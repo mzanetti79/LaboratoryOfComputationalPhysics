@@ -48,3 +48,35 @@ Now you `master` and `DEV_BRANCH_NAME` are the identical, work on the latter wil
 `git remote -v`
 
 `git fetch upstream`
+
+### Standard development cycle
+
+  * Before starting with the development you could check whether the orginal repository (mzanetti79's one) have been updated with respect to your forked version (that's likely to be the case prior to every lab class). If it had, then merge the chances into your master:
+
+  `git fetch upstream`
+
+  `git checkout master`
+
+  `git merge upstream/master`
+
+this will update your local version, not the one on github. To update the latter you need to push the local version (see later)
+
+  * From within your local repository choose your development branch and check it out (i.e. switch to it). :
+
+`git checkout DEV_BRANCH_NAME`
+
+  * Now do the real stuff, i.e. developing some code. Image you create a NEW_FILE. Add the file to your local repository and stages it for commit (To unstage a file, use 'git reset HEAD NEW_FILE)'
+
+`git add NEW_FILE`
+
+  * Commits the (tracked) changes you made to the file and prepares them to be pushed to your remote repository on github
+
+`git commit -m "Add existing file"`
+
+(what follows after `-m` is a comment to later remind what was that commit about)
+
+ * Now you want to propagate (push) your local changes to your remote repository on github (`origin`)
+
+ `git push origin DEV_BRANCH_NAME`
+
+ * Finally you may want to propagate your development also to the repo you originally forked from, i.e. mzanetti79's one (this is likely to happen anytime you'll be asked to deliver your homework!). For that you need to go for a "pull request", which is done from github itself.   
