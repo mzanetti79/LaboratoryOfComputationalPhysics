@@ -79,4 +79,14 @@ this will update your local version, not the one on github. To update the latter
 
  `git push origin DEV_BRANCH_NAME`
 
- * Finally you may want to propagate your development also to the repo you originally forked from, i.e. mzanetti79's one (this is likely to happen anytime you'll be asked to deliver your homework!). For that you need to go for a "pull request", which is done from github itself.   
+ * Finally you may want to propagate your development also to the repo you originally forked from, i.e. mzanetti79's one (this is likely to happen anytime you'll be asked to deliver your homework!). For that you need to go for a "pull request", which is done from github itself.
+
+ * To close a development loop is a good habit to clean up, i.e. get rid of the development branch. Prior to that you may want to merge the `master` branch
+
+ `git checkout master`
+
+ `git merge DEV_BRANCH_NAME`  
+
+ `git push origin master`
+
+ `git commit -d DEV_BRANCH_NAME` 
