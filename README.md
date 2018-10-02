@@ -33,6 +33,16 @@ In particular, if you are working in a location where such repo already exist, w
 
 (you must have understood what capital-letters-words stand for). Your git configuration is stored in `.gitconfig`, a file that you can alwasy edit by hand or via the `git config ..` commands.
 
+* Define mzanetti79's repo as the upstream repository (you may need to set the url too), check that actually succeeded and get (fetch) the updates that have been done on the remote repository:
+
+`git remote add upstream https://github.com/mzanetti79/LaboratoryOfComputationalPhysics.git`
+
+`git remote set-url origin https://PhysicsOfData@github.com/PhysicsOfData/LaboratoryOfComputationalPhysics.git`
+
+`git remote -v`
+
+`git fetch upstream`
+
   * The default branch is `master`, you should now create your how development branch where to play and exercise with the code:
 
 `git branch`
@@ -41,13 +51,6 @@ In particular, if you are working in a location where such repo already exist, w
 
 Now you `master` and `DEV_BRANCH_NAME` are the identical, work on the latter will tracked and later committed.
 
-  * Define mzanetti79's repo as the upstream repository, check that actually succeeded and get (fetch) the updates that have been done on the remote repository:
-
-`git remote add upstream https://github.com/mzanetti79/LaboratoryOfComputationalPhysics.git`
-
-`git remote -v`
-
-`git fetch upstream`
 
 ### Standard development cycle
 
@@ -89,4 +92,4 @@ this will update your local version, not the one on github. To update the latter
 
  `git push origin master`
 
- `git commit -d DEV_BRANCH_NAME` 
+ `git commit -d DEV_BRANCH_NAME`
