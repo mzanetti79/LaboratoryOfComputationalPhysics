@@ -45,12 +45,12 @@ def Swap(x,y):
 	return toSwap[0], toSwap[1]
 #enddef
 
-cyka = 3
-blyat = 6
+prima = 3
+seconda = 6
 
-print("cyka blyat = ", cyka, blyat)
-cyka, blyat = Swap(cyka,blyat)
-print("cyka blyat = ", cyka, blyat)
+print("prima seconda = ", prima, seconda)
+prima, seconda = Swap(prima,seconda)
+print("prima seconda = ", prima, seconda)
 
 
 # Es 3 ----------------
