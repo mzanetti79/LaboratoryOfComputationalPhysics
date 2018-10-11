@@ -4,8 +4,10 @@
 # 
 # 
 
+import time
+
 # Es 1.a ---------------
-print("\n\nEs1\n1.a)\n")
+print("\n\nEs1\n\n1.a)\n")
 
 listToAdd = []
 
@@ -113,11 +115,53 @@ l = [36, 45, 58, 3, 74, 96, 64, 45, 31, 10, 24, 19, 33, 86, 99, 18, 63, 70, 85,
  1, 84, 84, 36, 66, 9, 89, 50, 42, 91, 50, 95, 90, 98, 39, 16, 82, 31, 92, 41,
  45, 30, 66, 70, 34, 85, 94, 5, 3, 36, 72, 91, 84, 34, 87, 75, 53, 51, 20, 89, 51, 20]
  
-# xe queo
- 
+def CountUniques(listNumbers):
+	
+	listUniques = [ ]
+	for nums in listNumbers:
+		matches = [n for n in listNumbers if n == nums]
+		if len(matches) == 1:
+			listUniques.append(nums)
+		#endif
+	#enddo
+	return listUniques
+#enddef
+
+unici = CountUniques(l)
+
+print(unici)
+
+print("I numeri unici sono: ", len(unici), " mentre la lista di numeri è di ", len(l))
+	
+
+
+# Es 6 -----------
+
+print("\n\nEs 6\n")
+
+def Square(n):
+	ris = n**2
+	return ris
+#enddef
+
+def Cube(n):
+	ris = n**3
+	return ris
+#enddef
+
+def SixthPower(m):
+	#ris = Square(m)
+	#ris = Cube(ris)
+	ris = Square(Cube(m))
+	return ris
+#enddef
+
+pizdec = 2
+ris = SixthPower(pizdec)
+print("La sesta potenza di", pizdec, " è ", ris)
  
 # Es 7 -----------
-print("\n\nEs 7\n7.a\n")
+print("\n\nEs 7\n\n7.a)\n")
  
 listCubes = []
  
@@ -127,16 +171,19 @@ for i in range(10+1):
 	
 print(listCubes)
 	
-print("\n7.b")
+print("\n7.b)\n")
 listCubes = [n**3 for n in range(0,10+1)]	
 
 print(listCubes)
 
 
-# Es 7 ------------
+# Es 8 ------------
 print("\n\nEs 8\n")
 
 listTuples = []
+
+start = time.time()
+
 for i in range(1,100):
 	for j in range(i,100):
 		for k in range(j,100):
@@ -147,14 +194,34 @@ for i in range(1,100):
 		#enddo
 	#enddo
 #enddo
-
-
-# tuple2 = [ [ [ [i for i in range(1,100)] for j in range(i,100) ] for k in range(1,100) ] if k**2 - i**2 - j**2 == 0 ]
+end = time.time()
+print("Con for innestati: ", end - start, " s.")
 
 print(listTuples)
 
 
+# tuple2 = [ [ [ [i for i in range(1,100)] for j in range(i,100) ] for k in range(1,100) ] if k**2 - i**2 - j**2 == 0 ]
+start = time.time()
+
+listToTuple = [ (i, j, k) for i in range(1,100) for j in range(i,100) for k in range(j,100) if k**2 - i**2 - j**2 == 0 ]
+
+end = time.time()
+print("\nCon list comprehension: ", end - start, " s.")	
+
+print(listToTuple)
+
+
 # Es 9 --------
+
+print("\n\nEs 9\n")
+
+tupleToNorm = (0, 0, 1, 3, 4, 6, 7, 9, 10, 5, 3, 2, 1, 2, 0, 1, 0)
+listNorm = [n/max(tupleToNorm) for n in tupleToNorm]
+tupleNorm = tuple(listNorm)
+
+print(tupleToNorm)
+print(tupleNorm)
+
 
 
 
