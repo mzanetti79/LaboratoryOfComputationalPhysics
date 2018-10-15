@@ -5,6 +5,9 @@ Notebooks guiding students through the world of data analysis with python.
 This repo should be forked by each individual student. Exercises should be committed to the student's repo and notified to the professor by a pull request.
 Such pull request should be made on this remote repo under the corresponding student branch (Dedicated branches will indeed be created in due time).
 
+## IPython notebooks instructions and tips
+Notebooks are extremely powerful tools, you may find useful to discover some of their functionalities on this tutorial [page](https://nbviewer.jupyter.org/github/ipython/ipython/blob/3.x/examples/Notebook/Index.ipynb) or on this by checking this [list](https://www.dataquest.io/blog/jupyter-notebook-tips-tricks-shortcuts/) of tips
+
 ## Git Instructions
 
 To start with, you need to have a github account. If you don't have one, go to [github](github.com) and follow instructions on how to create it.
@@ -37,7 +40,7 @@ In particular, if you are working in a location where such repo already exist, w
 
 `git remote add upstream https://github.com/mzanetti79/LaboratoryOfComputationalPhysics.git`
 
-`git remote set-url origin https://PhysicsOfData@github.com/PhysicsOfData/LaboratoryOfComputationalPhysics.git`
+`git remote set-url origin https://YOUR_GIT_ACCOUNT@github.com/YOUR_GIT_ACCOUNT/LaboratoryOfComputationalPhysics.git`
 
 `git remote -v`
 
