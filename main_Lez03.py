@@ -1,4 +1,4 @@
-# even the heaven shall burn as we gather
+#
 # Lezione 03
 # LaboratoryOfComputationalPhysics
 
