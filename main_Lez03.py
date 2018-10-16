@@ -87,17 +87,53 @@ print("Trial 1\n")
 print (ans)
 print (alist) 
 
-adahList = [2,3,4]
-def ff(alist):
+def ff(alist,n):
     listToModify = []
-    listToModify = alist
-    for i in range(x):
+    for i in range(len(alist)):
+        listToModify.append(alist[i])
+    #enddo
+    for i in range(n):
         listToModify.append(i)
     #enddo
     return listToModify
 #enddef
 
-ansya = ff(adahList)
+adahList = [2,3,4]
+ansya = ff(adahList,x)
 print("Trial 2\n")
 print(ansya)
 print(adahList)
+
+
+# Es 3 ------------------------------------------------------
+print("Es 3\n\n")
+
+def DecoratorToSayHello(square):
+    def wrapper(x):
+        print("Oltre a restituire il quadrato, la funzione square dice HELLO")
+        print("Chiamata di square in wrapper: ", square(x))
+    #enddef
+    return wrapper
+#enddef
+
+
+@DecoratorToSayHello
+def square(x):
+    ris = x**2
+    return ris
+#enddef
+
+# NOTA: questo blocco appena scritto serve per non dover scrivere
+# tipo:
+#	square = DecoratorToSayHello(square)
+# cioe` l'effetto e` comunque che puntiamo al blocco wrapper
+
+x = 3
+print(square(x))
+
+
+# Es 4 -----------------------------------------------------
+
+
+
+        
