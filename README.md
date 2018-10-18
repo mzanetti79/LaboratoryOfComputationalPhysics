@@ -46,11 +46,11 @@ In particular, if you are working in a location where such repo already exist, w
 
 `git fetch upstream`
 
-  * The default branch is `master`, you should now create your how development branch where to play and exercise with the code:
+  * The default branch is `master`, you should now create your  development branch where to play and exercise with the code. Note that however you have a branch corresponding to you (name_surname) in the upstream repository (`upstream/name_surname`): that is the branch you should point the pull request to. In order to set up a proper development cycle, you must create a branch that *tracks* `upstream/name_surname`:
 
-`git branch`
+`git branch -vv`
 
-`git checkout -b DEV_BRANCH_NAME`
+`git checkout -b DEV_BRANCH_NAM upstream/name_surname`
 
 Now you `master` and `DEV_BRANCH_NAME` are the identical, work on the latter will tracked and later committed.
 
