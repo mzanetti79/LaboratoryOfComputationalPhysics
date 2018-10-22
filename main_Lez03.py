@@ -1,10 +1,11 @@
 #
 # Lezione 03
 # LaboratoryOfComputationalPhysics
+#
+#
 
 # ---- I C E _ B R E A K I N G _ S M A L L T A L K -------------
 
-print("Blyat")
 import time
 from math import pi
 from scipy.constants import g
@@ -60,8 +61,6 @@ print(list(ris))
 
 
 # se volessimo metterci un filtro?
-# quella della sigaretta che mi fumo oraaaa ==== ???
-
 
 # qui torna molto molto comoda la lambda
 ris = map(Blyat, filter(lambda n : n % 2 == 0 , trial))
@@ -178,21 +177,118 @@ print(g)
 densities = {"Al":[0.5,1,2],"Fe":[3,4,5],"Pb": [15,20,30]}
 radii = [1,2,3]
 
-#utilFuncs = [lambda r : 2 * pi * r , lambda r : pi * r**2 , lambda r : 4 * pi * r**3 / 3.0]
+utilFuncs = [lambda r : 2 * pi * r , lambda r : pi * r**2 , lambda r : 4 * pi * r**3 / 3.0]
 #utilFuncs = [lambda r : 2 * pi * r**i / i (if i == 3 lambda r : 4 * pi * r**i / i)  for i in range(1,4)]
-utilFuncs = [lambda r : c * pi * r**p for c, p in zip([2.0, 1.0, 4.0/3.0],[1, 2, 3])]
+#utilFuncs = [lambda r : c * pi * r**p for c,p in zip([2.0, 1.0, 4.0/3.0],[1, 2, 3])]
+
 
 
 r = radii[1]
 riss = utilFuncs[0](r)
 print(riss)
 
+
 for elem in densities.keys():
     print("Elemento: ", elem)
     for r in radii:
         print("Raggio r = ", r)
         for d,i in zip(densities[elem], utilFuncs):
-            print("Peso del corpo = ", d * i(r))
+            print("Peso del corpo = ", d * i(r) * g)
         #enddo
     #enddo
+#enddo
+
+
+# Es 6
+print("\n\nEs 6\n")
+
+# Parent class
+class Dog:
+
+	# Class attribute
+	razza = ' '
+	isHungry = False
+
+	# Initializer / Instance attributes
+	def __init__(self, name, age, razza):
+		self.name = name
+		self.age = age
+		self.razza = razza
+	#enddef
+
+	# instance method
+	def description(self):
+		return "{} is {} years old. It is a {}".format(self.name, self.age, self.razza)
+	#enddef
+
+	# instance method
+	def speak(self, sound):
+		return "{} says {}".format(self.name, sound)
+	#enddef
+	
+	def DogGotHungry(self):
+		self.isHungry = True
+		return self.isHungry
+	#enddef
+	
+	def Eat(self):
+		if self.isHungry:
+			self.isHungry = False
+			return "{} era isHungry, ma adesso ha Eatato.".format(self.name)
+		#endif
+		return "{} non è isHungry, non serve che Eata, sennò poi mette su panza.".format(self.name)
+	#enddef
+#}
+
+# Child class (inherits from Dog class)
+class RussellTerrier(Dog):
+	def run(self, speed):
+		return "{} runs {}".format(self.name, speed)
+	#enddef
+#}
+
+class LupoCecoslovacco(Dog):
+	def run(self,speed):
+		return "{} corre {} m/s.".format(self.name, speed)
+	#endddef
+	
+	def BarkAtTheMoon(self,time):
+		return "{} alle {} abbaia.".format(self.name, time)
+	#enddef
+#}
+
+# Child class (inherits from Dog class)
+class Bulldog(Dog):
+	def run(self, speed):
+		return "{} runs {}".format(self.name, speed)
+	#enddef
+
+	def sbava(self):
+		return "{} sbava molto".format(self.name)
+	#enddef
+	
+	# method override
+	def Eat(self):
+		return "{} ha mangiato quindi non è più isHungry.".format(self.name)
+	#enddef
+#}
+    
+
+dima = Bulldog("Dima",12,"Bulldog")
+vova = RussellTerrier("Vova",6,"RussellTerrier")
+boris = LupoCecoslovacco("Boris",9,"LupoCecoslovacco")
+
+listDogs = [dima, vova, boris]
+
+for _dog in listDogs:
+	print(_dog.description())
+	_dog.DogGotHungry()
+#enddo
+
+for _ in listDogs:
+	print(_.Eat())
+#enddo
+
+for _ in listDogs:
+	print(_.Eat())
 #enddo
