@@ -5,6 +5,9 @@ Notebooks guiding students through the world of data analysis with python.
 This repo should be forked by each individual student. Exercises should be committed to the student's repo and notified to the professor by a pull request.
 Such pull request should be made on this remote repo under the corresponding student branch (Dedicated branches will indeed be created in due time).
 
+## IPython notebooks instructions and tips
+Notebooks are extremely powerful tools, you may find useful to discover some of their functionalities on this tutorial [page](https://nbviewer.jupyter.org/github/ipython/ipython/blob/3.x/examples/Notebook/Index.ipynb) or on this by checking this [list](https://www.dataquest.io/blog/jupyter-notebook-tips-tricks-shortcuts/) of tips
+
 ## Git Instructions
 
 To start with, you need to have a github account. If you don't have one, go to [github](github.com) and follow instructions on how to create it.
@@ -43,18 +46,17 @@ In particular, if you are working in a location where such repo already exist, w
 
 `git fetch upstream`
 
-  * The default branch is `master`, you should now create your how development branch where to play and exercise with the code:
+  * The default branch is `master`, you should now create your  development branch where to play and exercise with the code. Note that however you have a branch corresponding to you (name_surname) in the upstream repository (`upstream/name_surname`): that is the branch you should point the pull request to. In order to set up a proper development cycle, you must create a branch (in the example below called TRACKING_BRANCH_NAME) that *tracks* `upstream/name_surname`:
 
-`git branch`
+`git branch -vv`
 
-`git checkout -b DEV_BRANCH_NAME`
+`git checkout -b TRACKING_BRANCH_NAME upstream/name_surname`
 
-Now you `master` and `DEV_BRANCH_NAME` are the identical, work on the latter will tracked and later committed.
-
+Note that the case you decide do make your development in a branch that does NOT track `upstream/name_surname`, you'll eventually need to merge your changes into the branch tracking `upstream/name_surname` which is the one you'll make the pull request for (see later).
 
 ### Standard development cycle
 
-  * Before starting with the development you could check whether the orginal repository (mzanetti79's one) have been updated with respect to your forked version (that's likely to be the case prior to every lab class). If it had, then merge the chances into your master:
+  * Before starting with the development you could check whether the orginal repository (mzanetti79's one) have been updated with respect to your forked version (that's likely to be the case prior to every lab class). If it had, then merge the chances into your master.
 
   `git fetch upstream`
 
@@ -62,34 +64,31 @@ Now you `master` and `DEV_BRANCH_NAME` are the identical, work on the latter wil
 
   `git merge upstream/master`
 
-this will update your local version, not the one on github. To update the latter you need to push the local version (see later)
+  The idea is that your master always reflects `upstream/master`, i.e. it keeps a local copy of the reference code as a starting point for your developments (i.e. solving the assigned problems).
+  Note that in order to update your repository on github, you need to push the local version (see later).
 
-  * From within your local repository choose your development branch and check it out (i.e. switch to it). :
+  * In the case a pull request of yours to mzanetti79 has been recently approved, you also need to synch your development branch:
 
-`git checkout DEV_BRANCH_NAME`
+  `git checkout TRACKING_BRANCH_NAME`
+
+  `git merge upstream/name_surname`
+
+  * You may also need to get the updates from the master, i.e. need to merge the master:
+
+  `git merge master`
 
   * Now do the real stuff, i.e. developing some code. Image you create a NEW_FILE. Add the file to your local repository and stages it for commit (To unstage a file, use 'git reset HEAD NEW_FILE)'
 
-`git add NEW_FILE`
+  `git add NEW_FILE`
 
   * Commits the (tracked) changes you made to the file and prepares them to be pushed to your remote repository on github
 
-`git commit -m "Add existing file"`
+  `git commit -m "Add existing file"`
 
 (what follows after `-m` is a comment to later remind what was that commit about)
 
  * Now you want to propagate (push) your local changes to your remote repository on github (`origin`)
 
- `git push origin DEV_BRANCH_NAME`
+ `git push origin TRACKING_BRANCH_NAME`
 
- * Finally you may want to propagate your development also to the repo you originally forked from, i.e. mzanetti79's one (this is likely to happen anytime you'll be asked to deliver your homework!). For that you need to go for a "pull request", which is done from github itself.
-
- * To close a development loop is a good habit to clean up, i.e. get rid of the development branch. Prior to that you may want to merge the `master` branch
-
- `git checkout master`
-
- `git merge DEV_BRANCH_NAME`  
-
- `git push origin master`
-
- `git commit -d DEV_BRANCH_NAME`
+ * Finally you may want to propagate your development also to the repo you originally forked from, i.e. mzanetti79's one (this is likely to happen anytime you'll be asked to deliver your homework!). For that you need to go for a "pull request", which is done from github itself. Be carefull to point your pull request to `mzanetti79/name_surname`
