@@ -57,5 +57,5 @@ Now you just need to setup your browser appropriately, for instance on firefox (
 
 ![alt text](./FirfoxSetup.png)
 
-Now cut&paste the URL that appears when you launched jupyter, e.g. ```        http://localhost:8888/?token=67c026e15b1e1a9be1459307493907d302b386aa7c123e86
+Now cut&paste the URL that appears when you launched jupyter, e.g. ```http://localhost:8888/?token=67c026e15b1e1a9be1459307493907d302b386aa7c123e86
 ```
