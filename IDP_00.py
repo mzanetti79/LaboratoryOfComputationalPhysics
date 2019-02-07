@@ -161,10 +161,49 @@ ud = np.array([0,1]).reshape((2,1))
 M = matrix(2,0,3,1)
 max_iter = 50
 player1 = player("Mainly nice")
-player1.set_k(0)
+player1.set_k(0.4)
 player2 = player("Mainly bad") # you have to set k if you adopt mainly..
-player2.set_k(1)
+player2.set_k(0.8)
 
 a = IPD(player1, player2, M, max_iter)
 print("player1 reward: ", player1.get_r())
 print("player2 reward: ", player2.get_r())
+
+
+# Plot the results player1 and player2
+# X is uc, Y is ud
+
+import matplotlib.pyplot as plt
+
+def create_path(player):
+    sample = player.get_move()
+    path = np.zeros(sample.shape)
+    path[:,1] = sample[:,1]
+    n = sample.shape[1]
+
+    for i in range (2,n):
+        path[:,i] = np.sum(sample[:,1:i+1], axis = 1)
+        
+    return path
+
+def plot_results(player, ax, x, y, n):
+    s = "Player"+str(n)+" choices with "+ str(player.get_strategies()) + " strategies"
+    ax.set_title(s)
+    ax.set_ylabel("defect")
+    ax.set_xlabel("Cooperate")
+    ax.scatter(x, y)
+
+points1 = create_path(player1)
+x1 = points1[0,:]
+y1 = points1[1,:]
+
+points2 = create_path(player2)
+x2 = points2[0,:]
+y2 = points2[1,:]
+
+fig, (ax1, ax2) = plt.subplots(nrows=1, ncols = 2, figsize=(9,5))
+
+
+
+plot_results(player1, ax1, x1, y1, 1)
+plot_results(player2, ax2, x2, y2, 2)
