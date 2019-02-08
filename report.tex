@@ -1,0 +1,67 @@
+% !TeX spellcheck = en_US
+%% arara: pdflatex
+%% arara: bibtex
+% arara: pdflatex
+% arara: pdflatex
+\documentclass[journal,a4paper,10pt,twoside]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{times,textcomp,amsfonts}
+\usepackage[cmex10]{amsmath}
+\usepackage[T1]{fontenc}
+%\usepackage[top=1.5cm, bottom=2cm, right=1.6cm,left=1.6cm]{geometry}
+\usepackage{breqn,cite,url,color} % Citation numbers sorted and properly "compressed/ranged".
+\usepackage{epstopdf}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfig}
+\usepackage{array,booktabs} % nice rules in tables
+
+% amsmath sets \interdisplaylinepenalty = 10000
+% preventing page breaks from occurring within multiline equations
+\interdisplaylinepenalty=2500
+
+%\let\labelindent\relax % Compact lists
+\usepackage{enumitem}
+
+%tikz figures
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,chains,shapes,arrows}
+\usepackage{pgfplots}
+\usetikzlibrary{plotmarks}
+\newlength\fheight
+\newlength\fwidth
+\pgfplotsset{compat=newest}
+\pgfplotsset{plot coordinates/math parser=false}
+
+\usepackage{indentfirst}
+%\setlength\parindent{0pt}
+\linespread{1}
+\usepackage{placeins}
+
+\newcommand{\EB}[1]{\textit{\color{blue}EB says: #1}}
+\newcommand{\FR}[1]{\textit{\color{green}FR says: #1}}
+\newcommand{\LA}[1]{\textit{\color{orange}LA says: #1}}
+\newcommand{\FS}[1]{\textit{\color{red}FS says: #1}}
+
+%%%%%%%%%%%%%%%%
+\begin{document}
+\title{On the Iterated Prisoner's Dilemma}
+
+\author{%
+    \IEEEauthorblockN{Elia Bonetto, Filippo Rigotto, Luca Attanasio and Francesco Savio}
+
+    \IEEEauthorblockA{Department of Information Engineering, University of Padova -- Via Gradenigo, 6/b, 35131 Padova, Italy}
+    %\\Email: {\tt\{bonettoe,rigottof\}@dei.unipd.it}}
+}
+
+\maketitle
+%%%%%%%%%%
+
+\begin{abstract}
+\end{abstract}
+
+% content
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{report.bib}
+\end{document}
