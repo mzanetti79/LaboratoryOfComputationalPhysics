@@ -207,3 +207,4 @@ fig, (ax1, ax2) = plt.subplots(nrows=1, ncols = 2, figsize=(9,5))
 
 plot_results(player1, ax1, x1, y1, 1)
 plot_results(player2, ax2, x2, y2, 2)
+fig.savefig("IDP_00.png")
