@@ -59,7 +59,7 @@ def IPDRoundRobin(m, strategies, num_iter):
     
 def main():
     # number of iterations and players
-    NUM_ITER = 50
+    NUM_ITER = 10
     NUM_PLAYERS = 10
 
     # define payoff matrix
@@ -99,18 +99,33 @@ def main():
     print("\nStrategies:")
     print("\n".join(snames))
 
-    res_dict = IPDRoundRobin(M1, strategies, NUM_ITER)
+    res_dict = IPDRoundRobin(M1, strategies, NUM_ITER*NUM_PLAYERS)
     hist = res_dict['history']
 
     # plot cumulative rewards
+    plt.figure(figsize=(15,5)) 
+    plt.subplot(1,2,1)
     for pl in range(NUM_PLAYERS):
         hp = hist[ hist[:,0] == pl ]
-        plt.plot(hp[:,3]) # plot only when they were pl1 in the game
+        plt.plot(hp[:,3],'*') # plot only when they were pl1 in the game
     plt.title("{} players game".format(NUM_PLAYERS))
     plt.xlabel('Iteration')
     plt.ylabel('Cum. reward')
     plt.legend(["P"+str(i)+" "+snames[i].replace('ainly','') for i in range(NUM_PLAYERS)])
-    
+    plt.subplot(1,2,2)
+    coop_h = []
+    def_h = []
+    time = []
+    for i in range(0, int(hist.shape[0]/NUM_PLAYERS)):
+        coop = (sum(1 if x==0 else 0 for x in hist[:,1][i:i+10])/NUM_PLAYERS)
+        def_h.append(1-coop)
+        coop_h.append(coop)
+        time.append(i)
+    plt.plot(time,coop_h,'r')
+    plt.plot(time,def_h)
+    plt.legend(['Cooperate','Deflect'])
+    plt.title('Percentage of cooperation/deflection')
+    #plt.show()
     plt.savefig('../img/idpmp-rewards-{}.png'.format( '-'.join(snames_stripped) ))
     plt.close()
 

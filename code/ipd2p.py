@@ -70,6 +70,8 @@ def main():
             h1,h2 = IPD2players(M1, s1, s2, NUM_ITER)
             
             # plot cumulative rewards
+            plt.figure(figsize=(15,5))
+            plt.subplot(1,2,1)
             plt.plot(h1[:,2])
             plt.plot(h2[:,2])
             plt.title("2 pl. game: {} - {}".format(s1name,s2name))
@@ -82,7 +84,14 @@ def main():
                 s1name = s1name[0:s1name.find(' (')]
             if '(' in s2name:
                 s2name = s2name[0:s2name.find(' (')]
-            
+            plt.subplot(1,2,2)
+            plt.plot(h1[:,0]+1,'*')
+            plt.plot(-h2[:,0]-1,'*')
+            plt.yticks([1,2,-1,-2],['Cooperate','Defiate','Cooperate','Defiate'])
+            plt.ylim(-3,3)
+            plt.title('Strategy evolution')
+            plt.legend(['Player 1','Player 2'])
+            #plt.show()
             plt.savefig('../img/idp2p-rewards-{}-{}.png'.format(s1name,s2name))
             plt.close()
 
