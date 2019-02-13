@@ -121,6 +121,8 @@ def main():
         def_h.append(1-coop)
         coop_h.append(coop)
         time.append(i)
+    plt.ylim(top=1)
+    plt.ylim(bottom=0)
     plt.plot(time,coop_h,'r')
     plt.plot(time,def_h)
     plt.legend(['Cooperate','Deflect'])
