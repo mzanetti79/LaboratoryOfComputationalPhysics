@@ -107,7 +107,7 @@ def main():
     plt.subplot(1,2,1)
     for pl in range(NUM_PLAYERS):
         hp = hist[ hist[:,0] == pl ]
-        plt.plot(hp[:,3],'*') # plot only when they were pl1 in the game
+        plt.plot(hp[:,3]) # plot only when they were pl1 in the game
     plt.title("{} players game".format(NUM_PLAYERS))
     plt.xlabel('Iteration')
     plt.ylabel('Cum. reward')
