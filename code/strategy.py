@@ -15,12 +15,17 @@ class Player(Strategy):
     def __str__(self):
            return "Player number {} with strategy: {}".format(self.n, self.s)
     
+    #the idea is to create player of index n, eventually changing it's strategy
+    #and have a list of players inside this class to manage all part of the homework
     def __init__(self, n, probS = True, k = 0):
         if probS:
             self.s = ProbStrategy(k)
         else:
             self.s = TipForTat()
         self.n = n
+    
+    def __get__(self): #Todo Not working
+        return self.s.get()
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
