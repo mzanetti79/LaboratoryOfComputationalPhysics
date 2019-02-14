@@ -77,19 +77,22 @@ def main():
     # define strategies for players
     strategies = []
     for _ in range(NUM_PLAYERS):
-        ch = np.random.randint(0,5) # currently 5 possible strategies
-        if ch == 0:
-            s = NiceStrategy()
-        elif ch == 1:
-            s = BadStrategy()
-        elif ch == 2:
-            k = np.random.randint(0,50)
-            s = MainlyNiceStrategy(k)
-        elif ch == 3:
-            k = np.random.randint(50,101)
-            s = MainlyBadStrategy(k)
-        elif ch == 4:
+        ch = np.random.randint(0,6) # currently 6 possible strategies
+        if ch == 0: #Nice
+            s = ProbStrategy(0)
+        elif ch == 1: #Bad
+            s = ProbStrategy(100)
+        elif ch == 2: #MNice
+            k = np.random.randint(1,50)
+            s = ProbStrategy(k)
+        elif ch == 3: #MBad
+            k = np.random.randint(51,100)
+            s = ProbStrategy(k)
+        elif ch == 4: #Indifferent
+            s = ProbStrategy(50)
+        elif ch == 5:
             s = TitForTat()
+            
         strategies.append(s)
     
     # save names to display later

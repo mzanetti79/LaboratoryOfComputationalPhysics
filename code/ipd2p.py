@@ -56,9 +56,9 @@ def main():
     print("Testing {} iterations of 2-people IPD with\nM={}".format(NUM_ITER, M1))
 
     # define k for strategy probabilities
-    kH = np.random.randint(50,101)
+    kH = np.random.randint(51,100)
     kL = np.random.randint(0,50)
-    strategies = [NiceStrategy(), BadStrategy(), MainlyNiceStrategy(kL), MainlyBadStrategy(kH), TitForTat()]
+    strategies = [ProbStrategy(0), ProbStrategy(100), ProbStrategy(kL), ProbStrategy(kH), ProbStrategy(50), TitForTat()]
     
     for s1 in strategies:
         for s2 in strategies:

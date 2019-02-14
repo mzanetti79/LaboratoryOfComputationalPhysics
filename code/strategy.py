@@ -1,4 +1,3 @@
-
 import numpy as np
 
 class Strategy:
@@ -10,47 +9,42 @@ class Strategy:
     def get(self):
         pass
 
-class NiceStrategy(Strategy):
-    """Always cooperate."""
 
+class Player(Strategy):
+    """Class to describe a player with strategy and history"""
     def __str__(self):
-        return "Nice"
-
-    def get(self):
-        return 0 # cooperate
-
-class BadStrategy(Strategy):
-    """Always defect."""
-
-    def __str__(self):
-        return "Bad"
-
-    def get(self):
-        return 1 # defect
-
+           return "Player number {} with strategy: {}".format(self.n, self.s)
+    
+    def __init__(self, n, probS = True, k = 0):
+        if probS:
+            self.s = ProbStrategy(k)
+        else:
+            self.s = TipForTat()
+        self.n = n
+    
 class ProbStrategy(Strategy):
-    """Abstract Strategy class when probability is used."""
+    """Strategy class when probability is used."""
 
-    def __init__(self, k):
+    def __init__(self, k): #todo put limit check on k
         self.k = k
 
     def get(self):
-        num = np.random.randint(0,101)
+        num = np.random.randint(0,100)
         return 0 if num >= self.k else 1
         # coop if more than k, else defect
 
-class MainlyNiceStrategy(ProbStrategy):
-    """Cooperates most times."""
-
     def __str__(self):
-        return "MainlyNice (k={})".format(self.k)
-
-class MainlyBadStrategy(ProbStrategy):
-    """Defect most times."""
-
-    def __str__(self):
-        return "MainlyBad (k={})".format(self.k)
-
+        if (self.k == 0):
+            return "Nice"
+        elif (self.k == 100):
+            return "Bad"
+        elif (self.k > 50):
+            return "MainlyBad (k={})".format(self.k)
+        elif (self.k < 50):
+            return "MainlyNice (k={})".format(self.k)
+        else:
+            return "Indifferent"
+        
 class TitForTat(Strategy):
     """Plays opponent's last move."""
 
