@@ -45,6 +45,9 @@ def IPD2players(m, s1, s2, num_iter):
     return hist1, hist2
     
 def main():
+    # compare results with other version
+    np.random.seed(1234)
+
     # number of iterations
     NUM_ITER = 50
 
@@ -81,7 +84,7 @@ def main():
             plt.title("2 pl. game: {} - {}".format(s1name,s2name))
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
-            plt.legend(['Player1','Player2','test','test'])
+            plt.legend(['Player1','Player2'])
 
             # strip k from names if necessary
             if '(' in s1name:
