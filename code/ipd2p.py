@@ -71,26 +71,30 @@ def main():
             
             # plot cumulative rewards
             plt.figure(figsize=(15,5))
-            plt.subplot(1,2,1)
+            # plt.subplot(1,2,1)
             plt.plot(h1[:,2])
             plt.plot(h2[:,2])
+            # https://predictablynoisy.com/matplotlib/_images/sphx_glr_colormaps_004.png
+            # different dot colors based on action (easiest way to plot points)
+            plt.scatter(np.arange(0,h1.shape[0]), h1[:,2], c=h1[:,0], cmap='bwr')
+            plt.scatter(np.arange(0,h2.shape[0]), h2[:,2], c=h2[:,0], cmap='bwr')
             plt.title("2 pl. game: {} - {}".format(s1name,s2name))
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
-            plt.legend(['Player1','Player2'])
+            plt.legend(['Player1','Player2','test','test'])
 
             # strip k from names if necessary
             if '(' in s1name:
                 s1name = s1name[0:s1name.find(' (')]
             if '(' in s2name:
                 s2name = s2name[0:s2name.find(' (')]
-            plt.subplot(1,2,2)
-            plt.plot(h1[:,0]+1,'*')
-            plt.plot(-h2[:,0]-1,'*')
-            plt.yticks([1,2,-1,-2],['Cooperate','Defiate','Cooperate','Defiate'])
-            plt.ylim(-3,3)
-            plt.title('Strategy evolution')
-            plt.legend(['Player 1','Player 2'])
+            # plt.subplot(1,2,2)
+            # plt.plot(h1[:,0]+1,'*')
+            # plt.plot(-h2[:,0]-1,'*')
+            # plt.yticks([1,2,-1,-2],['Cooperate','Defiate','Cooperate','Defiate'])
+            # plt.ylim(-3,3)
+            # plt.title('Strategy evolution')
+            # plt.legend(['Player 1','Player 2'])
             #plt.show()
             plt.savefig('../img/idp2p-rewards-{}-{}.png'.format(s1name,s2name))
             plt.close()
