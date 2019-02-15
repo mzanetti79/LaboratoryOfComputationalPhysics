@@ -12,6 +12,8 @@ class Strategy:
 
 class Player(Strategy):
     M1 = np.array([[2,0],[3,1]])
+    # M1 = np.array([[3,0],[5,2]]) # another good choice
+    # or use M = generatePayoffMatrix()
     M2 = M1.T
     
     """Class to describe a player with strategy and history"""
@@ -34,14 +36,14 @@ class Player(Strategy):
             action1 = self.s.get()
         else:
             action1 = 0 # cooperate
-            if size(sOpponent.playedHist) > 0:
+            if len(sOpponent.playedHist) > 0:
                 action1 = self.s.get(sOpponent.playedHist[-1]) # pass opponent's move
             
         if type(sOpponent) != TitForTat:
             action2 = sOpponent.s.get()
         else:
             action2 = 0
-            if size(self.playedHist) > 0:
+            if len(self.playedHist) > 0:
                 action2 = s2.get(self.playedHist[-1])
         self.update(action1, action2, False)
         sOpponent.update(action1, action2, True)
