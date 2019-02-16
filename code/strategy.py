@@ -1,56 +1,50 @@
 import numpy as np
 
-class Strategy:
-    """Abstract Strategy class to derive other."""
+class Player(object):
+    """Class to describe a player with strategy and history."""
 
-    def __str__(self):
-        return "Base"
-
-    def get(self):
-        pass
-
-
-class Player(Strategy):
     M1 = np.array([[2,0],[3,1]])
     # M1 = np.array([[3,0],[5,2]]) # another good choice
     # or use M = generatePayoffMatrix()
     M2 = M1.T
     
-    """Class to describe a player with strategy and history"""
     def __str__(self):
-           return "Player with strategy: {}".format(self.s)
+        return "Player with strategy: {}".format(self.s)
     
-    #the idea is to create player of index n, eventually changing it's strategy
-    #and have a list of players inside this class to manage all part of the homework
-    def __init__(self, probS = True, k = 0):
-        if probS:
+    def __init__(self, k=0):
+        # todo payoff matrix M should be an external parameter
+        # todo if strategy may change, methods need to be added
+        if k >= 0:
             self.s = ProbStrategy(k)
-        else:
+        elif k == -1:
             self.s = TitForTat()
-        self.clearHist()
+        self.clear_hist()
     
-    def play_iter(self, sOpponent, num_iter):
+    def play_iter(self, opponent, num_iter):
+        """Plays the game against an opponent num_iter times."""
         for _ in range(num_iter):
-            self.play(sOpponent)
+            self.play(opponent)
 
-    def play(self, sOpponent): 
+    def play(self, opponent): 
+        """Plays the game against an opponent."""
         if type(self.s) != TitForTat:
             action1 = self.s.get()
         else:
             action1 = 0 # cooperate
-            if len(sOpponent.playedHist) > 0:
-                action1 = self.s.get(sOpponent.playedHist[-1]) # pass opponent's move
+            if len(opponent.playedHist) > 0:
+                action1 = self.s.get(opponent.playedHist[-1]) # pass opponent's move
             
-        if type(sOpponent) != TitForTat:
-            action2 = sOpponent.s.get()
+        if type(opponent) != TitForTat:
+            action2 = opponent.s.get()
         else:
             action2 = 0
             if len(self.playedHist) > 0:
-                action2 = s2.get(self.playedHist[-1])
+                action2 = opponent.s.get(self.playedHist[-1]) # todo check if opponent or self
         self.update(action1, action2, False)
-        sOpponent.update(action1, action2, True)
+        opponent.update(action1, action2, True)
         
     def update(self, action1, action2, opponent):
+        """Updates the state based on the actions."""
         self.stratHist.append(str(self.s)) #todo check if better this or k
         if opponent:
             self.payoffHist.append(self.M2[action1,action2])
@@ -59,14 +53,17 @@ class Player(Strategy):
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
 
-    def clearHist(self):
+    def clear_hist(self):
+        """Clears all history of the player."""
         self.stratHist = []
         self.payoffHist = []
         self.playedHist = []
 
 class MultiPlayer(Player):
-    def __init__(self, probS, k):
-        Player.__init__(self, probS, k)
+    """Class to describe multiple players with strategy and history."""
+
+    def __init__(self, k):
+        Player.__init__(self, k)
         
         # save results for multiple rounds played by user
         # this way we can save all the results from the tournament
@@ -75,35 +72,44 @@ class MultiPlayer(Player):
         self.prevPlayedHist = []
         self.results = [] # 'w' = win, 'l' = loss, d' = draw
 
-    def play_iter(self, sOpponent, num_iter):
-        Player.play_iter(self, sOpponent, num_iter)
+    def play_iter(self, opponent, num_iter):
+        Player.play_iter(self, opponent, num_iter)
 
         self.prevStratHist.append(self.stratHist)
         self.prevPayoffHist.append(self.payoffHist)
         self.prevPlayedHist.append(self.playedHist)
 
-        sOpponent.prevStratHist.append(sOpponent.stratHist)
-        sOpponent.prevPayoffHist.append(sOpponent.payoffHist)
-        sOpponent.prevPlayedHist.append(sOpponent.playedHist)
+        opponent.prevStratHist.append(opponent.stratHist)
+        opponent.prevPayoffHist.append(opponent.payoffHist)
+        opponent.prevPlayedHist.append(opponent.playedHist)
 
         # who won? check the sum of rewards
-        if np.sum(self.payoffHist) == np.sum(sOpponent.payoffHist):
+        if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
             self.results.append('d')
-            sOpponent.results.append('d')
-        elif np.sum(self.payoffHist) > np.sum(sOpponent.payoffHist):
+            opponent.results.append('d')
+        elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
             self.results.append('w')
-            sOpponent.results.append('l')
+            opponent.results.append('l')
         else:
             self.results.append('l')
-            sOpponent.results.append('w')
+            opponent.results.append('w')
 
         # set actual history to zero
-        self.clearHist()
-        sOpponent.clearHist()
+        self.clear_hist()
+        opponent.clear_hist()
 
-    # number of rounds each user played
     def rounds_played(self):
+        """Number of rounds each user played."""
         return len(self.prevStratHist)
+
+class Strategy:
+    """Abstract Strategy class to derive other."""
+
+    def __str__(self):
+        return "Base"
+
+    def get(self):
+        pass
 
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""

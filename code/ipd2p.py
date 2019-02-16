@@ -15,15 +15,16 @@ def main():
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 
     # define k for strategy probabilities
+    # use k=-1 for TfT
     kH = np.random.randint(51,100)
     kL = np.random.randint(0,50)
     k_strategies = np.array([0, 100, kL, kH, 50, -1])
-    probS = k_strategies >=0
 
-    for (k1, probS1) in zip(k_strategies, probS):
-        for (k2, probS2) in zip(k_strategies, probS):
-            p1 = Player(k=k1, probS=probS1)
-            p2 = Player(k=k2, probS=probS2)
+    for k1 in k_strategies:
+        for k2 in k_strategies:
+            # todo this does A-B but also B-A, maybe change
+            p1 = Player(k1)
+            p2 = Player(k2)
             p1.play_iter(p2, NUM_ITER)
             print("Evaluating {} - {}...".format(p1.s,p2.s))
             # print(p1.payoffHist, p1.playedHist)
@@ -45,7 +46,7 @@ def main():
             # plt.legend(['Player1','Player2'])
             # 0 = cooperate = blue
             plt.legend(handles=[
-                Line2D([0], [0], color='w', marker='o', label='Defiate',
+                Line2D([0], [0], color='w', marker='o', label='Defect',
                           markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='Cooperate',
                           markerfacecolor='b')

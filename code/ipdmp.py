@@ -4,22 +4,21 @@ import matplotlib.pyplot as plt
 from mgen import generatePayoffMatrix
 from strategy import *
 
-def IPDRoundRobin(k_strategies, probS, num_iter):
+def IPDRoundRobin(k_strategies, num_iter):
     n = num_strat = k_strategies.size
-    num_rounds = int(((n-1)/2)*(n))
+    num_rounds = int( ((n-1)/2) * n)
 
     # initialize players with given strategies
     round_robin_p = np.array([])
-    for (k_, probS_) in zip(k_strategies, probS):
-        p = MultiPlayer(k=k_, probS=probS_)
+    for k in k_strategies:
+        p = MultiPlayer(k)
         round_robin_p = np.append(round_robin_p, p)
 
     # each player plays against another in a round robin scheme
     for (i, p1) in zip(np.arange(n), round_robin_p):
-        for (j, p2) in zip(np.arange(n), round_robin_p):
-            if j > i:
-                # print(i, j)
-                p1.play_iter(p2, num_iter)
+        for (j, p2) in zip(np.arange(i+1,n), round_robin_p):
+            # print(i, j)
+            p1.play_iter(p2, num_iter)
 
     return round_robin_p
     
@@ -35,13 +34,12 @@ def main():
 
     # define strategies for players
     # -1 = TfT
+    # -2 = random
     k_strategies = np.random.choice([0, 100, 50, -1, -2, -2], NUM_PLAYERS)
-    # set random k if k == -2
     mask = k_strategies == -2
-    k_strategies[mask] = np.random.randint(0,100,size=np.sum(mask))
-    probS = k_strategies >= 0
+    k_strategies[mask] = np.random.randint(1,100,size=np.sum(mask))
 
-    round_robin_p = IPDRoundRobin(k_strategies, probS, NUM_ITER)
+    round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER)
     
     for p in round_robin_p:
         print(p.results)
