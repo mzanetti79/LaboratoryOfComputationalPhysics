@@ -70,6 +70,7 @@ class MultiPlayer(Player):
         self.prevStratHist = []
         self.prevPayoffHist = []
         self.prevPlayedHist = []
+        self.prevOpponent = []
         self.results = [] # 'w' = win, 'l' = loss, d' = draw
 
     def play_iter(self, opponent, num_iter):
@@ -82,6 +83,9 @@ class MultiPlayer(Player):
         opponent.prevStratHist.append(opponent.stratHist)
         opponent.prevPayoffHist.append(opponent.payoffHist)
         opponent.prevPlayedHist.append(opponent.playedHist)
+
+        self.prevOpponent.append(opponent)
+        opponent.prevOpponent.append(self)
 
         # who won? check the sum of rewards
         if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
@@ -101,6 +105,18 @@ class MultiPlayer(Player):
     def rounds_played(self):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
+
+    def count_wins(self):
+        """Counts the number of rounds won by player."""
+        return self.results.count('w')
+
+    def count_losses(self):
+        """Counts the number of rounds loss by player."""
+        return self.results.count('l')
+
+    def count_draws(self):
+        """Counts the number of rounds drawn by player."""
+        return self.results.count('d')
 
 class Strategy:
     """Abstract Strategy class to derive other."""

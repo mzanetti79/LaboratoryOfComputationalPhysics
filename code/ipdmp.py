@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 from mgen import generatePayoffMatrix
@@ -16,7 +17,7 @@ def IPDRoundRobin(k_strategies, num_iter):
 
     # each player plays against another in a round robin scheme
     for (i, p1) in zip(np.arange(n), round_robin_p):
-        for (j, p2) in zip(np.arange(i+1,n), round_robin_p):
+        for (j, p2) in zip(np.arange(i+1,n), round_robin_p[i+1:]):
             # print(i, j)
             p1.play_iter(p2, num_iter)
 
@@ -24,11 +25,12 @@ def IPDRoundRobin(k_strategies, num_iter):
     
 def main():
     np.random.seed(1234)
+    pd.set_option('display.max_columns', None)
 
     # number of iterations
     NUM_ITER = 50
     # number of players
-    NUM_PLAYERS = 4
+    NUM_PLAYERS = 10
 
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -40,46 +42,50 @@ def main():
     k_strategies[mask] = np.random.randint(1,100,size=np.sum(mask))
 
     round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER)
-    
-    for p in round_robin_p:
-        print(p.results)
 
-    # # plot cumulative rewards
-    # plt.figure(figsize=(15,5)) 
-    # plt.subplot(1,2,1)
-    # for pl in range(NUM_PLAYERS):
-    #     hp1 = hist[ hist[:,0] == pl ] # when they were first player
-    #     hp2 = hist[ hist[:,4] == pl]   # when they were second player
-    #     rewards1 = hp1[:,3]
-    #     # try e catch because rewars1 can have zero shape
-    #     try:
-    #         rewards2 = rewards1[-1] + hp2[:,7] # had to add a costant term 
-    #     except:
-    #         rewards2 = hp2[:,7]
-    #     rewards = np.concatenate((rewards1, rewards2), axis = 0)
-    #     plt.plot(rewards) # plot only when they were pl1 and pl2
-    # plt.title("{} players game".format(NUM_PLAYERS))
-    # plt.xlabel('Iteration')
-    # plt.ylabel('Cum. reward')
-    # plt.legend(["P"+str(i)+" "+snames[i].replace('ainly','') for i in range(NUM_PLAYERS)])
-    # plt.subplot(1,2,2)
-    # coop_h = []
-    # def_h = []
-    # time = []
-    # for i in range(0, int(hist.shape[0]/NUM_PLAYERS)):
-    #     coop = (sum(1 if x==0 else 0 for x in hist[:,1][i:i+10])/NUM_PLAYERS)
-    #     def_h.append(1-coop)
-    #     coop_h.append(coop)
-    #     time.append(i)
-    # plt.ylim(top=1.1)
-    # plt.ylim(bottom=-0.1)
-    # plt.plot(time,coop_h,'r')
-    # plt.plot(time,def_h)
-    # plt.legend(['Cooperate','Deflect'])
-    # plt.title('Percentage of cooperation/deflection')
-    # #plt.show()
-    # plt.savefig('../img/idpmp-rewards-{}.png'.format( '-'.join(snames_stripped) ))
-    # plt.close()
+    # serie A table
+    # todo: store final rewards sum as well as opponent rewards sum
+    # (Goal Fatti, Goal Subiti)
+    ranking_df = pd.DataFrame()
+    # all matches played sorted by time
+    matches_df = pd.DataFrame()
+
+    for (i, p) in zip(np.arange(NUM_PLAYERS), round_robin_p):
+
+        points = np.zeros(len(p.results))
+        points[np.array(p.results) == 'd'] = 1
+        points[np.array(p.results) == 'w'] = 3
+        points[np.array(p.results) == 'l'] = 0
+        points = np.cumsum(points)
+        plt.plot(points, label=p.s)
+        plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
+        plt.xlabel('Match number')
+        plt.ylabel('Points')
+
+        df = pd.DataFrame(
+            [[p.s, p.count_wins(), p.count_draws(), p.count_losses(), int(points[-1])]],
+            columns=['Player','W','D','L','points']
+        )
+        ranking_df = ranking_df.append(df)
+
+        for j in range(i+1, len(p.results)):
+            # can now access any property from p1 or p2 for plots
+            # each match can be explored
+            # print(i, j)
+                df = pd.DataFrame(
+                    [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i], np.sum(p.prevPayoffHist[j]), np.sum(p.prevOpponent[j].prevPayoffHist[i])]],
+                    columns=['p1','p2','p1-result', 'p2-result','p1-score','p2-score']
+                )
+                matches_df = matches_df.append(df)
+
+    plt.legend()
+    # plt.show()
+    plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
+    plt.close()
+
+    ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, True, True])
+    print(ranking_df)
+    print(matches_df)
 
 if __name__ == "__main__":
     main()
