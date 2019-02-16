@@ -4,38 +4,37 @@ import matplotlib.pyplot as plt
 from mgen import generatePayoffMatrix
 from strategy import *
 
-from ipd2p_v1 import IPD2players
-
-def IPDRoundRobin(k_strategies, probS, num_round):
+def IPDRoundRobin(k_strategies, probS, num_iter):
     n = num_strat = k_strategies.size
-    actual_round = 0
-    index = 0
-    num_iter = int((((n-1)/2)*(n))*num_round)
+    num_rounds = int(((n-1)/2)*(n))
 
-    # rewards = np.zeros(num_strat,dtype='int') # cumulative reward for both players
-    # hist = np.zeros((num_iter,8),dtype='int') # history of moves
+    # initialize players with given strategies
     round_robin_p = np.array([])
-    for actual_round in range(num_round):
-        # player1 e.g s1 is index i
-        for (i, k1, probS1) in zip(np.arange(num_strat), k_strategies, probS):
-            #player2 e.g s2 is index j
-            for (j, k2, probS2) in zip(np.arange(num_strat), k_strategies, probS):
+    for (k_, probS_) in zip(k_strategies, probS):
+        p = MultiPlayer(k=k_, probS=probS_)
+        round_robin_p = np.append(round_robin_p, p)
 
-                if j>i:
-                    # to be checked
-                    p1 = Player(k=k1, probS=probS1)
-                    p2 = Player(k=k2, probS=probS2)
-                    p1, p2 = IPD2players(p1, p2, num_iter)
-                    round_robin_p = np.append(round_robin_p, [p1, p2])
+    # each player plays against another in a round robin scheme
+    for (i, p1) in zip(np.arange(n), round_robin_p):
+        for (j, p2) in zip(np.arange(n), round_robin_p):
+            if j > i:
+                # print(i, j)
+                p1.play_iter(p2, num_iter)
 
-    return round_robin_p.reshape(int(round_robin_p.size/2), 2)
+    for p in round_robin_p:
+        print(p.prevPayoffHist)
+        print('\n')
+    exit()
+
+    return round_robin_p
     
 def main():
-    # number of rounds and players
-    NUM_ROUND = 5
-    NUM_PLAYERS = 10
+    # number of iterations
+    NUM_ITER = 50
+    # number of players
+    NUM_PLAYERS = 4
 
-    print("Testing {} rounds of {}-people IPD".format(NUM_ROUND, NUM_PLAYERS))
+    print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define strategies for players
     # -1 = TfT
@@ -45,7 +44,7 @@ def main():
     k_strategies[mask] = np.random.randint(0,100,size=np.sum(mask))
     probS = k_strategies >=0
 
-    round_robin_p = IPDRoundRobin(k_strategies, probS, NUM_ROUND)
+    round_robin_p = IPDRoundRobin(k_strategies, probS, NUM_ITER)
     print(round_robin_p.shape)
     # # plot cumulative rewards
     # plt.figure(figsize=(15,5)) 

@@ -4,11 +4,6 @@ from matplotlib.lines import Line2D
 
 from mgen import generatePayoffMatrix
 from strategy import *
-    
-def IPD2players(p1, p2, num_iter):
-    for _ in range(num_iter):
-        p1.play(p2)
-    return p1, p2
 
 def main():
     # compare results with other version
@@ -29,7 +24,7 @@ def main():
         for (k2, probS2) in zip(k_strategies, probS):
             p1 = Player(k=k1, probS=probS1)
             p2 = Player(k=k2, probS=probS2)
-            p1, p2 = IPD2players(p1, p2, NUM_ITER)
+            p1.play_iter(p2, NUM_ITER)
             print("Evaluating {} - {}...".format(p1.s,p2.s))
             # print(p1.payoffHist, p1.playedHist)
             # print(p2.payoffHist, p2.playedHist)

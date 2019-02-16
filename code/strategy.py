@@ -31,6 +31,10 @@ class Player(Strategy):
         self.payoffHist = []
         self.playedHist = []
     
+    def play_iter(self, sOpponent, num_iter):
+        for _ in range(num_iter):
+            self.play(sOpponent)
+
     def play(self, sOpponent): 
         if type(self.s) != TitForTat:
             action1 = self.s.get()
@@ -56,7 +60,39 @@ class Player(Strategy):
         else:
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
+
+    def clearHist(self):
+        self.stratHist = []
+        self.payoffHist = []
+        self.playedHist = []
+
+class MultiPlayer(Player):
+    def __init__(self, probS, k):
+        Player.__init__(self, probS, k)
         
+        # save results for multiple rounds played by user
+        self.prevStratHist = []
+        self.prevPayoffHist = []
+        self.prevPlayedHist = []
+
+    def play_iter(self, sOpponent, num_iter):
+        Player.play_iter(self, sOpponent, num_iter)
+
+        self.prevStratHist.append(self.stratHist)
+        self.prevPayoffHist.append(self.payoffHist)
+        self.prevPlayedHist.append(self.playedHist)
+
+        sOpponent.prevStratHist.append(sOpponent.stratHist)
+        sOpponent.prevPayoffHist.append(sOpponent.payoffHist)
+        sOpponent.prevPlayedHist.append(sOpponent.playedHist)
+
+        # set actual history to zero
+        self.clearHist()
+        sOpponent.clearHist()
+
+    def actual_round(self):
+        return len(self.prevStratHist)
+
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
 
