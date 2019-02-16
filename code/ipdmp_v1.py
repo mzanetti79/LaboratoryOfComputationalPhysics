@@ -21,14 +21,11 @@ def IPDRoundRobin(k_strategies, probS, num_iter):
                 # print(i, j)
                 p1.play_iter(p2, num_iter)
 
-    for p in round_robin_p:
-        print(p.prevPayoffHist)
-        print('\n')
-    exit()
-
     return round_robin_p
     
 def main():
+    np.random.seed(1234)
+
     # number of iterations
     NUM_ITER = 50
     # number of players
@@ -42,10 +39,13 @@ def main():
     # set random k if k == -2
     mask = k_strategies == -2
     k_strategies[mask] = np.random.randint(0,100,size=np.sum(mask))
-    probS = k_strategies >=0
+    probS = k_strategies >= 0
 
     round_robin_p = IPDRoundRobin(k_strategies, probS, NUM_ITER)
-    print(round_robin_p.shape)
+    
+    for p in round_robin_p:
+        print(p.results)
+
     # # plot cumulative rewards
     # plt.figure(figsize=(15,5)) 
     # plt.subplot(1,2,1)

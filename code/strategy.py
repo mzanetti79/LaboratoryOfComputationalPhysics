@@ -27,9 +27,7 @@ class Player(Strategy):
             self.s = ProbStrategy(k)
         else:
             self.s = TitForTat()
-        self.stratHist = []
-        self.payoffHist = []
-        self.playedHist = []
+        self.clearHist()
     
     def play_iter(self, sOpponent, num_iter):
         for _ in range(num_iter):
@@ -71,9 +69,11 @@ class MultiPlayer(Player):
         Player.__init__(self, probS, k)
         
         # save results for multiple rounds played by user
+        # this way we can save all the results from the tournament
         self.prevStratHist = []
         self.prevPayoffHist = []
         self.prevPlayedHist = []
+        self.results = [] # 'w' = win, 'l' = loss, d' = draw
 
     def play_iter(self, sOpponent, num_iter):
         Player.play_iter(self, sOpponent, num_iter)
@@ -86,11 +86,23 @@ class MultiPlayer(Player):
         sOpponent.prevPayoffHist.append(sOpponent.payoffHist)
         sOpponent.prevPlayedHist.append(sOpponent.playedHist)
 
+        # who won? check the sum of rewards
+        if np.sum(self.payoffHist) == np.sum(sOpponent.payoffHist):
+            self.results.append('d')
+            sOpponent.results.append('d')
+        elif np.sum(self.payoffHist) > np.sum(sOpponent.payoffHist):
+            self.results.append('w')
+            sOpponent.results.append('l')
+        else:
+            self.results.append('l')
+            sOpponent.results.append('w')
+
         # set actual history to zero
         self.clearHist()
         sOpponent.clearHist()
 
-    def actual_round(self):
+    # number of rounds each user played
+    def rounds_played(self):
         return len(self.prevStratHist)
 
 class ProbStrategy(Strategy):
