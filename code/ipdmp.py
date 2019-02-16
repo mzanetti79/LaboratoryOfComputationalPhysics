@@ -72,11 +72,11 @@ def main():
             # can now access any property from p1 or p2 for plots
             # each match can be explored
             # print(i, j)
-                df = pd.DataFrame(
+            df = pd.DataFrame(
                     [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i], np.sum(p.prevPayoffHist[j]), np.sum(p.prevOpponent[j].prevPayoffHist[i])]],
                     columns=['p1','p2','p1-result', 'p2-result','p1-score','p2-score']
-                )
-                matches_df = matches_df.append(df)
+            )
+            matches_df = matches_df.append(df)
 
     plt.legend()
     # plt.show()
