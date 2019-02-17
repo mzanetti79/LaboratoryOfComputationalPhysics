@@ -46,13 +46,17 @@ def main():
             # plt.legend(['Player1','Player2'])
             # 0 = cooperate = blue
             plt.legend(handles=[
+                Line2D([0], [0], color='w', marker='_', label='Player 1',
+                          markeredgecolor='r'),
+                Line2D([0], [0], color='w', marker='_', label='Player 2',
+                          markeredgecolor='b'),
                 Line2D([0], [0], color='w', marker='o', label='Defect',
                           markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='Cooperate',
-                          markerfacecolor='b')
+                          markerfacecolor='b')          
             ])
 
-            # plt.show()
+            #plt.show()
             plt.savefig('../img_v1/idp2p-rewards-{}-{}.png'.format(p1.s,p2.s))
             plt.close()
 
