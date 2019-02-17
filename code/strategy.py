@@ -60,9 +60,19 @@ class Player(object):
         kH = np.random.randint(51,100)
         kL = np.random.randint(0,50)
         k_strategies = np.array([0, 100, kL, kH, 50, -1])
-        proposed =  k_strategies[np.random.randint(0,6)]
+        
+        k =  k_strategies[np.random.randint(0,6)]
+        if k >= 0:
+            proposed = ProbStrategy(k)
+        elif k == -1:
+            proposed = TitForTat()
+            
         while proposed == self.s:
-            proposed =  k_strategies[np.random.randint(0,6)]
+            k =  k_strategies[np.random.randint(0,6)]
+            if k >= 0:
+                proposed = ProbStrategy(k)
+            elif k == -1:
+                proposed = TitForTat()
         self.s = proposed
         
     def clear_hist(self):
@@ -109,19 +119,19 @@ class MultiPlayer(Player):
             self.results.append('d')
             opponent.results.append('d')
             if self.changing:
-                self.Player.change()
+                self.change()
             if opponent.changing:
-                opponent.Player.change()
+                opponent.change()
         elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
             self.results.append('w')
             opponent.results.append('l')
             if opponent.changing:
-                opponent.Player.change()
+                opponent.change()
         else:
             self.results.append('l')
             opponent.results.append('w')
             if self.changing:
-                self.Player.change()
+                self.change()
                 
         # set actual history to zero
         self.clear_hist()
