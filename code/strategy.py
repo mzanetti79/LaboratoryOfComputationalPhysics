@@ -49,15 +49,18 @@ class Player(object):
         if opponent:
             self.payoffHist.append(self.M2[action1,action2])
             self.playedHist.append(action2)
+            self.bestPossibleHist.append(max(self.M2[:,action2]))
         else:
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
+            self.bestPossibleHist.append(max(self.M1[action1,:]))
 
     def clear_hist(self):
         """Clears all history of the player."""
         self.stratHist = []
         self.payoffHist = []
         self.playedHist = []
+        self.bestPossibleHist = []
 
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
