@@ -32,14 +32,16 @@ class Player(object):
         else:
             action1 = 0 # cooperate
             if len(opponent.playedHist) > 0:
+                print(opponent.playedHist[-1])
                 action1 = self.s.get(opponent.playedHist[-1]) # pass opponent's move
             
-        if type(opponent) != TitForTat:
+        if type(opponent.s) != TitForTat:
             action2 = opponent.s.get()
         else:
             action2 = 0
             if len(self.playedHist) > 0:
                 action2 = opponent.s.get(self.playedHist[-1]) # todo check if opponent or self
+                
         self.update(action1, action2, False)
         opponent.update(action1, action2, True)
         
