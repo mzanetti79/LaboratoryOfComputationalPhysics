@@ -32,7 +32,7 @@ class Player(object):
         else:
             action1 = 0 # cooperate
             if len(opponent.playedHist) > 0:
-                print(opponent.playedHist[-1])
+                # print(opponent.playedHist[-1])
                 action1 = self.s.get(opponent.playedHist[-1]) # pass opponent's move
             
         if type(opponent.s) != TitForTat:
