@@ -55,6 +55,16 @@ class Player(object):
             self.playedHist.append(action1)
             self.bestPossibleHist.append(max(self.M1[action1,:]))
 
+    def change(self):
+        """Change the strategy randomly"""
+        kH = np.random.randint(51,100)
+        kL = np.random.randint(0,50)
+        k_strategies = np.array([0, 100, kL, kH, 50, -1])
+        proposed =  k_strategies[np.random.randint(0,6)]
+        while proposed == self.s:
+            proposed =  k_strategies[np.random.randint(0,6)]
+        self.s = proposed
+        
     def clear_hist(self):
         """Clears all history of the player."""
         self.stratHist = []
@@ -65,7 +75,7 @@ class Player(object):
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
 
-    def __init__(self, k):
+    def __init__(self, k, changing = False):
         Player.__init__(self, k)
         
         # save results for multiple rounds played by user
@@ -73,20 +83,24 @@ class MultiPlayer(Player):
         self.prevStratHist = []
         self.prevPayoffHist = []
         self.prevPlayedHist = []
+        self.prevBestPossibleHist = []
         self.prevOpponent = []
         self.results = [] # 'w' = win, 'l' = loss, d' = draw
-
+        self.changing = changing
+        
     def play_iter(self, opponent, num_iter):
         Player.play_iter(self, opponent, num_iter)
 
         self.prevStratHist.append(self.stratHist)
         self.prevPayoffHist.append(self.payoffHist)
         self.prevPlayedHist.append(self.playedHist)
-
+        self.prevBestPossibleHist.append(self.bestPossibleHist)
+        
         opponent.prevStratHist.append(opponent.stratHist)
         opponent.prevPayoffHist.append(opponent.payoffHist)
         opponent.prevPlayedHist.append(opponent.playedHist)
-
+        opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
+        
         self.prevOpponent.append(opponent)
         opponent.prevOpponent.append(self)
 
@@ -94,17 +108,25 @@ class MultiPlayer(Player):
         if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
             self.results.append('d')
             opponent.results.append('d')
+            if self.changing:
+                self.Player.change()
+            if opponent.changing:
+                opponent.Player.change()
         elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
             self.results.append('w')
             opponent.results.append('l')
+            if opponent.changing:
+                opponent.Player.change()
         else:
             self.results.append('l')
             opponent.results.append('w')
-
+            if self.changing:
+                self.Player.change()
+                
         # set actual history to zero
         self.clear_hist()
         opponent.clear_hist()
-
+    
     def rounds_played(self):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
