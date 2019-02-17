@@ -26,8 +26,8 @@ def main():
             p2 = Player(k2)
             p1.play_iter(p2, NUM_ITER)
             print("Evaluating {} - {}...".format(p1.s,p2.s))
-            # print(p1.payoffHist, p1.playedHist)
-            # print(p2.payoffHist, p2.playedHist)
+            #print(p1.payoffHist, p1.playedHist)
+            #print(p2.playedHist)
 
             # plot cumulative rewards
             plt.figure(figsize=(15,5))
@@ -37,8 +37,17 @@ def main():
             plt.plot(rew2)
             # https://predictablynoisy.com/matplotlib/_images/sphx_glr_colormaps_004.png
             # different dot colors based on action (easiest way to plot points)
-            plt.scatter(np.arange(0,rew1.size), rew1, c=p1.playedHist, cmap='bwr')
-            plt.scatter(np.arange(0,rew2.size), rew2, c=p2.playedHist, cmap='bwr')
+            for i in range(0,rew1.size):
+                if p1.playedHist[i] == 0:
+                    plt.plot(i, rew1[i], 'bo')
+                else:
+                    plt.plot(i, rew1[i], 'ro')
+                    
+                if p2.playedHist[i] == 0:
+                    plt.plot(i, rew2[i], 'bo')
+                else:
+                    plt.plot(i, rew2[i], 'ro')
+
             plt.title("2 pl. game: {} - {}".format(p1.s,p2.s))
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
@@ -46,9 +55,9 @@ def main():
             # 0 = cooperate = blue
             plt.legend(handles=[
                 Line2D([0], [0], color='w', marker='_', label='Player 1',
-                          markeredgecolor='r'),
-                Line2D([0], [0], color='w', marker='_', label='Player 2',
                           markeredgecolor='b'),
+                Line2D([0], [0], color='w', marker='_', label='Player 2',
+                          markeredgecolor='r'),
                 Line2D([0], [0], color='w', marker='o', label='Defect',
                           markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='Cooperate',
