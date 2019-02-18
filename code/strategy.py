@@ -59,19 +59,19 @@ class Player(object):
         kL = np.random.randint(0,50)
         k_strategies = np.array([0, 100, kL, kH, 50, -1])
         
-        k =  k_strategies[np.random.randint(0,6)]
-        if k >= 0:
-            proposed = ProbStrategy(k)
-        elif k == -1:
-            proposed = TitForTat()
+        proposed = self.propose_change(k_strategies)
             
         while proposed == self.s:
-            k =  k_strategies[np.random.randint(0,6)]
-            if k >= 0:
-                proposed = ProbStrategy(k)
-            elif k == -1:
-                proposed = TitForTat()
+            proposed = self.propose_change(k_strategies)
+
         self.s = proposed
+
+    def propose_change(self, k_strategies):
+        k =  np.random.choice(k_strategies) # gene
+        if k >= 0:
+            return ProbStrategy(k)
+        elif k == -1:
+            return TitForTat()
         
     def clear_hist(self):
         """Clears all history of the player."""
@@ -150,47 +150,6 @@ class MultiPlayer(Player):
     def count_draws(self):
         """Counts the number of rounds drawn by player."""
         return self.results.count('d')
-
-class GeneMultiPlayer(MultiPlayer):
-    def __init__(self, k, changing = True):
-        MultiPlayer.__init__(self, k, changing)
-        # attitude of individual to cooperate
-        self.gene = np.random.randint(0,100)
-
-    def change(self):
-        """Change the strategy based on gene that can mutate randomly"""
-        # individuals evolve towards the best strategy better strategy
-        # self.gene = np.random.randint(self.gene, 100)
-        # individuals evolve randomly (towards a better or worse strategy)
-        self.gene = np.random.randint(0, 100)
-
-        kH = np.random.randint(51,100)
-        kL = np.random.randint(0,50)
-        k_strategies = np.array([0, kL, 50, kH, 100])
-        
-        # choose strategy based on gene: attitude to cooperate
-        min_gap = np.inf
-        for k in k_strategies:
-            gap = np.abs(self.gene - k)
-            if gap < min_gap:
-                min_gap = gap
-                proposed_k = k
-        
-        proposed = ProbStrategy(proposed_k)
-        # fixme: in which case should TitForTat be chosen?
-            
-        while proposed == self.s:
-            min_gap = np.inf
-            for k in k_strategies:
-                gap = np.abs(self.gene - k)
-                if gap < min_gap:
-                    min_gap = gap
-                    proposed_k = k
-            
-            proposed = ProbStrategy(proposed_k)
-            # fixme: in which case should TitForTat be chosen?
-
-        self.s = proposed
 
 class Strategy:
     """Abstract Strategy class to derive other."""
