@@ -78,9 +78,9 @@ def main():
        #    matches_df = matches_df.append(df)
 
     plt.legend()
-    plt.show()
-    #plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
-    #plt.close()
+    # plt.show()
+    plt.savefig('../img_v1/cidpmp-scores-{}.png'.format(NUM_PLAYERS))
+    plt.close()
 
     ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
     print(ranking_df)
