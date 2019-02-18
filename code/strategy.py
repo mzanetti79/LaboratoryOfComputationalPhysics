@@ -2,18 +2,16 @@ import numpy as np
 
 class Player(object):
     """Class to describe a player with strategy and history."""
-
-    M1 = np.array([[2,0],[3,1]])
-    # M1 = np.array([[3,0],[5,2]]) # another good choice
-    # or use M = generatePayoffMatrix()
-    M2 = M1.T
     
     def __str__(self):
         return "Player with strategy: {}".format(self.s)
     
-    def __init__(self, k=0):
-        # todo payoff matrix M should be an external parameter
-        # todo if strategy may change, methods need to be added
+    # M1 = np.array([[3,0],[5,2]]) # another good choice
+    # or use M = generatePayoffMatrix()
+    def __init__(self, k=0, M1=np.array([[2,0],[3,1]])):
+        self.M1 = M1
+        self.M2 = M1.T
+
         if k >= 0:
             self.s = ProbStrategy(k)
         elif k == -1:
@@ -27,23 +25,20 @@ class Player(object):
 
     def play(self, opponent): 
         """Plays the game against an opponent."""
-        if type(self.s) != TitForTat:
-            action1 = self.s.get()
-        else:
-            action1 = 0 # cooperate
-            if len(opponent.playedHist) > 0:
-                # print(opponent.playedHist[-1])
-                action1 = self.s.get(opponent.playedHist[-1]) # pass opponent's move
-            
-        if type(opponent.s) != TitForTat:
-            action2 = opponent.s.get()
-        else:
-            action2 = 0
-            if len(self.playedHist) > 0:
-                action2 = opponent.s.get(self.playedHist[-1]) # todo check if opponent or self
+        action1 = self.act(opponent)
+        action2 = opponent.act(self)
                 
         self.update(action1, action2, False)
         opponent.update(action1, action2, True)
+
+    def act(self, opponent):
+        if type(self.s) != TitForTat:
+            return self.s.get()
+        else:
+            if len(opponent.playedHist) > 0:
+                # print(opponent.playedHist[-1])
+                return self.s.get(opponent.playedHist[-1]) # pass opponent's move
+            return 0 # cooperate
         
     def update(self, action1, action2, opponent):
         """Updates the state based on the actions."""
@@ -155,6 +150,18 @@ class MultiPlayer(Player):
         """Counts the number of rounds drawn by player."""
         return self.results.count('d')
 
+class GeneMultiPlayer(MultiPlayer):
+    def __init__(self, k, changing = True):
+        MultiPlayer.__init__(self, k, changing)
+        # attitude of individual to cooperate
+        # each strategy cooperates with this probability?
+        self.gene = np.random.uniform() # between 0 and 1
+
+    # mutating strategy
+    def change(self):
+        """Change the strategy so that best fitting is determined, gene can mutate randomly"""
+        pass # todo implement cooperation strategy
+
 class Strategy:
     """Abstract Strategy class to derive other."""
 
@@ -167,8 +174,10 @@ class Strategy:
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
 
-    def __init__(self, k): #todo put limit check on k
-        self.k = k
+    def __init__(self, k):
+        # default value 0 is to cooperate in case of wrong k
+        # todo: check if throwing exception is better
+        self.k = k if k>=0 and k<=100 else 0
 
     def get(self):
         num = np.random.randint(0,100)

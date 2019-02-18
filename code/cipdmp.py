@@ -82,7 +82,7 @@ def main():
     #plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
     #plt.close()
 
-    ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, True, True])
+    ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
     print(ranking_df)
     print(matches_df)
 

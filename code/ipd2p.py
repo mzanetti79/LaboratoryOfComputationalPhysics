@@ -68,7 +68,7 @@ def main():
                           markerfacecolor='b')
                 ])
 
-            plt.show()
+            # plt.show()
             plt.savefig('../img_v1/idp2p-rewards-{}-{}.png'.format(p1.s,p2.s))
             plt.close()
 
