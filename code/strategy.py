@@ -54,6 +54,7 @@ class Player(object):
 
     def change(self):
         """Change the strategy randomly"""
+        # watch out: each player has a different kH, kL
         kH = np.random.randint(51,100)
         kL = np.random.randint(0,50)
         k_strategies = np.array([0, 100, kL, kH, 50, -1])
@@ -154,13 +155,42 @@ class GeneMultiPlayer(MultiPlayer):
     def __init__(self, k, changing = True):
         MultiPlayer.__init__(self, k, changing)
         # attitude of individual to cooperate
-        # each strategy cooperates with this probability?
-        self.gene = np.random.uniform() # between 0 and 1
+        self.gene = np.random.randint(0,100)
 
-    # mutating strategy
     def change(self):
-        """Change the strategy so that best fitting is determined, gene can mutate randomly"""
-        pass # todo implement cooperation strategy
+        """Change the strategy based on gene that can mutate randomly"""
+        # individuals evolve towards the best strategy better strategy
+        # self.gene = np.random.randint(self.gene, 100)
+        # individuals evolve randomly (towards a better or worse strategy)
+        self.gene = np.random.randint(0, 100)
+
+        kH = np.random.randint(51,100)
+        kL = np.random.randint(0,50)
+        k_strategies = np.array([0, kL, 50, kH, 100])
+        
+        # choose strategy based on gene: attitude to cooperate
+        min_gap = np.inf
+        for k in k_strategies:
+            gap = np.abs(self.gene - k)
+            if gap < min_gap:
+                min_gap = gap
+                proposed_k = k
+        
+        proposed = ProbStrategy(proposed_k)
+        # fixme: in which case should TitForTat be chosen?
+            
+        while proposed == self.s:
+            min_gap = np.inf
+            for k in k_strategies:
+                gap = np.abs(self.gene - k)
+                if gap < min_gap:
+                    min_gap = gap
+                    proposed_k = k
+            
+            proposed = ProbStrategy(proposed_k)
+            # fixme: in which case should TitForTat be chosen?
+
+        self.s = proposed
 
 class Strategy:
     """Abstract Strategy class to derive other."""
