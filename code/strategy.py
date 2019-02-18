@@ -151,6 +151,14 @@ class MultiPlayer(Player):
         """Counts the number of rounds drawn by player."""
         return self.results.count('d')
 
+    def get_points(self):
+        """Counts the points at each match of the player w=3, d=1, l=0."""
+        points = np.zeros(len(self.results))
+        points[np.array(self.results) == 'd'] = 1
+        points[np.array(self.results) == 'w'] = 3
+        points[np.array(self.results) == 'l'] = 0
+        return np.cumsum(points)
+
 class Strategy:
     """Abstract Strategy class to derive other."""
 

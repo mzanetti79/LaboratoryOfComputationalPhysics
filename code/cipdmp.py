@@ -51,11 +51,7 @@ def main():
 
     for (i, p) in zip(np.arange(NUM_PLAYERS), round_robin_p):
 
-        points = np.zeros(len(p.results))
-        points[np.array(p.results) == 'd'] = 1
-        points[np.array(p.results) == 'w'] = 3
-        points[np.array(p.results) == 'l'] = 0
-        points = np.cumsum(points)
+        points = p.get_points()
         plt.plot(points, label='P. {}'.format(i))
         plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
         plt.xlabel('Match number')
