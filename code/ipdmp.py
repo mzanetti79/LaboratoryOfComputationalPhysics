@@ -80,8 +80,10 @@ def main():
 
     ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
 
-    print(ranking_df)
-    print(matches_df)
+    # print(ranking_df)
+    print(ranking_df.to_latex())
+    # print(matches_df)
+    print(matches_df.to_latex())
     # ranking_df = pd.DataFrame(ranking_df)
     # matches_df = pd.DataFrame(matches_df)
     # display(ranking_df)

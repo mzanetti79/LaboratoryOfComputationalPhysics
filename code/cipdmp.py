@@ -79,8 +79,8 @@ def main():
     plt.close()
 
     ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
-    print(ranking_df)
-    print(matches_df)
+    print(ranking_df.to_latex())
+    print(matches_df.to_latex())
 
 if __name__ == "__main__":
     main()
