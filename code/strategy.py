@@ -8,7 +8,7 @@ class Player(object):
     
     # M1 = np.array([[3,0],[5,2]]) # another good choice
     # or use M = generatePayoffMatrix()
-    def __init__(self, k=0, M1=np.array([[2,0],[3,1]])):
+    def __init__(self, k=0, M1=np.array([[3,0],[5,1]])):
         self.M1 = M1
         self.M2 = M1.T
 
@@ -96,23 +96,7 @@ class MultiPlayer(Player):
         self.results = [] # 'w' = win, 'l' = loss, d' = draw
         self.changing = changing
         
-    def play_iter(self, opponent, num_iter):
-        Player.play_iter(self, opponent, num_iter)
-
-        self.prevStratHist.append(self.stratHist)
-        self.prevPayoffHist.append(self.payoffHist)
-        self.prevPlayedHist.append(self.playedHist)
-        self.prevBestPossibleHist.append(self.bestPossibleHist)
-        
-        opponent.prevStratHist.append(opponent.stratHist)
-        opponent.prevPayoffHist.append(opponent.payoffHist)
-        opponent.prevPlayedHist.append(opponent.playedHist)
-        opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
-        
-        self.prevOpponent.append(opponent)
-        opponent.prevOpponent.append(self)
-
-        # who won? check the sum of rewards
+    def winner(self,opponent):
         if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
             self.results.append('d')
             opponent.results.append('d')
@@ -130,11 +114,35 @@ class MultiPlayer(Player):
             opponent.results.append('w')
             if self.changing:
                 self.change()
+    
+    def winner_alt(self,opponent):
+        self.results.append(np.sum(self.payoffHist))
+        opponent.results.append(np.sum(opponent.payoffHist))
+        
+    def play_iter(self, opponent, num_iter):
+        Player.play_iter(self, opponent, num_iter)
+
+        self.prevStratHist.append(self.stratHist)
+        self.prevPayoffHist.append(self.payoffHist)
+        self.prevPlayedHist.append(self.playedHist)
+        self.prevBestPossibleHist.append(self.bestPossibleHist)
+        
+        opponent.prevStratHist.append(opponent.stratHist)
+        opponent.prevPayoffHist.append(opponent.payoffHist)
+        opponent.prevPlayedHist.append(opponent.playedHist)
+        opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
+        
+        self.prevOpponent.append(opponent)
+        opponent.prevOpponent.append(self)
+
+        # who won? check the sum of rewards
+        self.winner_alt(opponent)
                 
         # set actual history to zero
         self.clear_hist()
         opponent.clear_hist()
     
+
     def rounds_played(self):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
@@ -157,6 +165,11 @@ class MultiPlayer(Player):
         points[np.array(self.results) == 'd'] = 1
         points[np.array(self.results) == 'w'] = 3
         points[np.array(self.results) == 'l'] = 0
+        return np.cumsum(points)
+
+    def get_points_alt(self):
+        points = np.zeros(len(self.results))
+        points = self.results
         return np.cumsum(points)
 
 class Strategy:
