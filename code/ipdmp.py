@@ -29,7 +29,7 @@ def main():
     # number of iterations
     NUM_ITER = 500
     # number of players
-    NUM_PLAYERS = 6
+    NUM_PLAYERS = 15
 
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -42,9 +42,10 @@ def main():
 
     # define k for strategy probabilities
     # use k=-1 for TfT
-    kH = np.random.randint(51,100)
-    kL = np.random.randint(0,50)
-    k_strategies = np.array([0, 100, kL, kH, 50, -1])
+    k = []
+    for i in range(NUM_PLAYERS-4):
+        k.append(np.random.randint(1,100))
+    k_strategies = np.append(np.array([0, 100, 50, -1]), k)
     
     round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER, True)
 
