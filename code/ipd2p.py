@@ -21,6 +21,7 @@ def main():
     
     for k1 in k_strategies:
         for k2 in k_strategies[np.where(k_strategies == k1)[0][0]:]:                
+            #reset the lists for new match A vs B
             cum_results =  {k1:[], k2:[]}
             mean_results = {k1:[], k2:[]}
             std_results = {k1:[], k2:[]}
@@ -30,8 +31,8 @@ def main():
             rew1 = np.zeros_like(NUM_ITER)
             rew2 = np.zeros_like(NUM_ITER)
             print("Evaluating {} - {}...".format(p1.s,p2.s))
+            # repeat the match to get some statistics (mean and std)
             for n in range(0,100):
-            # todo this does A-B but also B-A, maybe change
                 p1.clear_hist()
                 p2.clear_hist()
                 p1.play_iter(p2, NUM_ITER)
