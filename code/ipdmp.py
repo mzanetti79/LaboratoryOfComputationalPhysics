@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mgen import generatePayoffMatrix
 from strategy import *
 
-def IPDRoundRobin(k_strategies, num_iter):
+def IPDRoundRobin(k_strategies, num_iter, itself):
     n = num_strat = k_strategies.size
     num_rounds = int( ((n-1)/2) * n)
 
@@ -16,31 +16,37 @@ def IPDRoundRobin(k_strategies, num_iter):
 
     # each player plays against another in a round robin scheme
     for (i, p1) in zip(np.arange(n), round_robin_p):
-        for (j, p2) in zip(np.arange(i+1,n), round_robin_p[i+1:]):
-            # print(i, j)
+        #todo reason if A vs A makes sense
+        for (j, p2) in zip(np.arange(i if itself else i+1 ,n), round_robin_p[i if itself else i+1:]):
             p1.play_iter(p2, num_iter)
 
     return round_robin_p
     
 def main():
-    np.random.seed(1234)
+    np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
     # number of iterations
-    NUM_ITER = 50
+    NUM_ITER = 500
     # number of players
-    NUM_PLAYERS = 10
+    NUM_PLAYERS = 6
 
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define strategies for players
     # -1 = TfT
     # -2 = random
-    k_strategies = np.random.choice([0, 100, 50, -1, -2, -2], NUM_PLAYERS)
-    mask = k_strategies == -2
-    k_strategies[mask] = np.random.randint(1,100,size=np.sum(mask))
+    #k_strategies = np.random.choice([0, 100, 50, -1, -2, -2], NUM_PLAYERS)
+    #mask = k_strategies == -2
+    #k_strategies[mask] = np.random.randint(1,100,size=np.sum(mask))
 
-    round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER)
+    # define k for strategy probabilities
+    # use k=-1 for TfT
+    kH = np.random.randint(51,100)
+    kL = np.random.randint(0,50)
+    k_strategies = np.array([0, 100, kL, kH, 50, -1])
+    
+    round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER, True)
 
     # serie A table
     # todo: store final rewards sum as well as opponent rewards sum
@@ -50,8 +56,8 @@ def main():
     matches_df = pd.DataFrame()
 
     for (i, p) in zip(np.arange(NUM_PLAYERS), round_robin_p):
-
-        points = p.get_points()
+        #points = p.get_points()
+        points = p.get_points_alt()
         plt.plot(points, label=p.s)
         plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
         plt.xlabel('Match number')
@@ -63,7 +69,7 @@ def main():
         )
         ranking_df = ranking_df.append(df)
 
-        for j in range(i+1, len(p.results)):
+        for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots
             # each match can be explored
             # print(i, j)
@@ -75,10 +81,10 @@ def main():
 
     plt.legend()
     # plt.show()
-    plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
-    plt.close()
+    #plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
+    #plt.close()
 
-    ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
+    ranking_df = ranking_df.sort_values(['W', 'D', 'L','points'], ascending=[False, False, False, False])
 
     # print(ranking_df)
     print(ranking_df.to_latex())
