@@ -18,7 +18,8 @@ def main():
     kH = np.random.randint(51,100)
     kL = np.random.randint(0,50)
     k_strategies = np.array([0, 100, kL, kH, 50, -1])
-
+    
+    results =  {el:[] for el in k_strategies}
     for k1 in k_strategies:
         for k2 in k_strategies:
             # todo this does A-B but also B-A, maybe change
