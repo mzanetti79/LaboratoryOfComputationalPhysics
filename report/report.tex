@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 %% arara: pdflatex
-%% arara: bibtex
+%% arara: bibtex - useless for now
 % arara: pdflatex
 % arara: pdflatex
 \documentclass[journal,a4paper,10pt,twoside]{IEEEtran}
@@ -61,9 +61,13 @@
 %%%%%%%%%%
 
 \begin{abstract}
+In this work we analyse the Iterated Prisoner's Dilemma(IPD), under four main point of view: between two players, between multiple players, between multiple players with evolution on the population and between multiple players with a randomness on the type between rounds(some Nature choice in Game Theory terms).
+This report gives a introduction on the Prisoner's Dilemma problem both theoretically and mathematically defining the base structure that will be used in all the following sections.
+Following this in Section \ref{Strategies} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{IPD2P}, \ref{IPDMP}, \ref{rIPDMP}, \ref{crIPDMP}] we illustrate the results of our simulation for each one of the study-cases. At the end on Section \ref{Conclusion} some final thoughts and considerations on the work done.
+All the code, developed in \textit{Python 3.7}, can be found on our \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub} page.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction} 
 The Prisoner's Dilemma (PD) is a classical game analyzed in game theory, which attempts to model social/economical interaction. It's a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance.
 
 The classical formulation of the PD is that given two prisoners, their conviction depends on their mutual cooperation. It can be understood more easily if illustrated in terms of a trade-off game (\textit{closed bag exachange}):
@@ -72,9 +76,9 @@ The classical formulation of the PD is that given two prisoners, their convictio
 \textit{Two people meet and exchange closed bags, with the understanding that one of them contains money, and the other contains a purchase. Either player can choose to honor the deal by putting into his or her bag what he or she agreed, or he or she can defect by handing over an empty bag.}
 \end{quote}
 
-For both players the winning strategy is not to cooperate.
+For both players the winning strategy is not to cooperate(and it is the only Nash Equilibrium point). Even if counter-intuitive this is a best response in every single-shot game. If the other player cooperate the defective one gets a better result, if both defect everyone is happy. There is a caveat though: the best strategy, that is said to Pareto dominate the others, is to cooperate for both players. Even if this is true since it gives better payoffs with respect to the case where both defect, it is unrealistic for rational players since they cannot be sure that the opponent will cooperate and anyway deviating from this strategy will improve the player results. Since both players know this(it's common knowledge), the resulting "best" strategy is to defect so they know nobody will deviate and they get something(which is better than nothing obviously).
 
-This statement changes when the interaction between the two individuals is iterated. In that case a more altruist strategy is expected to emerge.
+This reasoning changes when the interaction between the two individuals is iterated. In that case a more altruist strategy is expected to emerge.
 
 Mathematically the PD can be expressed with linear algebra. The key component is the \textit{Payoff matrix} $M$, which quantifies the reward of each player depending on whether he/she cooperated or not (defect):
 
@@ -104,7 +108,7 @@ $$
 
 In an Iterative Prisoner's Dilemma (IPD), two players play prisoner's dilemma more than once in succession and they can remember previous actions of their opponent and change their strategy accordingly. The winning strategy is the one which yields to a larger reward at the end of the IPD.
 
-\section{Strategies}
+\section{Strategies} \label{Strategies}
 
 The strategy is represented as a function which outputs either $u_C$ or $u_D$. Depending on the strategy such function might depend on the opponent's history of moves, on his/her history of moves or on the number of moves played till that moment and so on. The strategy is based on a probability density function. The strategies used in our project can be distinguished between strategies based on probability and deterministic strategies.
 
@@ -125,7 +129,7 @@ The deterministic strategies are:
 
 Each player might change strategy to get a higher reward during the IPD.
 
-\section{IPD between two players}
+\section{IPD between two players} \label{IPD2P}
 In this section the IPD between two players, who use two fixed strategies respectively during the match, is implemented.
 In particular the number of iterations was set $NUM\_ITER = 50$. This is also seen as the number of moves during the match. All the possible combinations between players using different strategies are evaluated, as well as the same strategy playing against itself.
 % What has emerged?
@@ -135,28 +139,28 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Bad-Bad.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-Bad.png}
     \caption{Bad guy vs bad guy}
     \label{fig:badvsbad}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Indifferent-Bad.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Indifferent-Bad.png}
     \caption{Bad guy vs Indifferent}
     \label{fig:badvsindiff}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Bad-TitForTat.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-TitForTat.png}
     \caption{Bad guy vs TfT}
     \label{fig:badvstft}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Bad-Nice.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-Nice.png}
     \caption{Bad guy vs Nice guy}
     \label{fig:badvsnice}
 \end{figure}
@@ -164,7 +168,7 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
 %fix: because there is a space in the image!
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Bad-MainlyNice (k=19).png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-MainlyNice (k=19).png}
     \caption{Bad guy vs Mainly nice guy}
     \label{fig:badvsmainlynice}
 \end{figure}
@@ -172,7 +176,7 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
 %fix: because there is a space in the image!
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Bad-MainlyBad (k=98).png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-MainlyBad (k=98).png}
     \caption{Bad guy vs Mainly bad guy}
     \label{fig:badvsmainlybad}
 \end{figure}
@@ -181,35 +185,35 @@ Infact, players might consider a different combination of strategies if they bot
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Indifferent-Indifferent.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Indifferent-Indifferent.png}
     \caption{Indifferent guy vs Indifferent guy}
     \label{fig:indiffvsindiff}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-TitForTat-Indifferent.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-TitForTat-Indifferent.png}
     \caption{TfT vs Indifferent guy}
     \label{fig:tftvsindiff}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Nice-Nice.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Nice-Nice.png}
     \caption{Nice guy vs Nice guy}
     \label{fig:nicevsnice}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-Nice-TitForTat.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Nice-TitForTat.png}
     \caption{Nice guy vs TfT}
     \label{fig:nicevstft}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idp2p-rewards-TitForTat-TitForTat.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-TitForTat-TitForTat.png}
     \caption{TfT vs TfT}
     \label{fig:tftvstft}
 \end{figure}
@@ -220,7 +224,7 @@ In conclusion if a player wants to be sure he wins over the other he/she should 
 
 \newpage
 
-\section{Multiple players IPD - Round-robin scheme}
+\section{Multiple players IPD - Round-robin scheme} \label{IPDMP}
 In this section a multiple players IPD (MPIPD) is implemented. The round-robin scheme, used to match-up the opponents, consists in each player playing once against each other player in the torunament.
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the tournament.
 As in IPD it is possible to set the number of iterations in each match (i.e $NUM\_ITER = 50$). In addition the number of players $n = 10$ determines the total number of matches played in the tournament, which in this case is $\dfrac{n \times (n-1)}{2} = 45$.
@@ -228,89 +232,20 @@ As in IPD it is possible to set the number of iterations in each match (i.e $NUM
 We propose a strategy, similar to \textit{Serie A} to assign points to each player after the outcome of the match is determined. A player gets 3 points if he/she wins, 1 point for a draw and 0 points for a loss. A player wins if he/she has a higher reward than the opponent's at the $50-th$ last iteration. He/She looses if the reward is lower and draws if it's the same as the opponent's.
 The culumative points after each match are shown in \autoref{fig:mpipd}.
 In \autoref{tab:ranking_df} the ranking of the torunament is determined. It can be evaluated that the three players using a \textit{Bad guy} strategy win the tournament.
-The strategies can be sorted by most number of points as follows: \texit{Bad guy}, \textit{Mainly bad guy}, \textit{Indifferent}, \textit{Mainly Nice}, \textit{TitForTat} and \textit{Nice}.
+The strategies can be sorted by most number of points as follows: \textit{Bad guy}, \textit{Mainly bad guy}, \textit{Indifferent}, \textit{Mainly Nice}, \textit{TitForTat} and \textit{Nice}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/idpmp-scores-10.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idpmp-scores-10.png}
     \caption{Match number vs Points}
     \label{fig:mpipd}
 \end{figure}
 
-\begin{table}
-    \centering
-    \begin{tabular}{llrrrr}
-    \toprule
-    {} &             Player &  W &  D &  L &  points \\
-    \midrule
-    0 &                Bad &  7 &  2 &  0 &      23 \\
-    0 &                Bad &  7 &  2 &  0 &      23 \\
-    0 &                Bad &  7 &  2 &  0 &      23 \\
-    0 &   MainlyBad (k=59) &  6 &  0 &  3 &      18 \\
-    0 &        Indifferent &  4 &  1 &  4 &      13 \\
-    0 &  MainlyNice (k=27) &  2 &  2 &  5 &       8 \\
-    0 &  MainlyNice (k=31) &  2 &  1 &  6 &       7 \\
-    0 &          TitForTat &  0 &  5 &  4 &       5 \\
-    0 &          TitForTat &  0 &  3 &  6 &       3 \\
-    0 &               Nice &  0 &  2 &  7 &       2 \\
-    \bottomrule
-    \end{tabular}
-    
-    \caption{Ranking table.}
-    \label{tab:ranking_df}
-\end{table}
 
 The outcome of each match of the tournament can be seen in \autoref{tab:match_df}.
-\begin{table}[]
-    \centering
-    \begin{tabular}{lllllrr}
-    \toprule
-    {} &                 p1 &                 p2 & p1-result & p2-result &  p1-score &  p2-score \\
-    \midrule
-    0 &          TitForTat &  MainlyNice (k=27) &         d &         d &        84 &        84 \\
-    0 &          TitForTat &   MainlyBad (k=59) &         l &         w &        72 &        75 \\
-    0 &          TitForTat &               Nice &         d &         d &       100 &       100 \\
-    0 &          TitForTat &                Bad &         l &         w &        49 &        52 \\
-    0 &          TitForTat &                Bad &         l &         w &        49 &        52 \\
-    0 &          TitForTat &                Bad &         l &         w &        49 &        52 \\
-    0 &          TitForTat &        Indifferent &         d &         d &        71 &        71 \\
-    0 &          TitForTat &          TitForTat &         d &         d &       100 &       100 \\
-    0 &  MainlyNice (k=31) &   MainlyBad (k=59) &         l &         w &        44 &       107 \\
-    0 &  MainlyNice (k=31) &               Nice &         w &         l &       115 &        70 \\
-    0 &  MainlyNice (k=31) &                Bad &         l &         w &        14 &       122 \\
-    0 &  MainlyNice (k=31) &                Bad &         l &         w &        16 &       118 \\
-    0 &  MainlyNice (k=31) &                Bad &         l &         w &        20 &       110 \\
-    0 &  MainlyNice (k=31) &        Indifferent &         l &         w &        70 &        94 \\
-    0 &  MainlyNice (k=31) &          TitForTat &         w &         l &        87 &        84 \\
-    0 &  MainlyNice (k=27) &               Nice &         w &         l &       114 &        72 \\
-    0 &  MainlyNice (k=27) &                Bad &         l &         w &        13 &       124 \\
-    0 &  MainlyNice (k=27) &                Bad &         l &         w &        12 &       126 \\
-    0 &  MainlyNice (k=27) &                Bad &         l &         w &        11 &       128 \\
-    0 &  MainlyNice (k=27) &        Indifferent &         l &         w &        72 &        87 \\
-    0 &  MainlyNice (k=27) &          TitForTat &         d &         d &        90 &        90 \\
-    0 &   MainlyBad (k=59) &                Bad &         l &         w &        35 &        80 \\
-    0 &   MainlyBad (k=59) &                Bad &         l &         w &        29 &        92 \\
-    0 &   MainlyBad (k=59) &                Bad &         l &         w &        28 &        94 \\
-    0 &   MainlyBad (k=59) &        Indifferent &         w &         l &        78 &        66 \\
-    0 &   MainlyBad (k=59) &          TitForTat &         w &         l &        71 &        68 \\
-    0 &               Nice &                Bad &         l &         w &         0 &       150 \\
-    0 &               Nice &                Bad &         l &         w &         0 &       150 \\
-    0 &               Nice &        Indifferent &         l &         w &        48 &       126 \\
-    0 &               Nice &          TitForTat &         d &         d &       100 &       100 \\
-    0 &                Bad &                Bad &         d &         d &        50 &        50 \\
-    0 &                Bad &        Indifferent &         w &         l &       102 &        24 \\
-    0 &                Bad &          TitForTat &         w &         l &        52 &        49 \\
-    0 &                Bad &        Indifferent &         w &         l &       114 &        18 \\
-    0 &                Bad &          TitForTat &         w &         l &        52 &        49 \\
-    0 &                Bad &          TitForTat &         w &         l &        52 &        49 \\
-    \bottomrule
-    \end{tabular}
-    \caption{Outcome of each match.}
-    \label{tab:match_df}
-\end{table}
 
 \newpage
-\section{Repeated multiple players IPD - Round-robin scheme}
+\section{Repeated multiple players IPD - Round-robin scheme} \label{rIPDMP}
 In this section the MPIPD round-robin scheme tournament, is iterated: \textit{Repeated multiple players IPD (rMPIPD}.
 At each tournament repetition, the population is increased adding players with strategies that depend on the results that strategies achieved in the previous iteration. 
 %In our case the population is increasing by one individual that uses the strategy of the previous tournament's winner.
@@ -318,41 +253,41 @@ At each tournament repetition, the population is increased adding players with s
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/ridpmp-scores-10-r0.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r0.png}
     \caption{Match number vs Points at repetition: 1.}
     \label{fig:rmpipd1}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/ridpmp-scores-10-r1.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r1.png}
     \caption{Match number vs Points at repetition: 2.}
     \label{fig:rmpipd2}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/ridpmp-scores-10-r2.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r2.png}
     \caption{Match number vs Points at repetition: 3.}
     \label{fig:rmpipd3}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/ridpmp-scores-10-r3.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r3.png}
     \caption{Match number vs Points at repetition: 4.}
     \label{fig:rmpipd4}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/ridpmp-scores-10-r4.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r4.png}
     \caption{Match number vs Points at repetition: 5.}
     \label{fig:rmpipd5}
 \end{figure}
 
 \newpage
-\section{Chainging rMPIPD - Round-Robin scheme}
+\section{Chainging rMPIPD - Round-Robin scheme} \label{crIPDMP}
 In this section a rMPIPD where strategies are allowed to mutate is implemented. The gene, a parameter, encodes the attitude of an individual to cooperate. This gene mutates randomly to choose a different strategy at each iteration. The phenotype, which is the strategy, corresponding to that gene competes in the MPIPD such that the best-fitted, which is the winner of the tournament, is determined.
 
 The goal of this task is to simulate the effect of genetic mutations and the effect of natura selection.
@@ -363,32 +298,14 @@ In \autoref{fig:cmpipd1} all the players change strategy at each iteration when 
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{img_v1/cidpmp-scores-10.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/cidpmp-scores-10.png}
     \caption{Match number vs Points at repetition: 1.}
     \label{fig:cmpipd1}
 \end{figure}
 
-\begin{table}[]
-    \centering
-    \begin{tabular}{lrrrrr}
-    \toprule
-    {} &  Player &  W &  D &  L &  points \\
-    \midrule
-    0 &       7 &  7 &  2 &  0 &      23 \\
-    0 &       4 &  6 &  0 &  3 &      18 \\
-    0 &       6 &  5 &  3 &  1 &      18 \\
-    0 &       0 &  4 &  2 &  3 &      14 \\
-    0 &       3 &  4 &  1 &  4 &      13 \\
-    0 &       1 &  3 &  1 &  5 &      10 \\
-    0 &       5 &  3 &  1 &  5 &      10 \\
-    0 &       9 &  3 &  1 &  5 &      10 \\
-    0 &       8 &  2 &  2 &  5 &       8 \\
-    0 &       2 &  1 &  1 &  7 &       4 \\
-    \bottomrule
-    \end{tabular}
-    \caption{Ranking table at repetition: 1.}
-    \label{tab:cmpipd1}
-\end{table}
+
+
+\section{Conclusion} \label{Conclusion}
 
 %\bibliographystyle{IEEEtran}
 %\bibliography{report.bib}
