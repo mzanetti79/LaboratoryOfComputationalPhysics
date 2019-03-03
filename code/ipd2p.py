@@ -45,15 +45,24 @@ def main():
                 cum_results[k2].append(rew2[-1])
                 
                 #mean and std of every repetition
-                mean_results[k1].append(np.mean(p1.payoffHist))
-                mean_results[k2].append(np.mean(p2.payoffHist))
-                std_results[k1].append(np.std(p1.payoffHist))
-                std_results[k2].append(np.std(p2.payoffHist))
+                # mean_results[k1].append(np.mean(p1.payoffHist))
+                # mean_results[k2].append(np.mean(p2.payoffHist))
+                # std_results[k1].append(np.std(p1.payoffHist))
+                # std_results[k2].append(np.std(p2.payoffHist))
                 
-
             #get mean and std for 100 tries
-            mean = np.mean(cum_results[k1])
-            std = np.std(cum_results[k2])
+            # mean = np.mean(cum_results[k1])
+            # std = np.std(cum_results[k2])
+
+            # boxplots for 100 tries -> A vs B
+            plt.boxplot([cum_results[k1], cum_results[k2]])
+            plt.xticks([1, 2], [p1.s, p2.s])
+            plt.ylabel('reward')
+            plt.savefig('../img_v1/idp2p-boxplot-{}-{}.png'.format(p1.s, p2.s))
+            plt.close()
+
+            # plt.boxplot([mean_results[k1], mean_results[k2]])
+            # plt.show()
             
             # plot cumulative rewards
             plt.figure(figsize=(15,5))    
@@ -74,13 +83,8 @@ def main():
             plt.title("2 pl. game: {} - {}".format(p1.s,p2.s))
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
-            # plt.legend(['Player1','Player2'])
             # 0 = cooperate = blue
             plt.legend(handles=[
-               # Line2D([0], [0], color='w', marker='_', label='Player 1',
-              #            markeredgecolor='b'),
-             #   Line2D([0], [0], color='w', marker='_', label='Player 2',
-            #              markeredgecolor='r'),
                 Line2D([0], [0], color='w', marker='x', label='P.1 Defect',
                           markeredgecolor='r'), 
                 Line2D([0], [0], color='w', marker='x', label='P.1 Cooperate',
