@@ -42,10 +42,8 @@ def main():
 
     # define k for strategy probabilities
     # use k=-1 for TfT
-    k = []
-    for i in range(NUM_PLAYERS-4):
-        k.append(np.random.randint(1,100))
-    k_strategies = np.append(np.array([0, 100, 50, -1]), k)
+    # append NUM_PLAYERS-4 strategies with k between 1 and 99 included
+    k_strategies = np.append([0, 100, 50, -1], np.random.choice(99, NUM_PLAYERS-4)+1)
     
     round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER, True)
 
