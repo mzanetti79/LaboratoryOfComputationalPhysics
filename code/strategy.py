@@ -96,24 +96,24 @@ class MultiPlayer(Player):
         self.results = [] # 'w' = win, 'l' = loss, d' = draw
         self.changing = changing
         
-    def winner(self,opponent):
-        if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
-            self.results.append('d')
-            opponent.results.append('d')
-            if self.changing:
-                self.change()
-            if opponent.changing:
-                opponent.change()
-        elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
-            self.results.append('w')
-            opponent.results.append('l')
-            if opponent.changing:
-                opponent.change()
-        else:
-            self.results.append('l')
-            opponent.results.append('w')
-            if self.changing:
-                self.change()
+    # def winner(self,opponent):
+    #     if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
+    #         self.results.append('d')
+    #         opponent.results.append('d')
+    #         if self.changing:
+    #             self.change()
+    #         if opponent.changing:
+    #             opponent.change()
+    #     elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
+    #         self.results.append('w')
+    #         opponent.results.append('l')
+    #         if opponent.changing:
+    #             opponent.change()
+    #     else:
+    #         self.results.append('l')
+    #         opponent.results.append('w')
+    #         if self.changing:
+    #             self.change()
     
     def winner_alt(self,opponent):
         self.results.append(np.sum(self.payoffHist))
@@ -147,28 +147,28 @@ class MultiPlayer(Player):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
 
-    def count_wins(self):
-        """Counts the number of rounds won by player."""
-        return self.results.count('w')
+    # def count_wins(self):
+    #     """Counts the number of rounds won by player."""
+    #     return self.results.count('w')
 
-    def count_losses(self):
-        """Counts the number of rounds loss by player."""
-        return self.results.count('l')
+    # def count_losses(self):
+    #     """Counts the number of rounds loss by player."""
+    #     return self.results.count('l')
 
-    def count_draws(self):
-        """Counts the number of rounds drawn by player."""
-        return self.results.count('d')
+    # def count_draws(self):
+    #     """Counts the number of rounds drawn by player."""
+    #     return self.results.count('d')
 
-    def get_points(self):
-        """Counts the points at each match of the player w=3, d=1, l=0."""
-        points = np.zeros(len(self.results))
-        points[np.array(self.results) == 'd'] = 1
-        points[np.array(self.results) == 'w'] = 3
-        points[np.array(self.results) == 'l'] = 0
-        return np.cumsum(points)
+    # def get_points(self):
+    #     """Counts the points at each match of the player w=3, d=1, l=0."""
+    #     points = np.zeros(len(self.results))
+    #     points[np.array(self.results) == 'd'] = 1
+    #     points[np.array(self.results) == 'w'] = 3
+    #     points[np.array(self.results) == 'l'] = 0
+    #     return np.cumsum(points)
 
     def get_points_alt(self):
-        points = np.zeros(len(self.results))
+        # points = np.zeros(len(self.results)) #todo check if useless
         points = self.results
         return np.cumsum(points)
 
