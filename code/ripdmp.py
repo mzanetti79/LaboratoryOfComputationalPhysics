@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mgen import generatePayoffMatrix
 from strategy import *
 
-def IPDRoundRobin(k_strategies, num_iter):
+def IPDRoundRobin(k_strategies, num_iter, itself = True):
     n = num_strat = k_strategies.size
     num_rounds = int( ((n-1)/2) * n)
 
@@ -16,8 +16,9 @@ def IPDRoundRobin(k_strategies, num_iter):
 
     # each player plays against another in a round robin scheme
     for (i, p1) in zip(np.arange(n), round_robin_p):
-        for (j, p2) in zip(np.arange(i+1,n), round_robin_p[i+1:]):
-            # print(i, j)
+        #todo reason if A vs A makes sense
+        for (j, p2) in zip(np.arange(i if itself else i+1 ,n), round_robin_p[i if itself else i+1:]):
+            # todo: for _ in range(NUM_REPETITIONS): -> CLEVER but get_points needs change
             p1.play_iter(p2, num_iter)
 
     # calculate ranking and matches dataframes
@@ -30,12 +31,11 @@ def IPDRoundRobin(k_strategies, num_iter):
     for (i, p) in zip(np.arange(n), round_robin_p):
         points = p.get_points_alt()
         df = pd.DataFrame(
-            [[p.s, int(points[-1])]],
-            columns=['Player','points']
+            [[p.s, int(points[-1]), p]],
+            columns=['Player','points', 'rrp']
         )
         ranking_df = ranking_df.append(df)
         ranking_df = ranking_df.sort_values(['points'], ascending=[False])
-        
         for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots
             # each match can be explored
@@ -45,7 +45,9 @@ def IPDRoundRobin(k_strategies, num_iter):
                     columns=['p1','p2','p1-score','p2-score']
             )
             matches_df = matches_df.append(df)
-        
+    
+    round_robin_p = np.array(ranking_df['rrp'])
+    ranking_df = ranking_df[['Player','points']]    
     return round_robin_p, ranking_df, matches_df
     
 def main():
@@ -53,11 +55,11 @@ def main():
     pd.set_option('display.max_columns', None)
 
     # number of iterations
-    NUM_ITER = 50
+    NUM_ITER = 100
     # number of players
-    NUM_PLAYERS = 10
-    NUM_REPETITIONS = 100
-
+    NUM_PLAYERS = 50
+    NUM_REPETITIONS = 20
+    PERCENTAGE = 0.3
     print("Testing repeated {}-times round-robin tournament with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
     repeated_round_robin_p = []
@@ -65,25 +67,27 @@ def main():
 
     
     #random initialization 
-    #k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, True)
+    k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, allowRep=True)
     
     #equal split initialization
-    kH = np.random.randint(51,100)
-    kL = np.random.randint(0,50)
-    k_strategies = [0, 100, kL, kH, 50, -1]
-    for i in range(NUM_PLAYERS//6-1):
-        k_strategies.extend(k_strategies)
-    if(NUM_PLAYERS%6 != 0):
-        k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
-    k_strategies = np.array(k_strategies)
+    #kH = np.random.randint(51,100)
+    #kL = np.random.randint(0,50)
+    #k_strategies = [0, 100, kL, kH, 50, -1]
+    #for i in range(NUM_PLAYERS//6-1):
+    #    k_strategies.extend(k_strategies)
+    #if(NUM_PLAYERS%6 != 0):
+    #    k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
+    #k_strategies = np.array(k_strategies)
     
     for r in range(NUM_REPETITIONS):
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
         repeated_round_robin_p.append(round_robin_p)
         # easy fix (depending on task)
         # add one winner strategy or multiple previous winners?
-        prev_winning_k = round_robin_p[0].s.k
-        print(prev_winning_k)
+        for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
+            k_strategies = np.append(k_strategies,round_robin_p[i].s.k)
+            k_strategies = np.delete(k_strategies,np.argmax(round_robin_p[NUM_PLAYERS-i-1].s.k if str(round_robin_p[NUM_PLAYERS-i-1].s) != 'TitForTat' else -1))
+            
         # print(matches_df)
         # ranking_df = pd.DataFrame(ranking_df)
         # matches_df = pd.DataFrame(matches_df)
