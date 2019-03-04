@@ -79,7 +79,7 @@ def main():
     #    k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
     #k_strategies = np.array(k_strategies)
     
-    for _ in range(NUM_REPETITIONS):
+    for r in range(NUM_REPETITIONS):
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
         repeated_round_robin_p.append(round_robin_p)
         # easy fix (depending on task)
@@ -88,8 +88,11 @@ def main():
             k_strategies = np.append(k_strategies,round_robin_p[i].s.k)
             k_strategies = np.delete(k_strategies,np.argmax(round_robin_p[NUM_PLAYERS-i-1].s.k if str(round_robin_p[NUM_PLAYERS-i-1].s) != 'TitForTat' else -1))
             
-        # print(ranking_df.to_latex(index=False))
-        # print(matches_df.to_latex(index=False))
+        # print(matches_df)
+        # ranking_df = pd.DataFrame(ranking_df)
+        # matches_df = pd.DataFrame(matches_df)
+        # display(ranking_df)
+        # display(matches_df)
 
     # save plots
     for (r, round_robin_p) in zip(np.arange(NUM_REPETITIONS), repeated_round_robin_p):
