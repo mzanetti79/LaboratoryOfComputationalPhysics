@@ -58,9 +58,8 @@ def main():
     NUM_ITER = 100
     # number of players
     NUM_PLAYERS = 50
-    NUM_REPETITIONS = 20
     PERCENTAGE = 0.3
-    print("Testing repeated {}-times round-robin tournament with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
+    print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     repeated_round_robin_p = []
     prev_winning_k = None
@@ -78,8 +77,9 @@ def main():
     #if(NUM_PLAYERS%6 != 0):
     #    k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
     #k_strategies = np.array(k_strategies)
-    
-    for r in range(NUM_REPETITIONS):
+    NUM_REPETITIONS = 0
+    while not np.array_equal(k_strategies, np.repeat(k_strategies[0], k_strategies.size)):
+        NUM_REPETITIONS += 1
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
         repeated_round_robin_p.append(round_robin_p)
         # easy fix (depending on task)
@@ -93,6 +93,8 @@ def main():
         # matches_df = pd.DataFrame(matches_df)
         # display(ranking_df)
         # display(matches_df)
+
+    print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
     # save plots
     for (r, round_robin_p) in zip(np.arange(NUM_REPETITIONS), repeated_round_robin_p):
