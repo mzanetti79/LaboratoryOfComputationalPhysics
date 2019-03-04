@@ -34,7 +34,8 @@ def IPDRoundRobin(k_strategies, num_iter):
             columns=['Player','points']
         )
         ranking_df = ranking_df.append(df)
-
+        ranking_df = ranking_df.sort_values(['points'], ascending=[False])
+        
         for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots
             # each match can be explored
@@ -44,7 +45,7 @@ def IPDRoundRobin(k_strategies, num_iter):
                     columns=['p1','p2','p1-score','p2-score']
             )
             matches_df = matches_df.append(df)
-            
+        
     return round_robin_p, ranking_df, matches_df
     
 def main():
@@ -54,26 +55,35 @@ def main():
     # number of iterations
     NUM_ITER = 50
     # number of players
-    NUM_PLAYERS = 100
-    NUM_REPETITIONS = 5
+    NUM_PLAYERS = 10
+    NUM_REPETITIONS = 100
 
     print("Testing repeated {}-times round-robin tournament with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
     repeated_round_robin_p = []
     prev_winning_k = None
 
-    k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS)
+    
+    #random initialization 
+    #k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, True)
+    
+    #equal split initialization
+    kH = np.random.randint(51,100)
+    kL = np.random.randint(0,50)
+    k_strategies = [0, 100, kL, kH, 50, -1]
+    for i in range(NUM_PLAYERS//6-1):
+        k_strategies.extend(k_strategies)
+    if(NUM_PLAYERS%6 != 0):
+        k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
+    k_strategies = np.array(k_strategies)
     
     for r in range(NUM_REPETITIONS):
-
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
         repeated_round_robin_p.append(round_robin_p)
         # easy fix (depending on task)
         # add one winner strategy or multiple previous winners?
         prev_winning_k = round_robin_p[0].s.k
         print(prev_winning_k)
-
-        print(ranking_df)
         # print(matches_df)
         # ranking_df = pd.DataFrame(ranking_df)
         # matches_df = pd.DataFrame(matches_df)
