@@ -28,7 +28,7 @@ def main():
     pd.set_option('display.max_columns', None)
 
     # number of iterations
-    NUM_ITER = 500
+    NUM_ITER = 50
     # number of players
     NUM_PLAYERS = 15
     # num repetitions
@@ -41,10 +41,13 @@ def main():
     matches_df = pd.DataFrame()
 
     # define k for strategy probabilities
-    # use k=-1 for TfT
     # append NUM_PLAYERS-4 strategies with k between 1 and 99 included
     # todo check if replace=True or False
-    k_strategies = np.append([0, 100, 50, -1], np.random.choice(99, NUM_PLAYERS-4)+1)
+    k = []
+    for i in range(NUM_PLAYERS-4):
+        k.append(np.random.randint(1,100))
+    #just one since it involves a copy of the array. It's NOT in-place this operation
+    k_strategies = np.append(np.array([0, 100, 50, -1]), k)
     
     saved_points = []
     for n in range(NUM_REPETITIONS):
@@ -72,7 +75,6 @@ def main():
             for j in range(i, len(p.results)):
                 # can now access any property from p1 or p2 for plots
                 # each match can be explored
-                # print(i, j)
                 df = pd.DataFrame(
                         [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i]]],
                         columns=['p1','p2','p1-score','p2-score']
@@ -92,15 +94,18 @@ def main():
         # print(matches_df.to_latex(index=False))
         # ranking_df = pd.DataFrame(ranking_df)
         # matches_df = pd.DataFrame(matches_df)
-        # display(ranking_df)
-        # display(matches_df)
+        #display(ranking_df)
+        #display(matches_df)
 
-    saved_points = np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS)))
+    saved_points = pd.DataFrame(np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS))))
+    meds = saved_points.median()
+    meds = meds.sort_values(ascending=False,)
+    saved_points = saved_points[meds.index]
     # plt.figure(figsize=(10,6))
-    plt.boxplot(saved_points)
-    plt.xticks(np.arange(NUM_PLAYERS)+1, [p.s for p in round_robin_p], rotation=90)
+    saved_points.boxplot()
+    plt.xticks(np.arange(NUM_PLAYERS)+1, [round_robin_p[p].s for p in meds.index], rotation=90)
     plt.tight_layout()
-    # plt.show()
+    plt.show()
     plt.savefig('../img_v1/idpmp-boxplot-{}.png'.format(NUM_PLAYERS))
     plt.close()
 
