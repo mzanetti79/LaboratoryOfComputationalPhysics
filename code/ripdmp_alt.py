@@ -28,11 +28,17 @@ def IPDRoundRobin(k_strategies, num_iter, itself = True):
     # all matches played sorted by time
     matches_df = pd.DataFrame()
 
+    # calculate points sum
+    sum_points = 0
+    for p in round_robin_p:
+        points = p.get_points_alt()
+        sum_points += int(points[-1])
+
     for (i, p) in zip(np.arange(n), round_robin_p):
         points = p.get_points_alt()
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), p]],
-            columns=['Player','points', 'rrp']
+            [[p.s, int(points[-1]), int(points[-1])/sum_points, p]],
+            columns=['Player','points','percentage','rrp']
         )
         ranking_df = ranking_df.append(df)
         ranking_df = ranking_df.sort_values(['points'], ascending=[False])
@@ -47,7 +53,7 @@ def IPDRoundRobin(k_strategies, num_iter, itself = True):
             matches_df = matches_df.append(df)
     
     round_robin_p = np.array(ranking_df['rrp'])
-    ranking_df = ranking_df[['Player','points']]    
+    ranking_df = ranking_df[['Player','points','percentage']]    
     return round_robin_p, ranking_df, matches_df
     
 def main():
@@ -57,7 +63,7 @@ def main():
     # number of iterations
     NUM_ITER = 100
     # number of players
-    NUM_PLAYERS = 50
+    NUM_PLAYERS = 6
     NUM_REPETITIONS = 20
     PERCENTAGE = 0.3
     print("Testing repeated {}-times round-robin tournament with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
@@ -67,7 +73,7 @@ def main():
 
     
     #random initialization 
-    k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, allowRep=True)
+    # k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, allowRep=True)
     
     #equal split initialization
     #kH = np.random.randint(51,100)
@@ -78,18 +84,29 @@ def main():
     #if(NUM_PLAYERS%6 != 0):
     #    k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
     #k_strategies = np.array(k_strategies)
+
+    # fixed initialization
+    k_strategies = np.array([0, 100, 50, -1, 25, 75])
     
-    for _ in range(NUM_REPETITIONS):
+    for r in range(NUM_REPETITIONS):
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
         repeated_round_robin_p.append(round_robin_p)
         # easy fix (depending on task)
         # add one winner strategy or multiple previous winners?
-        for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
-            k_strategies = np.append(k_strategies,round_robin_p[i].s.k)
-            k_strategies = np.delete(k_strategies,np.argmax(round_robin_p[NUM_PLAYERS-i-1].s.k if str(round_robin_p[NUM_PLAYERS-i-1].s) != 'TitForTat' else -1))
-            
-        # print(ranking_df.to_latex(index=False))
-        # print(matches_df.to_latex(index=False))
+        # for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
+            # k_strategies = np.append(k_strategies,round_robin_p[i].s.k)
+            # k_strategies = np.delete(k_strategies,np.argmax(round_robin_p[NUM_PLAYERS-i-1].s.k if str(round_robin_p[NUM_PLAYERS-i-1].s) != 'TitForTat' else -1))
+            # k_strategies = np.append(k_strategies, )
+        for i in range(0,6):
+            # add as many as told by percentage
+                k_strategies = np.append(k_strategies, k_strategies[i])
+        NUM_PLAYERS = k_strategies.size
+
+        # print(matches_df)
+        # ranking_df = pd.DataFrame(ranking_df)
+        # matches_df = pd.DataFrame(matches_df)
+        # display(ranking_df)
+        # display(matches_df)
 
     # save plots
     for (r, round_robin_p) in zip(np.arange(NUM_REPETITIONS), repeated_round_robin_p):
