@@ -117,7 +117,8 @@ class MultiPlayer(Player):
     
     def winner_alt(self,opponent):
         self.results.append(np.sum(self.payoffHist))
-        opponent.results.append(np.sum(opponent.payoffHist))
+        if opponent.s != self.s:
+            opponent.results.append(np.sum(opponent.payoffHist))
         
     def play_iter(self, opponent, num_iter):
         Player.play_iter(self, opponent, num_iter)
@@ -133,7 +134,8 @@ class MultiPlayer(Player):
         opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
         
         self.prevOpponent.append(opponent)
-        opponent.prevOpponent.append(self)
+        if self.s != opponent.s:
+            opponent.prevOpponent.append(self)
 
         # who won? check the sum of rewards
         self.winner_alt(opponent)

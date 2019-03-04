@@ -30,29 +30,33 @@ def main():
     # number of iterations
     NUM_ITER = 50
     # number of players
-    NUM_PLAYERS = 15
+    NUM_PLAYERS = 10
     # num repetitions
     NUM_REPETITIONS = 10
 
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    # save results in tables
-    ranking_df = pd.DataFrame()
-    matches_df = pd.DataFrame()
-
     # define k for strategy probabilities
     # append NUM_PLAYERS-4 strategies with k between 1 and 99 included
     # todo check if replace=True or False
     k = []
-    for i in range(NUM_PLAYERS-4):
-        k.append(np.random.randint(1,100))
+    while len(k) < (NUM_PLAYERS-4):
+        prob = np.random.randint(1,100)
+        if prob != 50 and prob not in k:
+            k.append(prob)
     #just one since it involves a copy of the array. It's NOT in-place this operation
     k_strategies = np.append(np.array([0, 100, 50, -1]), k)
     
     saved_points = []
+    
     for n in range(NUM_REPETITIONS):
+        
+        # save results in tables
+        ranking_df = pd.DataFrame()
+        matches_df = pd.DataFrame()
+        
         round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER, True)
-
+        
         for (i, p) in zip(np.arange(NUM_PLAYERS), round_robin_p):
             #points = p.get_points()
             points = p.get_points_alt()
@@ -65,7 +69,6 @@ def main():
 
             # save points for each repetition
             saved_points.append(int(points[-1]))
-
             df = pd.DataFrame(
                 [[p.s, int(points[-1])]],
                 columns=['Player','points']
@@ -75,12 +78,12 @@ def main():
             for j in range(i, len(p.results)):
                 # can now access any property from p1 or p2 for plots
                 # each match can be explored
+
                 df = pd.DataFrame(
                         [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i]]],
                         columns=['p1','p2','p1-score','p2-score']
                 )
                 matches_df = matches_df.append(df)
-
         # plt.legend()
         # plt.show()
         #plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
@@ -96,7 +99,21 @@ def main():
         # matches_df = pd.DataFrame(matches_df)
         #display(ranking_df)
         #display(matches_df)
+    
+    players_results = []
+    for i in round_robin_p:
+        players_results.append(i.results)
 
+    one_round = pd.DataFrame(players_results).T
+    meds = one_round.median()
+    meds = meds.sort_values(ascending=False)
+    one_round = one_round[meds.index]
+    one_round.boxplot()
+    plt.xticks(np.arange(NUM_PLAYERS)+1, [round_robin_p[p].s for p in meds.index], rotation=90)
+    plt.show()
+    plt.savefig('../img_v1/idpmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
+    plt.close()
+    
     saved_points = pd.DataFrame(np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS))))
     meds = saved_points.median()
     meds = meds.sort_values(ascending=False,)
@@ -106,8 +123,8 @@ def main():
     plt.xticks(np.arange(NUM_PLAYERS)+1, [round_robin_p[p].s for p in meds.index], rotation=90)
     plt.tight_layout()
     plt.show()
-    plt.savefig('../img_v1/idpmp-boxplot-{}.png'.format(NUM_PLAYERS))
-    plt.close()
-
+    plt.savefig('../img_v1/idpmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
+#    plt.close()
+#
 if __name__ == "__main__":
     main()
