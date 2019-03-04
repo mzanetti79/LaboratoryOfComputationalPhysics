@@ -36,33 +36,19 @@ def main():
                 p1.clear_hist()
                 p2.clear_hist()
                 p1.play_iter(p2, NUM_ITER)
-                #print(p1.playedHist)
-                #print(p2.playedHist)
-
+            
                 rew1 = np.cumsum(p1.payoffHist)
                 rew2 = np.cumsum(p2.payoffHist)
                 cum_results[k1].append(rew1[-1])
                 cum_results[k2].append(rew2[-1])
                 
-                #mean and std of every repetition
-                # mean_results[k1].append(np.mean(p1.payoffHist))
-                # mean_results[k2].append(np.mean(p2.payoffHist))
-                # std_results[k1].append(np.std(p1.payoffHist))
-                # std_results[k2].append(np.std(p2.payoffHist))
-                
-            #get mean and std for 100 tries
-            # mean = np.mean(cum_results[k1])
-            # std = np.std(cum_results[k2])
-
             # boxplots for 100 tries -> A vs B
             plt.boxplot([cum_results[k1], cum_results[k2]])
             plt.xticks([1, 2], [p1.s, p2.s])
             plt.ylabel('reward')
-            plt.savefig('../img_v1/idp2p-boxplot-{}-{}.png'.format(p1.s, p2.s))
-            plt.close()
-
-            # plt.boxplot([mean_results[k1], mean_results[k2]])
-            # plt.show()
+            plt.show()
+            #plt.savefig('../img_v1/idp2p-boxplot-{}-{}.png'.format(p1.s, p2.s))
+            #plt.close()
             
             # plot cumulative rewards
             plt.figure(figsize=(15,5))    
@@ -94,9 +80,9 @@ def main():
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate',
                           markerfacecolor='b')
                 ])
-            #plt.show()
-            plt.savefig('../img_v1/idp2p-rewards-{}-{}.png'.format(p1.s,p2.s))
-            plt.close()
+            plt.show()
+            #plt.savefig('../img_v1/idp2p-rewards-{}-{}.png'.format(p1.s,p2.s))
+            #plt.close()
 
 if __name__ == "__main__":
     main()
