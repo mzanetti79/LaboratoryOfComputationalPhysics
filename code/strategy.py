@@ -183,12 +183,14 @@ class Strategy:
     def get(self):
         pass
 
-    def generatePlayer(NUM_PLAYERS):
+    def generatePlayer(NUM_PLAYERS, allowRep = False):
         # define strategies for players
         k = []
+        l = -1 if allowRep else 1
+        h = 101 if allowRep else 100
         while len(k) < (NUM_PLAYERS-4):
-            prob = np.random.randint(1,100)
-            if prob != 50 and prob not in k:
+            prob = np.random.randint(l, h)
+            if (prob != 50 and prob not in k) or allowRep:
                 k.append(prob)
         return np.append(np.array([0, 100, 50, -1]), k)
     
