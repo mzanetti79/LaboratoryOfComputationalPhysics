@@ -29,7 +29,8 @@ class Player(object):
         action2 = opponent.act(self)
                 
         self.update(action1, action2, False)
-        opponent.update(action1, action2, True)
+        if(opponent.s != self.s):
+            opponent.update(action1, action2, True)
 
     def act(self, opponent):
         if type(self.s) != TitForTat:
@@ -128,10 +129,11 @@ class MultiPlayer(Player):
         self.prevPlayedHist.append(self.playedHist)
         self.prevBestPossibleHist.append(self.bestPossibleHist)
         
-        opponent.prevStratHist.append(opponent.stratHist)
-        opponent.prevPayoffHist.append(opponent.payoffHist)
-        opponent.prevPlayedHist.append(opponent.playedHist)
-        opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
+        if self.s != opponent.s:
+            opponent.prevStratHist.append(opponent.stratHist)
+            opponent.prevPayoffHist.append(opponent.payoffHist)
+            opponent.prevPlayedHist.append(opponent.playedHist)
+            opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
         
         self.prevOpponent.append(opponent)
         if self.s != opponent.s:
