@@ -39,14 +39,8 @@ def main():
     # define k for strategy probabilities
     # append NUM_PLAYERS-4 strategies with k between 1 and 99 included
     # todo check if replace=True or False
-    k = []
-    while len(k) < (NUM_PLAYERS-4):
-        prob = np.random.randint(1,100)
-        if prob != 50 and prob not in k:
-            k.append(prob)
-    #just one since it involves a copy of the array. It's NOT in-place this operation
-    k_strategies = np.append(np.array([0, 100, 50, -1]), k)
-    
+    k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS)
+        
     saved_points = []
     
     for n in range(NUM_REPETITIONS):
