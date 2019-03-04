@@ -183,6 +183,15 @@ class Strategy:
     def get(self):
         pass
 
+    def generatePlayer(NUM_PLAYERS):
+        # define strategies for players
+        k = []
+        while len(k) < (NUM_PLAYERS-4):
+            prob = np.random.randint(1,100)
+            if prob != 50 and prob not in k:
+                k.append(prob)
+        return np.append(np.array([0, 100, 50, -1]), k)
+    
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
 
