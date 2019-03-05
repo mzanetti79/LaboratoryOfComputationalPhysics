@@ -65,7 +65,7 @@ def main():
     prev_winning_k = None
 
     #random initialization 
-    k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, allowRep=True)
+    k_strategies = Strategy.generatePlayers(num_players=NUM_PLAYERS, allow_repetitions=True)
     #strategies evolution
     strategies_df = pd.DataFrame()
 

@@ -67,7 +67,7 @@ def main():
     # define k for strategy probabilities
     # append NUM_PLAYERS-4 strategies with k between 1 and 99 included
     # todo check if replace=True or False
-    k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS)
+    k_strategies = Strategy.generatePlayers(num_players=NUM_PLAYERS)
     
     for _ in range(NUM_REPETITIONS):
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, True)

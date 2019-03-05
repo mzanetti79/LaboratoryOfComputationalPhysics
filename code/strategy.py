@@ -1,5 +1,16 @@
 import numpy as np
 
+COOPERATE = 0
+DEFECT = 1
+
+NICE = 0
+IND  = 50
+BAD  = 100
+
+TFT  = -1
+TF2T = -2
+GRT  = -3
+
 class Player(object):
     """Class to describe a player with strategy and history."""
     
@@ -8,15 +19,19 @@ class Player(object):
     
     # M1 = np.array([[3,0],[5,2]]) # another good choice
     # or use M = generatePayoffMatrix()
-    def __init__(self, k=0, M1=np.array([[3,0],[5,1]])):
-        self.M1 = M1
-        self.M2 = M1.T
+    def __init__(self, k=0, M=np.array([[3,0],[5,1]])):
+        self.M1 = M
+        self.M2 = M.T
 
         if k >= 0:
             self.s = ProbStrategy(k)
-        elif k == -1:
+        elif k == TFT:
             self.s = TitForTat()
-        self.clear_hist()
+        elif k == TF2T:
+            self.s = TitFor2Tat()
+        elif k == GRT:
+            self.s = GrimTrigger()
+        self.clear_history()
     
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
@@ -33,13 +48,17 @@ class Player(object):
             opponent.update(action1, action2, True)
 
     def act(self, opponent):
-        if type(self.s) != TitForTat:
+        """Gets the action based on the strategy."""
+        if type(self.s) == ProbStrategy:
             return self.s.get()
-        else:
+        elif type(self.s) == TitForTat or type(self.s) == GrimTrigger:
             if len(opponent.playedHist) > 0:
-                # print(opponent.playedHist[-1])
                 return self.s.get(opponent.playedHist[-1]) # pass opponent's move
-            return 0 # cooperate
+            return COOPERATE
+        elif type(self.s) == TitFor2Tat:
+            if len(opponent.playedHist) > 1:
+                return self.s.get(opponent.playedHist[-2]) # pass opponent's second to lastmove
+            return COOPERATE
         
     def update(self, action1, action2, opponent):
         """Updates the state based on the actions."""
@@ -53,28 +72,31 @@ class Player(object):
             self.playedHist.append(action1)
             self.bestPossibleHist.append(max(self.M1[action1,:]))
 
-    def change(self):
-        """Change the strategy randomly"""
+    def change_strategy(self):
+        """Change the strategy randomly."""
         # watch out: each player has a different kH, kL
         kH = np.random.randint(51,100)
         kL = np.random.randint(0,50)
-        k_strategies = np.array([0, 100, kL, kH, 50, -1])
+        k_strategies = np.array([NICE, BAD, IND, TFT, TF2T, GRT, kL, kH])
         
-        proposed = self.propose_change(k_strategies)
-            
-        while proposed == self.s:
-            proposed = self.propose_change(k_strategies)
+        s_next = self.random_str(k_strategies)
+        while s_next == self.s:
+            s_next = self.random_str(k_strategies)
 
-        self.s = proposed
+        self.s = s_next
 
-    def propose_change(self, k_strategies):
-        k =  np.random.choice(k_strategies) # gene
+    def random_str(self, k_list):
+        k =  np.random.choice(k_list) # gene
         if k >= 0:
             return ProbStrategy(k)
-        elif k == -1:
+        elif k == TFT:
             return TitForTat()
+        elif k == TF2T:
+            return TitFor2Tat()
+        elif k == GRT:
+            return GrimTrigger()
         
-    def clear_hist(self):
+    def clear_history(self):
         """Clears all history of the player."""
         self.stratHist = []
         self.payoffHist = []
@@ -84,7 +106,7 @@ class Player(object):
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
 
-    def __init__(self, k, changing = False):
+    def __init__(self, k, changing=False):
         Player.__init__(self, k)
         
         # save results for multiple rounds played by user
@@ -102,19 +124,19 @@ class MultiPlayer(Player):
     #         self.results.append('d')
     #         opponent.results.append('d')
     #         if self.changing:
-    #             self.change()
+    #             self.change_strategy()
     #         if opponent.changing:
-    #             opponent.change()
+    #             opponent.change_strategy()
     #     elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
     #         self.results.append('w')
     #         opponent.results.append('l')
     #         if opponent.changing:
-    #             opponent.change()
+    #             opponent.change_strategy()
     #     else:
     #         self.results.append('l')
     #         opponent.results.append('w')
     #         if self.changing:
-    #             self.change()
+    #             self.change_strategy()
     
     def winner_alt(self,opponent):
         self.results.append(np.sum(self.payoffHist))
@@ -143,10 +165,9 @@ class MultiPlayer(Player):
         self.winner_alt(opponent)
                 
         # set actual history to zero
-        self.clear_hist()
-        opponent.clear_hist()
+        self.clear_history()
+        opponent.clear_history()
     
-
     def rounds_played(self):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
@@ -185,38 +206,38 @@ class Strategy:
     def get(self):
         pass
 
-    def generatePlayer(NUM_PLAYERS, allowRep = False):
+    @staticmethod
+    def generatePlayers(num_players, allow_repetitions=False):
         # define strategies for players
-        k = []
-        l = -1 if allowRep else 1
-        h = 101 if allowRep else 100
-        while len(k) < (NUM_PLAYERS-4):
+        k = [NICE, BAD, IND, TFT, TF2T, GRT] # todo check if ok
+        l = -1 if allow_repetitions else 1
+        h = 101 if allow_repetitions else 100
+        while len(k) < num_players:
             prob = np.random.randint(l, h)
-            if (prob != 50 and prob not in k) or allowRep:
+            if (prob != IND and prob not in k) or allow_repetitions:
                 k.append(prob)
-        return np.append(np.array([0, 100, 50, -1]), k)
+        return np.array(k)
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
 
     def __init__(self, k):
-        # default value 0 is to cooperate in case of wrong k
+        # default value is to cooperate in case of wrong k
         # todo: check if throwing exception is better
-        self.k = k if k>=0 and k<=100 else 0
+        self.k = k if k>=NICE and k<=BAD else NICE
 
     def get(self):
         num = np.random.randint(0,100)
-        return 0 if num >= self.k else 1
-        # coop if more than k, else defect
+        return COOPERATE if num >= self.k else DEFECT
 
     def __str__(self):
-        if (self.k == 0):
+        if (self.k == NICE):
             return "Nice"
-        elif (self.k == 100):
+        elif (self.k == BAD):
             return "Bad"
-        elif (self.k > 50):
+        elif (self.k > IND):
             return "MainlyBad (k={})".format(self.k)
-        elif (self.k < 50):
+        elif (self.k < IND):
             return "MainlyNice (k={})".format(self.k)
         else:
             return "Indifferent"
@@ -228,9 +249,17 @@ class TitForTat(Strategy):
         return "TitForTat"
 
     def get(self, last_move=None):
-        if last_move is None:
-            return 0 # cooperate the first time
+        if last_move == None:
+            return COOPERATE # first time
         return last_move # repeat past opponent move
+
+class TitFor2Tat(TitForTat):
+    """Plays opponent's second to last move."""
+
+    def __str__(self):
+        return "TitFor2Tat"
+    
+    # get method remains the same, just change indexes
 
 class GrimTrigger(Strategy):
     """Cooperate at first, if opponent defects once then always defect."""
@@ -242,9 +271,9 @@ class GrimTrigger(Strategy):
         return "GrimTrigger"
 
     def get(self, last_move=None):
-        if last_move is 1:
+        if last_move == DEFECT:
             self.triggered = True
 
         if self.triggered:
-            return 1 # always defect
-        return 0 # else cooperate
+            return DEFECT
+        return COOPERATE
