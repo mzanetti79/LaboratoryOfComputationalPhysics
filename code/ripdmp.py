@@ -64,10 +64,11 @@ def main():
     repeated_round_robin_p = []
     prev_winning_k = None
 
-    
     #random initialization 
     k_strategies = Strategy.generatePlayer(NUM_PLAYERS=NUM_PLAYERS, allowRep=True)
-    
+    #strategies evolution
+    strategies_df = pd.DataFrame()
+
     #equal split initialization
     #kH = np.random.randint(51,100)
     #kL = np.random.randint(0,50)
@@ -82,12 +83,18 @@ def main():
         NUM_REPETITIONS += 1
         round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
         repeated_round_robin_p.append(round_robin_p)
+
+        # create strategies history
+        unique, counts = np.unique(k_strategies, return_counts=True)
+        df = pd.DataFrame([counts],columns=unique)
+        strategies_df = strategies_df.append(df)
+        
         # easy fix (depending on task)
         # add one winner strategy or multiple previous winners?
         for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
             k_strategies = np.append(k_strategies,round_robin_p[i].s.k)
             k_strategies = np.delete(k_strategies,np.argmax(round_robin_p[NUM_PLAYERS-i-1].s.k if str(round_robin_p[NUM_PLAYERS-i-1].s) != 'TitForTat' else -1))
-            
+
         # print(matches_df)
         # ranking_df = pd.DataFrame(ranking_df)
         # matches_df = pd.DataFrame(matches_df)
@@ -97,6 +104,15 @@ def main():
     print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
     # save plots
+    strategies_df.index = np.arange(strategies_df.index.size)
+    strategies_df = strategies_df.fillna(0)
+    strategies_df.plot()
+    plt.legend(ncol=int(NUM_PLAYERS/5))
+    plt.title('Strategies evolution')
+    plt.ylabel('Number of strategies')
+    plt.xlabel('Time')
+    plt.show()
+
     for (r, round_robin_p) in zip(np.arange(NUM_REPETITIONS), repeated_round_robin_p):
         for p in round_robin_p:
             points = p.get_points_alt()
