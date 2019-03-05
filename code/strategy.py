@@ -231,3 +231,20 @@ class TitForTat(Strategy):
         if last_move is None:
             return 0 # cooperate the first time
         return last_move # repeat past opponent move
+
+class GrimTrigger(Strategy):
+    """Cooperate at first, if opponent defects once then always defect."""
+
+    def __init__(self):
+        self.triggered = False
+
+    def __str__(self):
+        return "GrimTrigger"
+
+    def get(self, last_move=None):
+        if last_move is 1:
+            self.triggered = True
+
+        if self.triggered:
+            return 1 # always defect
+        return 0 # else cooperate
