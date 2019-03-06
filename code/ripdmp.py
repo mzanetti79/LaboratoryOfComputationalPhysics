@@ -1,34 +1,35 @@
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from ipdmp import IPDRoundRobin
 from mgen import generatePayoffMatrix
 from strategy import *
 
-def IPDRoundRobin(k_strategies, num_iter, itself = True):
-    n = num_strat = k_strategies.size
-    num_rounds = int( ((n-1)/2) * n)
+def IPDRR(k_strategies, num_iter, against_itself=False):
+    """REMOVE. Original in ipdmp is used instead (same code)."""
+
+    n = k_strategies.size
+    #num_rounds = int( ((n-1)/2) * n)
 
     # initialize players with given strategies
-    round_robin_p = np.array([])
-    for k in k_strategies:
-        p = MultiPlayer(k)
-        round_robin_p = np.append(round_robin_p, p)
+    players = np.array([ MultiPlayer(k) for k in k_strategies ])
+
+    # todo: for _ in range(NUM_REPETITIONS): -> CLEVER but get_points needs change
 
     # each player plays against another in a round robin scheme
-    for (i, p1) in zip(np.arange(n), round_robin_p):
-        #todo reason if A vs A makes sense
-        for (j, p2) in zip(np.arange(i if itself else i+1 ,n), round_robin_p[i if itself else i+1:]):
-            # todo: for _ in range(NUM_REPETITIONS): -> CLEVER but get_points needs change
+    for (i, p1) in zip(np.arange(n), players):
+        start = i if against_itself else i+1
+        for (j, p2) in zip(np.arange(start, n), players[start:]):
             p1.play_iter(p2, num_iter)
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
 
-    ranking_df = pd.DataFrame()
-    # all matches played sorted by time
-    matches_df = pd.DataFrame()
+    ranking_df = pd.DataFrame() # all points gained by players
+    matches_df = pd.DataFrame() # all matches played sorted by time
 
-    for (i, p) in zip(np.arange(n), round_robin_p):
+    for (i, p) in zip(np.arange(n), players):
         points = p.get_points_alt()
         df = pd.DataFrame(
             [[p.s, int(points[-1]), p]],
@@ -36,6 +37,7 @@ def IPDRoundRobin(k_strategies, num_iter, itself = True):
         )
         ranking_df = ranking_df.append(df)
         ranking_df = ranking_df.sort_values(['points'], ascending=[False])
+
         for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots
             # each match can be explored
@@ -46,30 +48,28 @@ def IPDRoundRobin(k_strategies, num_iter, itself = True):
             )
             matches_df = matches_df.append(df)
     
-    round_robin_p = np.array(ranking_df['rrp'])
+    players = np.array(ranking_df['rrp'])
     ranking_df = ranking_df[['Player','points']]    
-    return round_robin_p, ranking_df, matches_df
+    return players, ranking_df, matches_df
     
 def main():
-    np.random.seed(1234)
+    np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    # number of iterations
     NUM_ITER = 100
-    # number of players
     NUM_PLAYERS = 50
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    repeated_round_robin_p = []
+    repeated_players = []
     prev_winning_k = None
 
-    #random initialization 
-    k_strategies = Strategy.generatePlayers(num_players=NUM_PLAYERS, allow_repetitions=True)
-    #strategies evolution
-    strategies_df = pd.DataFrame()
+    # random initialization of NUM_PLAYERS-6 agents 
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, allow_repetitions=True)
+    
+    strategies_df = pd.DataFrame() # strategies evolution
 
-    #equal split initialization
+    # equal split initialization
     #kH = np.random.randint(51,100)
     #kL = np.random.randint(0,50)
     #k_strategies = [0, 100, kL, kH, 50, -1]
@@ -78,11 +78,12 @@ def main():
     #if(NUM_PLAYERS%6 != 0):
     #    k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
     #k_strategies = np.array(k_strategies)
+
     NUM_REPETITIONS = 0
     while not np.array_equal(k_strategies, np.repeat(k_strategies[0], k_strategies.size)):
         NUM_REPETITIONS += 1
-        round_robin_p, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER)
-        repeated_round_robin_p.append(round_robin_p)
+        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
+        repeated_players.append(players)
 
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
@@ -92,8 +93,27 @@ def main():
         # easy fix (depending on task)
         # add one winner strategy or multiple previous winners?
         for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
-            k_strategies = np.append(k_strategies,round_robin_p[i].s.k)
-            k_strategies = np.delete(k_strategies,np.argmax(round_robin_p[NUM_PLAYERS-i-1].s.k if str(round_robin_p[NUM_PLAYERS-i-1].s) != 'TitForTat' else -1))
+            pl_strat_str = str(players[i].s)
+            if pl_strat_str == 'TitForTat':
+                value = TFT
+            elif pl_strat_str == 'TitFor2Tat':
+                value = TF2T
+            elif pl_strat_str == 'GrimTrigger':
+                value = GRT
+            else:
+                value = players[i].s.k
+            k_strategies = np.append(k_strategies, value)
+            
+            pl_strat_str = str(players[NUM_PLAYERS-i-1].s)
+            if pl_strat_str == 'TitForTat':
+                value = TFT
+            elif pl_strat_str == 'TitFor2Tat':
+                value = TF2T
+            elif pl_strat_str == 'GrimTrigger':
+                value = GRT
+            else:
+                value = players[NUM_PLAYERS-i-1].s.k
+            k_strategies = np.delete(k_strategies,np.argmax(value))
 
         # print(matches_df)
         # ranking_df = pd.DataFrame(ranking_df)
@@ -113,8 +133,8 @@ def main():
     plt.xlabel('Time')
     plt.show()
 
-    for (r, round_robin_p) in zip(np.arange(NUM_REPETITIONS), repeated_round_robin_p):
-        for p in round_robin_p:
+    for (r, players) in zip(np.arange(NUM_REPETITIONS), repeated_players):
+        for p in players:
             points = p.get_points_alt()
             plt.plot(points, label=p.s)
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))

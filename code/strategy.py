@@ -17,8 +17,7 @@ class Player(object):
     def __str__(self):
         return "Player with strategy: {}".format(self.s)
     
-    # M1 = np.array([[3,0],[5,2]]) # another good choice
-    # or use M = generatePayoffMatrix()
+    # optional: use M = generatePayoffMatrix()
     def __init__(self, k=0, M=np.array([[3,0],[5,1]])):
         self.M1 = M
         self.M2 = M.T
@@ -44,7 +43,7 @@ class Player(object):
         action2 = opponent.act(self)
                 
         self.update(action1, action2, False)
-        if(opponent.s != self.s):
+        if opponent.s != self.s:
             opponent.update(action1, action2, True)
 
     def act(self, opponent):

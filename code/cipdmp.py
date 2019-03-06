@@ -1,10 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from ipdmp import IPDRoundRobin
 from mgen import generatePayoffMatrix
 from strategy import *
 
-def IPDRoundRobin(k_strategies, num_iter):
+def IPDRR2(k_strategies, num_iter):
+    """REMOVE. Use generalized original in ipdmp instead."""
     n = num_strat = k_strategies.size
     num_rounds = int( ((n-1)/2) * n)
 
@@ -23,24 +25,19 @@ def IPDRoundRobin(k_strategies, num_iter):
     return round_robin_p
     
 def main():
-    np.random.seed(1234)
+    np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    # number of iterations
     NUM_ITER = 50
-    # number of players
     NUM_PLAYERS = 10
-
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    # define strategies for players
-    # -1 = TfT
-    # -2 = random
-    k_strategies = np.random.choice([0, 100, 50, -1, -2, -2], NUM_PLAYERS)
-    mask = k_strategies == -2
-    k_strategies[mask] = np.random.randint(1,100,size=np.sum(mask))
-
-    round_robin_p = IPDRoundRobin(k_strategies, NUM_ITER)
+    # define k for strategy probabilities
+    # append NUM_PLAYERS-6 strategies with k between 1 and 99 included
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS)
+    
+    # todo: when using changing strategies, no points and ranking are computed (done in main)
+    players = IPDRoundRobin(k_strategies, NUM_ITER, changing_str=True)
 
     # serie A table
     # todo: store final rewards sum as well as opponent rewards sum
@@ -49,9 +46,8 @@ def main():
     # all matches played sorted by time
     matches_df = pd.DataFrame()
 
-    for (i, p) in zip(np.arange(NUM_PLAYERS), round_robin_p):
-
-        points = p.get_points()
+    for (i, p) in zip(np.arange(NUM_PLAYERS), players):
+        points = p.get_points_alt()
         plt.plot(points, label='P. {}'.format(i))
         plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
         plt.xlabel('Match number')
@@ -74,9 +70,9 @@ def main():
        #    matches_df = matches_df.append(df)
 
     plt.legend()
-    # plt.show()
-    plt.savefig('../img_v1/cidpmp-scores-{}.png'.format(NUM_PLAYERS))
-    plt.close()
+    plt.show()
+    #plt.savefig('../img_v1/cidpmp-scores-{}.png'.format(NUM_PLAYERS))
+    #plt.close()
 
     ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
     print(ranking_df.to_latex())
