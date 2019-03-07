@@ -47,7 +47,7 @@ def main():
     matches_df = pd.DataFrame()
 
     for (i, p) in zip(np.arange(NUM_PLAYERS), players):
-        points = p.get_points_alt()
+        points = p.get_points()
         plt.plot(points, label='P. {}'.format(i))
         plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
         plt.xlabel('Match number')

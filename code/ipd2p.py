@@ -17,7 +17,7 @@ def main():
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 
     # define k for strategy probabilities
-    k_strategies = Strategy.generatePlayers(8, replace=False)
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
     NUM_STRAT = len(k_strategies)
     
     #for k1 in k_strategies:

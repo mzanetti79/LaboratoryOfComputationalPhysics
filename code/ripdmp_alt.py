@@ -6,34 +6,37 @@ from ipdmp import IPDRoundRobin
 from mgen import generatePayoffMatrix
 from strategy import *
 
-
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
     NUM_ITER = 100
     NUM_PLAYERS = 8
-    NUM_REPETITIONS = 10
+    NUM_REPETITIONS = 5
     print("Testing repeated {}-times round-robin tournament starting with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
     repeated_players = []
-    prev_winning_k = None
-    #k = 5
-    # random initialization of NUM_PLAYERS-6 agents
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False, fixed=True) #GENERATE STRATEGIES WRONG
+
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False, fixed=True)
+
     strategies_df = pd.DataFrame() # strategies evolution
 
     for _ in range(NUM_REPETITIONS):
         players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
+        # todo: this part probably needs a fix, check if it makes sense
         score = ranking_df.groupby(['labels'], as_index = False).sum()
-        total_score = np.sum(score['points']) # total score
-        score['percentage'] = round((score['points']/total_score*10)**2) # ^2 to evaluate the difference
-        #
-        for index, row in score.iterrows():
-            k_strategies = np.append(k_strategies, np.repeat(row['labels'], row['percentage']))
+        # score['points'] = score['points']-score.min().points # to emphasize differences
+        score['percentage'] = score['points']/np.sum(score['points'])
 
+        score['users_to_add'] = round((score['percentage']*10)**2) # ^2 to evaluate the difference
+        print(score)
+
+        print('adding this many people: ', score['users_to_add'].sum())
+        
+        for index, row in score.iterrows():
+            k_strategies = np.append(k_strategies, np.repeat(row['labels'], row['users_to_add']))
 
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
@@ -63,7 +66,7 @@ def main():
     
     for (r, players) in zip(np.arange(NUM_REPETITIONS), repeated_players):
         for p in players:
-            points = p.get_points_alt()
+            points = p.get_points()
             plt.plot(points, label=p.s)
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             plt.xlabel('Match number')

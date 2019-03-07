@@ -76,9 +76,8 @@ class Player(object):
     def change_strategy(self):
         """Change the strategy randomly."""
         # watch out: each player has a different kH, kL
-        kH = np.random.randint(51,100)
-        kL = np.random.randint(0,50)
-        k_strategies = np.array([NICE, BAD, IND, TFT, TF2T, GRT, kL, kH])
+        # 8 is the total number of strategies
+        k_strategies = Strategy.generatePlayers(8, replace=False)
         
         s_next = self.random_str(k_strategies)
         while s_next == self.s:
@@ -87,7 +86,7 @@ class Player(object):
         self.s = s_next
 
     def random_str(self, k_list):
-        k =  np.random.choice(k_list) # gene
+        k = np.random.choice(k_list) # gene
         if k >= 0:
             return ProbStrategy(k)
         elif k == TFT:
@@ -117,29 +116,10 @@ class MultiPlayer(Player):
         self.prevPlayedHist = []
         self.prevBestPossibleHist = []
         self.prevOpponent = []
-        self.results = [] # 'w' = win, 'l' = loss, d' = draw
+        self.results = []
         self.changing = changing
-        
-    # def winner(self,opponent):
-    #     if np.sum(self.payoffHist) == np.sum(opponent.payoffHist):
-    #         self.results.append('d')
-    #         opponent.results.append('d')
-    #         if self.changing:
-    #             self.change_strategy()
-    #         if opponent.changing:
-    #             opponent.change_strategy()
-    #     elif np.sum(self.payoffHist) > np.sum(opponent.payoffHist):
-    #         self.results.append('w')
-    #         opponent.results.append('l')
-    #         if opponent.changing:
-    #             opponent.change_strategy()
-    #     else:
-    #         self.results.append('l')
-    #         opponent.results.append('w')
-    #         if self.changing:
-    #             self.change_strategy()
     
-    def winner_alt(self,opponent):
+    def winner(self,opponent):
         self.results.append(np.sum(self.payoffHist))
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
@@ -163,7 +143,7 @@ class MultiPlayer(Player):
             opponent.prevOpponent.append(self)
 
         # who won? check the sum of rewards
-        self.winner_alt(opponent)
+        self.winner(opponent)
                 
         # set actual history to zero
         self.clear_history()
@@ -173,30 +153,8 @@ class MultiPlayer(Player):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
 
-    # def count_wins(self):
-    #     """Counts the number of rounds won by player."""
-    #     return self.results.count('w')
-
-    # def count_losses(self):
-    #     """Counts the number of rounds loss by player."""
-    #     return self.results.count('l')
-
-    # def count_draws(self):
-    #     """Counts the number of rounds drawn by player."""
-    #     return self.results.count('d')
-
-    # def get_points(self):
-    #     """Counts the points at each match of the player w=3, d=1, l=0."""
-    #     points = np.zeros(len(self.results))
-    #     points[np.array(self.results) == 'd'] = 1
-    #     points[np.array(self.results) == 'w'] = 3
-    #     points[np.array(self.results) == 'l'] = 0
-    #     return np.cumsum(points)
-
-    def get_points_alt(self):
-        # points = np.zeros(len(self.results)) #todo check if useless
-        points = self.results
-        return np.cumsum(points)
+    def get_points(self):
+        return np.cumsum(self.results)
 
 class Strategy:
     """Abstract Strategy class to derive other."""
@@ -303,7 +261,7 @@ class GrimTrigger(Strategy):
         return "GrimTrigger"
 
     def get(self, last_move=None):
-        if last_move == DEFECT:
+        if not self.triggered and last_move == DEFECT:
             self.triggered = True
 
         if self.triggered:

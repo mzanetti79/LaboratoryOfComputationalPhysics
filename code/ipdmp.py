@@ -32,7 +32,7 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
 
 
     for (i, p) in zip(np.arange(n), players):
-        points = p.get_points_alt()
+        points = p.get_points()
         pl_strat_str = str(p.s)
         df = pd.DataFrame(
             [[p.s, int(points[-1]), p, p.s.id]],
@@ -83,7 +83,7 @@ def main():
         # should we use for players in repeated_players: ? r is not used
         for p in players:
             # save points for each repetition
-            points = p.get_points_alt()
+            points = p.get_points()
 
             #points = p.get_points()
             # plt.plot(points, label=p.s)
