@@ -13,7 +13,7 @@ def main():
 
     NUM_ITER = 100
     NUM_PLAYERS = 8
-    NUM_REPETITIONS = 5
+    NUM_REPETITIONS = 10
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     repeated_players = []
@@ -21,7 +21,7 @@ def main():
     #k = 5
     # random initialization of NUM_PLAYERS-6 agents
     # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
-    k_strategies = np.array([-3,-2,-1,0,25,50,75,100]) #GENERATE STRATEGIES WRONG
+    k_strategies = Strategy.generatePlayers(8, replace=False, fixed=True) #GENERATE STRATEGIES WRONG
     strategies_df = pd.DataFrame() # strategies evolution
 
     for _ in range(NUM_REPETITIONS):
