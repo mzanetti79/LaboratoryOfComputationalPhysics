@@ -20,7 +20,7 @@ def main():
     prev_winning_k = None
     #k = 5
     # random initialization of NUM_PLAYERS-6 agents
-    # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, allow_repetitions=False)
+    # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
     k_strategies = np.array([-3,-2,-1,0,25,50,75,100]) #GENERATE STRATEGIES WRONG
     strategies_df = pd.DataFrame() # strategies evolution
 

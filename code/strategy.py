@@ -208,29 +208,38 @@ class Strategy:
         pass
 
     @staticmethod
-    def generatePlayers(num_players, allow_repetitions=False):
+    def generatePlayers(num_players, replace=False):
         str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
-        ll = 0 if allow_repetitions else 1
-        lh = 51 if allow_repetitions else 50
-        hl = 50 if allow_repetitions else 51
-        hh = 101 if allow_repetitions else 100
-        
-        k = [] # strategies for players
-        while len(k) < num_players:
-            val = np.random.choice(str_choices)
 
-            # substitute with useful values if needed
-            if val == PRBL:
-                val = np.random.randint(ll, lh)
-                if (val != IND and val not in k) or allow_repetitions:
-                    k.append(val)
-            elif val == PRBH:
-                val = np.random.randint(hl, hh)
-                if (val != IND and val not in k) or allow_repetitions:
-                    k.append(val)
-            else:
-                k.append(val)
-        return np.array(k)
+        k = np.random.choice(str_choices,num_players,replace=replace)
+        maskL = k==PRBL
+        k[maskL] = np.random.choice(49,size=maskL.sum(),replace=replace) + 1 # 1 to 49 exclude nice, indifferent
+        maskH = k==PRBH
+        k[maskH] = np.random.choice(49,size=maskH.sum(),replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+
+        return k
+
+        # ll = 0 if replace else 1
+        # lh = 51 if replace else 50
+        # hl = 50 if replace else 51
+        # hh = 101 if replace else 100
+        
+        # k = [] # strategies for players
+        # while len(k) < num_players:
+        #     val = np.random.choice(str_choices)
+
+        #     # substitute with useful values if needed
+        #     if val == PRBL:
+        #         val = np.random.randint(ll, lh)
+        #         if (val != IND and val not in k) or replace:
+        #             k.append(val)
+        #     elif val == PRBH:
+        #         val = np.random.randint(hl, hh)
+        #         if (val != IND and val not in k) or replace:
+        #             k.append(val)
+        #     else:
+        #         k.append(val)
+        # return np.array(k)
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
@@ -239,6 +248,7 @@ class ProbStrategy(Strategy):
         # default value is to cooperate in case of wrong k
         # todo: check if throwing exception is better
         self.k = k if k>=NICE and k<=BAD else NICE
+        self.id = k
 
     def get(self):
         num = np.random.randint(0,100)
@@ -259,6 +269,9 @@ class ProbStrategy(Strategy):
 class TitForTat(Strategy):
     """Plays opponent's last move."""
 
+    def __init__(self):
+        self.id = TFT
+
     def __str__(self):
         return "TitForTat"
 
@@ -270,6 +283,9 @@ class TitForTat(Strategy):
 class TitFor2Tat(TitForTat):
     """Plays opponent's second to last move."""
 
+    def __init__(self):
+        self.id = TF2T
+
     def __str__(self):
         return "TitFor2Tat"
     
@@ -280,6 +296,7 @@ class GrimTrigger(Strategy):
     """Cooperate at first, if opponent defects once then always defect."""
 
     def __init__(self):
+        self.id = GRT
         self.triggered = False
 
     def __str__(self):

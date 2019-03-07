@@ -65,7 +65,7 @@ def main():
     prev_winning_k = None
 
     # random initialization of NUM_PLAYERS-6 agents 
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, allow_repetitions=True)
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True)
     
     strategies_df = pd.DataFrame() # strategies evolution
 

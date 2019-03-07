@@ -15,10 +15,7 @@ def main():
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 
     # define k for strategy probabilities
-    # use k=-1 for TfT
-    kH = np.random.randint(51,100)
-    kL = np.random.randint(0,50)
-    k_strategies = np.array([NICE, BAD, IND, kL, kH, TFT, TF2T, GRT])
+    k_strategies = Strategy.generatePlayers(8, replace=False)
     NUM_STRAT = len(k_strategies)
     
     #for k1 in k_strategies:
@@ -51,9 +48,9 @@ def main():
             plt.xticks([1, 2], [p1.s, p2.s])
             plt.ylabel('Reward')
             plt.title("2 pl. game")
-            plt.show()
-            #plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
-            #plt.close()
+            # plt.show()
+            plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
+            plt.close()
             
             # plot cumulative rewards
             # show only the last iteration's plot
@@ -81,9 +78,9 @@ def main():
                 Line2D([0], [0], color='w', marker='o', label='P.2 Defect', markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate', markerfacecolor='b')
             ])
-            plt.show()
-            #plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
-            #plt.close()
+            # plt.show()
+            plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
+            plt.close()
 
 if __name__ == "__main__":
     main()

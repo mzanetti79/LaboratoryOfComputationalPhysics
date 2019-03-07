@@ -73,8 +73,7 @@ def main():
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
-    # append NUM_PLAYERS-6 strategies with k between 1 and 99 included
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, allow_repetitions=False)
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
 
     repeated_players = []
     for _ in range(NUM_REPETITIONS):
