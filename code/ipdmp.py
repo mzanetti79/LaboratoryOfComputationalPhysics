@@ -34,16 +34,8 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
     for (i, p) in zip(np.arange(n), players):
         points = p.get_points_alt()
         pl_strat_str = str(p.s)
-        if pl_strat_str == 'TitForTat':
-            value = TFT
-        elif pl_strat_str == 'TitFor2Tat':
-            value = TF2T
-        elif pl_strat_str == 'GrimTrigger':
-            value = GRT
-        else:
-            value = p.s.k
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), p, value]],
+            [[p.s, int(points[-1]), p, p.s.id]],
             columns=['Player','points', 'rrp', 'labels']
         )
         ranking_df = ranking_df.append(df)
