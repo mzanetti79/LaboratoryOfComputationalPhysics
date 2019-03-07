@@ -2,7 +2,7 @@
 %% arara: pdflatex
 % arara: pdflatex
 % arara: pdflatex
-\documentclass[journal,a4paper,10pt,twoside]{IEEEtran}
+\documentclass[journal,a4paper,10pt,twoside,draft]{IEEEtran}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{times,textcomp,amsfonts}
@@ -15,8 +15,6 @@
 \usepackage{subfig}
 \usepackage{array,booktabs} % nice rules in tables
 
-%useful custom packages
-\usepackage{hyperref}
 
 % amsmath sets \interdisplaylinepenalty = 10000
 % preventing page breaks from occurring within multiline equations
@@ -45,6 +43,18 @@
 \newcommand{\LA}[1]{\textit{\color{orange}LA says: #1}}
 \newcommand{\FS}[1]{\textit{\color{red}FS says: #1}}
 
+\usepackage{hyperref}
+\definecolor{dkpowder}{rgb}{0,0.2,0.7}
+\hypersetup{%
+    pdfpagemode  = {UseOutlines},
+    bookmarksopen,
+    pdfstartview = {FitH},
+    colorlinks,
+    linkcolor = {dkpowder},
+    citecolor = {dkpowder},
+    urlcolor  = {dkpowder},
+}
+
 %%%%%%%%%%%%%%%%
 \begin{document}
 \title{On the Iterated Prisoner's Dilemma}
@@ -60,17 +70,17 @@
 %%%%%%%%%%
 
 \begin{abstract}
-In this work we analyse the Iterated Prisoner's Dilemma(IPD), under four main point of view: between two players, between multiple players, between multiple players with evolution on the population and between multiple players with a randomness on the type between rounds(some Nature choice in Game Theory terms).
-This report gives a introduction on the Prisoner's Dilemma problem both theoretically and mathematically defining the base structure that will be used in all the following sections.
-Following this in Section \ref{Strategies} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{IPD2P}, \ref{IPDMP}, \ref{rIPDMP}, \ref{crIPDMP}] we illustrate the results of our simulation for each one of the study-cases. At the end on Section \ref{Conclusion} some final thoughts and considerations on the work done.
-All the code, developed in \textit{Python 3.7}, can be found on our \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub} page.
+In this work we analyse the Iterated Prisoner's Dilemma (IPD), under four main points of view: between two players, between multiple players, between multiple players with evolution on the population and between multiple players with randomness on the type between rounds (a Nature choice, in Game Theory terms).
+This report gives first an introduction on the Prisoner's Dilemma problem both theoretically and mathematically, defining the base structure that will be used in all the following sections.
+In Section \ref{Strategies} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{IPD2P}, \ref{IPDMP}, \ref{rIPDMP}, \ref{crIPDMP}] we illustrate the results of our simulations for each one of the study-cases. At the end, on Section \ref{Conclusion}, some final thoughts and considerations on the work done.
+All the code, developed in \textit{Python 3.7}, can be found on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
 \end{abstract}
 
 \section{Introduction} 
-The Prisoner's Dilemma (PD) is a classical game analyzed in game theory, which attempts to model social/economical interaction. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance, and as we will see shortly if the intuition tells us that the best choice is to cooperate the only stable point in a one-shot game is to \textbf{NOT} cooperate.
+The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory, which attempts to model social/economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance, and as we will see shortly if the intuition tells us that the best choice is to cooperate the only stable point in a one-shot game is to \textit{not} cooperate.
 
 The classical formulation of the PD is that given two prisoners, their conviction depends on their mutual cooperation, they can be either stay silent or fink, respectively cooperate or not. 
-Another possible formulation is by the means of a trade-off game(\textit{closed bag exachange}):
+Another possible formulation is by the means of a trade-off game called \textit{closed bag exchange}:
 
 \begin{quote}
 \textit{Two people meet and exchange closed bags, with the understanding that one of them contains money, and the other contains a purchase. Either player can choose to honor the deal by putting into his or her bag what he or she agreed, or he or she can defect by handing over an empty bag.}
@@ -86,16 +96,17 @@ T & P
 \end{pmatrix}
 $$
 
-with $T$(Temptation), $R$(Reward), $S$("Sucker's"), $P$(Punishment) integers that satisfy the following conditions:
+where $T$ (Temptation), $R$ (Reward), $S$ (``Sucker's''), $P$ (Punishment) are integers that satisfy the following conditions:
 
 $$
 T>R>P>S; \quad 2R > T+S 
-$$  (for example $T=3$, $R=2$, $P=1$ and $S=0$)
-
-$R$ is given if both cooperates, $S$ if who's watching the matrix cooperate and the other defect, $T$ is the opposite of $S$ and finally $P$ is if both players defect.
+$$
+For example, $T=3$, $R=2$, $P=1$ and $S=0$.
 %, or  $T=5$, $R=3$, $P=2$, $S=0$. 
 
-As for the representation of the game for a single round each (player's) choice (move) can be represented by one of the two axis in ${\rm I\!R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$, the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
+$R$ is given if both cooperates, $S$ if who's watching the matrix cooperate and the other defect, $T$ is the opposite of $S$ and finally $P$ is if both players defect.
+
+As for the representation of the game for a single round, each player's choice (move) can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
 
 $$
 r_1 = u_1^T M u_2
@@ -104,39 +115,50 @@ r_1 = u_1^T M u_2
 r_2 = u_2^T M u_1
 $$
 
+At a first glance, for a single shot game (a game which is played only once), the best strategy may seem for both players to cooperate, as this lead to a good payoff which maximizes the global outcome (evaluated as the sum of the payoffs for each of them). This is indeed the Pareto dominating strategy. 
 
-At a first glance, for a single shot game(a game which is played only once), the best strategy may seem for both players to cooperate, as this lead to a good payoff which maximizes the global outcome(sum of the payoffs for each of them). This is indeed the Pareto dominating strategy. 
+There is a problem though: if a player cooperates he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this is true for both players. 
+Given the fact that both players are rational and fully aware of the rules of the game (they are \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of act is to defect as this would lead to a slightly lower payoff if the opponent defect (minor punishment) but a higher one if the other player would choose to cooperate.
+Following this, the only possible reasonable conclusion is that the only Nash Equilibrium, or the only way to win this game in a single-shot scenario, is to always defect.
+This is not Pareto optimal but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect.
 
-There is a problem though: if a player cooperate he has an incentive to deviate from his choice(to cooperate) and so to betray the other and defect as this leads to a better payoff for himself, and this is true for both of the players. Given the fact that both players are rational and fully aware of the rules of the games(simultaneous moves, payoff matrix), both of them will easily conclude that the best way of action is to defect as this would lead to a slightly lower payoff if the other defect(minor punishment) but a higher one if the other player would choose to cooperate. Following this the only possible reasonable conclusion is that the only Nash Equilibrium, or the only way to win this game in a single-shot scenario, is to always defect. This is not Pareto optimal but playing cooperate, as we have just seen, is not feasible. The only strategy in which nobody wants to deviate is to defect.
-
-This reasoning is no longer true when we consider repeated games and in particular Iterated Prisoner Dilemma since this involves time and memory and more complicated strategies can be introduced like random once, grim triggers or Tit For (Two)Tat. Winning a game in this setup is to achieve a better payoff in the long run. In \ref{IPD2P} we will se a simple one-vs-one game, iterated through time, while in the other cases there will be involved also population and other dynamics.
+This reasoning is no longer true when we consider repeated games and in particular the Iterated Prisoner Dilemma (IPD) since this involves time and memory (history) and more complicated strategies can be introduced like random once, grim triggers or Tit For (Two) Tat.
+Winning a game in this setup means to achieve a better payoff in the long run. In Sec.~\ref{IPD2P} we will se a simple one-vs-one game, iterated through time, while in the other cases population and other dynamics will be involved.
 
 \section{Strategies} \label{Strategies}
 
-The strategy is represented as a function which outputs either $u_C$ or $u_D$. Depending on the strategy such function might depend on the opponent's history of moves, on his/her history of moves or on the number of moves played till that moment and so on. The strategy is based on a probability density function. The strategies used in our project can be distinguished between strategies based on probability and deterministic strategies.
+The strategy is represented as a function which outputs either $u_C$ or $u_D$. Depending on the strategy, such function might depend on the opponent's history of moves, on the player's history of moves or on the number of moves played till that moment and so on.
+The strategy is based on a probability density function. In this project we used both strategies based on probability and deterministic ones.
 
 The strategies based on probability are:
 
-\begin{enumerate}
-    \item Nice guy: always cooperate (the function's output is always $u_C$).
-    \item Bad guy: always defect (the function's output is always $u_D$).
-    \item Indifferent: randomly defect $k=50\%$ of the times and cooperate $100-k=50\%$.
-    \item Mainly nice: randomly defect $k\%$ of the times and cooperate $100-k\%$, with $k<50$.
-    \item Mainly bad: randomly defect $k\%$ of the times and cooperate $100-k\%$, with $k>50$.
-\end{enumerate}
+\begin{description}
+    \item[Nice guy] always cooperate (the function's output is always $u_C$).
+    \item[Bad guy] always defect (the function's output is always $u_D$).
+    \item[Indifferent] randomly defect half $(k=50\%)$ of the times.
+    \item[Mainly nice] randomly defect $k\%$ of the times and cooperate $100-k\%$, with $k<50$.
+    \item[Mainly bad] randomly defect $k\%$ of the times and cooperate $100-k\%$, with $k>50$.
+\end{description}
 
 The deterministic strategies are:
-\begin{enumerate}
-    \item Tit-for-Tat (TfT): start by cooperating, then repeat opponent's previous move.
-\end{enumerate}
+\begin{description}
+    \item[Tit-for-Tat (TfT)] start by cooperating the first time, then repeat opponent's previous move.
+    \item[Tit-for-Two-Tat (Tf2T)] start by cooperating the first two times, then defect only if the opponent defected last two times.
+    \item[Grim-Trigger (GrT)] always cooperate until the opponent's first defect move, then always defect. 
+\end{description}
 
-Each player might change strategy to get a higher reward during the IPD.
+Each player may change strategy to get a higher reward during the IPD.
 
 \section{IPD between two players} \label{IPD2P}
-In this section the IPD between two players, who use two fixed strategies respectively during the match, is implemented.
-In particular the number of iterations was set $NUM\_ITER = 50$. This is also seen as the number of moves during the match. All the possible combinations between players using different strategies are evaluated, as well as the same strategy playing against itself. This is a simple repetition of the single shot game with the addition of memory.
+In this section the IPD between two players, who use two fixed strategies respectively during the match, is presented.
+We set the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match.
+Additionally, each player has one and only one strategy throughout its entire history, in this stage.
+All the possible combinations between players are evaluated, including the case of the player playing against itself.
+This is a simple repetition of the single-shot game with the addition of memory.
 
-Since we do not have population in this case(it is a simple A vs B game) as expected the winning strategy in all cases is not to cooperate, in other terms the \textit{Always Bad guy} strategy. If we take a closer look combination \textit{Good} and \textit{TfT} or \textit{Good} leads to better payoffs at the end of the run but these are isolated cases since the only strategy that wins against all the others and draw with itself is the \textit{Bad}. 
+Since we are not concerned about population in this case (it is a simple A vs B game), as expected the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy.
+If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the run, but these are isolated cases since the only strategy that wins against all the others and draw with itself is the \textit{Bad} one.
+\FR{Rev. till here}
 
 \textbf{TODO NOT TRUE - REWRITE}\\ \\ \\
 Infact in all cases, \textit{Bad guy} has a higher reward than the opponent as in \autoref{fig:badvsindiff}, \autoref{fig:badvstft}, \autoref{fig:badvsnice}, \autoref{fig:badvsmainlynice}, \autoref{fig:badvsmainlybad}. 
