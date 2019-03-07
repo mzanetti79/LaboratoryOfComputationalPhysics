@@ -104,7 +104,7 @@ def main():
 
         # plt.legend()
         # plt.show()
-        #plt.savefig('../img_v1/idpmp-scores-{}.png'.format(NUM_PLAYERS))
+        #plt.savefig('../img/ipdmp-scores-{}.png'.format(NUM_PLAYERS))
         #plt.close()
 
     # box plot of single match
@@ -116,7 +116,7 @@ def main():
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
     plt.tight_layout()
     plt.show()
-    plt.savefig('../img_v1/idpmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
+    plt.savefig('../img/ipdmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
     plt.close()
 
     # box plot of all points
@@ -127,7 +127,7 @@ def main():
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
     plt.tight_layout()
     plt.show()
-    plt.savefig('../img_v1/idpmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
+    plt.savefig('../img/ipdmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
     plt.close()
 
 if __name__ == "__main__":

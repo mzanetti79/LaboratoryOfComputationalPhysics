@@ -52,7 +52,7 @@ def main():
             plt.ylabel('Reward')
             plt.title("2 pl. game")
             plt.show()
-            #plt.savefig('../img_v1/idp2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
+            #plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
             #plt.close()
             
             # plot cumulative rewards
@@ -82,7 +82,7 @@ def main():
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate', markerfacecolor='b')
             ])
             plt.show()
-            #plt.savefig('../img_v1/idp2p-rewards-{}-{}.png'.format(p1.s,p2.s))
+            #plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
             #plt.close()
 
 if __name__ == "__main__":

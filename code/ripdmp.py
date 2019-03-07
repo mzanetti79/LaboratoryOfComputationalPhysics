@@ -143,7 +143,7 @@ def main():
 
         plt.legend()
         plt.show()
-        #plt.savefig('../img_v1/ridpmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
+        #plt.savefig('../img/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
         #plt.close()
 
 if __name__ == "__main__":

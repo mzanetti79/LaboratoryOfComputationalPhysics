@@ -71,7 +71,7 @@ def main():
 
     plt.legend()
     plt.show()
-    #plt.savefig('../img_v1/cidpmp-scores-{}.png'.format(NUM_PLAYERS))
+    #plt.savefig('../img/cipdmp-scores-{}.png'.format(NUM_PLAYERS))
     #plt.close()
 
     ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
