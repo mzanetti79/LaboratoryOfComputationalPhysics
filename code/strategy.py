@@ -274,6 +274,7 @@ class TitFor2Tat(TitForTat):
         return "TitFor2Tat"
     
     # get method remains the same, just change indexes
+    # todo but in the paper it is noted to act using both last and 2-to-last actions
 
 class GrimTrigger(Strategy):
     """Cooperate at first, if opponent defects once then always defect."""
