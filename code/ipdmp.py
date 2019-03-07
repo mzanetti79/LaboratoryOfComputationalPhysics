@@ -30,11 +30,21 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
     ranking_df = pd.DataFrame() # all points gained by players
     matches_df = pd.DataFrame() # all matches played sorted by time
 
+
     for (i, p) in zip(np.arange(n), players):
         points = p.get_points_alt()
+        pl_strat_str = str(p.s)
+        if pl_strat_str == 'TitForTat':
+            value = TFT
+        elif pl_strat_str == 'TitFor2Tat':
+            value = TF2T
+        elif pl_strat_str == 'GrimTrigger':
+            value = GRT
+        else:
+            value = p.s.k
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), p]],
-            columns=['Player','points', 'rrp']
+            [[p.s, int(points[-1]), p, value]],
+            columns=['Player','points', 'rrp', 'labels']
         )
         ranking_df = ranking_df.append(df)
         ranking_df = ranking_df.sort_values(['points'], ascending=[False])
@@ -48,24 +58,24 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
                     columns=['p1','p2','p1-score','p2-score']
             )
             matches_df = matches_df.append(df)
-    
+
     players = np.array(ranking_df['rrp'])
-    ranking_df = ranking_df[['Player','points']]    
+    ranking_df = ranking_df[['Player','points', 'labels']]
     return players, ranking_df, matches_df
-    
+
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
     NUM_ITER = 50
-    NUM_PLAYERS = 10
+    NUM_PLAYERS = 8
     NUM_REPETITIONS = 10
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
     # append NUM_PLAYERS-6 strategies with k between 1 and 99 included
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS)
-    
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, allow_repetitions=False)
+
     repeated_players = []
     for _ in range(NUM_REPETITIONS):
         players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
@@ -73,7 +83,7 @@ def main():
 
         # print(ranking_df.to_latex(index=False))
         # print(matches_df.to_latex(index=False))
-    
+
     # save points and other stuff if necessary
     saved_points = []
 
@@ -108,7 +118,7 @@ def main():
     plt.show()
     plt.savefig('../img_v1/idpmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
     plt.close()
-    
+
     # box plot of all points
     saved_points = pd.DataFrame(np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS))))
     meds = saved_points.median().sort_values(ascending=False)
