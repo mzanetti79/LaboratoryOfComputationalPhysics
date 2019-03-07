@@ -1,16 +1,18 @@
 % !TeX spellcheck = en_US
 %% arara: pdflatex
+%% arara: bibtex
 % arara: pdflatex
 % arara: pdflatex
-\documentclass[journal,a4paper,10pt,twoside,draft]{IEEEtran}
+\documentclass[journal,a4paper,10pt,twoside]{IEEEtran}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{times,textcomp,amsfonts}
 \usepackage[cmex10]{amsmath}
 \usepackage[T1]{fontenc}
 %\usepackage[top=1.5cm, bottom=2cm, right=1.6cm,left=1.6cm]{geometry}
-\usepackage{breqn,cite,url,color} % Citation numbers sorted and properly "compressed/ranged".
+\usepackage{breqn,cite,url} % Citation numbers sorted and properly "compressed/ranged".
 \usepackage{epstopdf}
+\usepackage[dvipsnames]{xcolor}
 \usepackage[pdftex]{graphicx}
 \usepackage{subfig}
 \usepackage{array,booktabs} % nice rules in tables
@@ -39,7 +41,7 @@
 \usepackage{placeins}
 
 \newcommand{\EB}[1]{\textit{\color{blue}EB says: #1}}
-\newcommand{\FR}[1]{\textit{\color{green}FR says: #1}}
+\newcommand{\FR}[1]{\textit{\color{ForestGreen}FR says: #1}}
 \newcommand{\LA}[1]{\textit{\color{orange}LA says: #1}}
 \newcommand{\FS}[1]{\textit{\color{red}FS says: #1}}
 
@@ -62,7 +64,7 @@
 \author{%
     \IEEEauthorblockN{Elia Bonetto, Filippo Rigotto, Luca Attanasio and Francesco Savio}
 
-    \IEEEauthorblockA{Department of Information Engineering, University of Padova -- Via Gradenigo, 6/b, 35131 Padova, Italy}
+    \IEEEauthorblockA{Dept. of Information Engineering, University of Padova -- Via Gradenigo, 6/b, 35131 Padova, Italy}
     % \\Email: {\tt\{bonettoe,rigottof,attanasiol,\}@dei.unipd.it}}
 }
 
@@ -72,7 +74,8 @@
 \begin{abstract}
 In this work we analyse the Iterated Prisoner's Dilemma (IPD), under four main points of view: between two players, between multiple players, between multiple players with evolution on the population and between multiple players with randomness on the type between rounds (a Nature choice, in Game Theory terms).
 This report gives first an introduction on the Prisoner's Dilemma problem both theoretically and mathematically, defining the base structure that will be used in all the following sections.
-In Section \ref{Strategies} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{IPD2P}, \ref{IPDMP}, \ref{rIPDMP}, \ref{crIPDMP}] we illustrate the results of our simulations for each one of the study-cases. At the end, on Section \ref{Conclusion}, some final thoughts and considerations on the work done.
+Then, in Section~\ref{s:str} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] we illustrate the results of our simulations for each one of the study-cases.
+At the end, on Section~\ref{s:conc}, some final thoughts and considerations on the work done.
 All the code, developed in \textit{Python 3.7}, can be found on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
 \end{abstract}
 
@@ -123,21 +126,20 @@ Following this, the only possible reasonable conclusion is that the only Nash Eq
 This is not Pareto optimal but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect.
 
 This reasoning is no longer true when we consider repeated games and in particular the Iterated Prisoner Dilemma (IPD) since this involves time and memory (history) and more complicated strategies can be introduced like random once, grim triggers or Tit For (Two) Tat.
-Winning a game in this setup means to achieve a better payoff in the long run. In Sec.~\ref{IPD2P} we will se a simple one-vs-one game, iterated through time, while in the other cases population and other dynamics will be involved.
+Winning a game in this setup means to achieve a better payoff in the long run. In Sec.~\ref{s:IPD2P} we will se a simple one-vs-one game, iterated through time, while in the other cases population and other dynamics will be involved.
 
-\section{Strategies} \label{Strategies}
-
-The strategy is represented as a function which outputs either $u_C$ or $u_D$. Depending on the strategy, such function might depend on the opponent's history of moves, on the player's history of moves or on the number of moves played till that moment and so on.
+\section{Strategies} \label{s:str}
+The strategy is represented as a function which outputs either $u_C$ or $u_D$. Depending on the strategy, such function might depend on one or both players' history of moves, or on the number of moves played till that moment and so on.
 The strategy is based on a probability density function. In this project we used both strategies based on probability and deterministic ones.
 
 The strategies based on probability are:
 
 \begin{description}
-    \item[Nice guy] always cooperate (the function's output is always $u_C$).
-    \item[Bad guy] always defect (the function's output is always $u_D$).
+    \item[Nice guy] always cooperate (function's output is always $u_C$).
+    \item[Bad guy] always defect (function's output is always $u_D$).
     \item[Indifferent] randomly defect half $(k=50\%)$ of the times.
-    \item[Mainly nice] randomly defect $k\%$ of the times and cooperate $100-k\%$, with $k<50$.
-    \item[Mainly bad] randomly defect $k\%$ of the times and cooperate $100-k\%$, with $k>50$.
+    \item[Mainly nice] randomly defect $k\%$ of the times, $k<50$.% and cooperate $100-k\%$, with $k<50$.
+    \item[Mainly bad] randomly defect $k\%$ of the times, $k>50$.% and cooperate $100-k\%$, with $k>50$.
 \end{description}
 
 The deterministic strategies are:
@@ -149,8 +151,8 @@ The deterministic strategies are:
 
 Each player may change strategy to get a higher reward during the IPD.
 
-\section{IPD between two players} \label{IPD2P}
-In this section the IPD between two players, who use two fixed strategies respectively during the match, is presented.
+\section{Two players IPD} \label{s:IPD2P}
+In this section the IPD between two players, who use two fixed strategies during the match, is presented.
 We set the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match.
 Additionally, each player has one and only one strategy throughout its entire history, in this stage.
 All the possible combinations between players are evaluated, including the case of the player playing against itself.
@@ -158,42 +160,42 @@ This is a simple repetition of the single-shot game with the addition of memory.
 
 Since we are not concerned about population in this case (it is a simple A vs B game), as expected the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy.
 If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the run, but these are isolated cases since the only strategy that wins against all the others and draw with itself is the \textit{Bad} one.
-\FR{Rev. till here}
 
-\textbf{TODO NOT TRUE - REWRITE}\\ \\ \\
+\EB{TODO NOT TRUE - REWRITE}\\
 Infact in all cases, \textit{Bad guy} has a higher reward than the opponent as in \autoref{fig:badvsindiff}, \autoref{fig:badvstft}, \autoref{fig:badvsnice}, \autoref{fig:badvsmainlynice}, \autoref{fig:badvsmainlybad}. 
-On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad} or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players in the first case and almost the same in the second case, meaning that they both get an advantage if defecting against the other. This is not the preferred choice if considering both players want to get a the highest reward possible.\\ \\ \\
-\textbf{ENDTODO}
-\begin{figure}
+On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad} or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players in the first case and almost the same in the second case, meaning that they both get an advantage if defecting against the other. This is not the preferred choice if considering both players want to get a the highest reward possible.\\
+\EB{ENDTODO}
+
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-Bad.png}
     \caption{Bad guy vs bad guy}
     \label{fig:badvsbad}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Indifferent-Bad.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-Indifferent.png}
     \caption{Bad guy vs Indifferent}
     \label{fig:badvsindiff}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-TitForTat.png}
     \caption{Bad guy vs TfT}
     \label{fig:badvstft}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-Nice.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Nice-Bad.png}
     \caption{Bad guy vs Nice guy}
     \label{fig:badvsnice}
 \end{figure}
 
 %fix: because there is a space in the image!
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-MainlyNice (k=19).png}
     \caption{Bad guy vs Mainly nice guy}
@@ -201,140 +203,146 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
 \end{figure}
 
 %fix: because there is a space in the image!
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Bad-MainlyBad (k=98).png}
     \caption{Bad guy vs Mainly bad guy}
     \label{fig:badvsmainlybad}
 \end{figure}
 
-Infact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in \autoref{fig:indiffvsindiff}, \autoref{fig:tftvsindiff}, \autoref{fig:nicevsnice}, \autoref{fig:nicevstft}, \autoref{fig:tftvstft}.
+In fact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in \autoref{fig:indiffvsindiff}, \autoref{fig:tftvsindiff}, \autoref{fig:nicevsnice}, \autoref{fig:nicevstft}, \autoref{fig:tftvstft}.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Indifferent-Indifferent.png}
     \caption{Indifferent guy vs Indifferent guy}
     \label{fig:indiffvsindiff}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-TitForTat-Indifferent.png}
+    \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Indifferent-TitForTat.png}
     \caption{TfT vs Indifferent guy}
     \label{fig:tftvsindiff}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Nice-Nice.png}
     \caption{Nice guy vs Nice guy}
     \label{fig:nicevsnice}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-Nice-TitForTat.png}
     \caption{Nice guy vs TfT}
     \label{fig:nicevstft}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idp2p-rewards-TitForTat-TitForTat.png}
     \caption{TfT vs TfT}
     \label{fig:tftvstft}
 \end{figure}
 
-The TfT strategy is interesting, because TfT leads almost to the same cumulative reward as the opponent. However it might be lower than one in some points, since it replicates the previous opponent's move and not the actual move. A player might choose this move if he wants almost the same reward as the opponent.
+The TfT strategy is interesting, because TfT leads to almost the same cumulative reward as the opponent.
+However it might be lower than one in some points \FR{Lower to \emph{what} one?}, since it replicates the previous opponent's move and not the actual move.
+A player might choose this move if he/she wants almost the same reward as the opponent.
 
-In conclusion if a player wants to be sure he wins over the other he/she should chose a \textit{Bad guy} strategy, if he/she wants to cooperate as much as possible he/she might choose \textit{TfT, Nice} or \textit{indifferent} hoping the opponent chooses the one of the strategies in this group.     
+In conclusion, if a player wants to be sure to win over the other he/she should chose a \textit{Bad guy} strategy, if he/she wants to cooperate as much as possible he/she might choose \textit{TfT, Nice guy} or \textit{indifferent} hoping the opponent chooses one of the strategies in this group.     
 
-\newpage
+\section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 
-\section{Multiple players IPD - Round-robin scheme} \label{IPDMP}
-\textbf{TODO IT DEPENDS ON THE INITIAL POPULATION}
-In this section a multiple players IPD (MPIPD) is implemented. The round-robin scheme, used to match-up the opponents, consists in each player playing once against each other player in the torunament.
-Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the tournament.
-As in IPD it is possible to set the number of iterations in each match (i.e $NUM\_ITER = 50$). In addition the number of players $n = 10$ determines the total number of matches played in the tournament, which in this case is $\dfrac{n \times (n-1)}{2} = 45$.
+In this section an IPD between multiple players (MPIPD) is discussed.
+The \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in each player playing once against each As a consequence, the number of players $n = 10$ determines the total number of matches played in the tournament, which in this case is ${n \times (n-1)}/{2} = 45$.
+Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole procedure.
+As in 2-player IPD, it is possible to set the number of iterations of each match (i.e. \texttt{NUM\_ITER = 50}).
 
+\FR{Below part needs to be adapted to current code}
+\EB{IT DEPENDS ON THE INITIAL POPULATION}
 We propose a strategy, similar to \textit{Serie A} to assign points to each player after the outcome of the match is determined. A player gets 3 points if he/she wins, 1 point for a draw and 0 points for a loss. A player wins if he/she has a higher reward than the opponent's at the $50-th$ last iteration. He/She looses if the reward is lower and draws if it's the same as the opponent's.
 The culumative points after each match are shown in \autoref{fig:mpipd}.
 In \autoref{tab:ranking_df} the ranking of the torunament is determined. It can be evaluated that the three players using a \textit{Bad guy} strategy win the tournament.
 The strategies can be sorted by most number of points as follows: \textit{Bad guy}, \textit{Mainly bad guy}, \textit{Indifferent}, \textit{Mainly Nice}, \textit{TitForTat} and \textit{Nice}.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/idpmp-scores-10.png}
     \caption{Match number vs Points}
     \label{fig:mpipd}
 \end{figure}
 
+The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \FR{table placeholder here}
 
-The outcome of each match of the tournament can be seen in \autoref{tab:match_df}.
+\newpage % too much floating images causes order problems. maybe put all of them at the end
+\section{Repeated multiple players IPD - RR scheme} \label{s:rIPDMP}
+We then used the previuosly defined MPIPD round-robin scheme tournament, iterating it many times to collect more advanced statistics.
+We identify this as a \textit{Repeated multiple players IPD} (rMPIPD).
+At each tournament repetition, the population is increased adding players with strategies that depend on the results achieved in the previous iteration.
 
-\newpage
-\section{Repeated multiple players IPD - Round-robin scheme} \label{rIPDMP}
-In this section the MPIPD round-robin scheme tournament, is iterated: \textit{Repeated multiple players IPD (rMPIPD}.
-At each tournament repetition, the population is increased adding players with strategies that depend on the results that strategies achieved in the previous iteration. 
 %In our case the population is increasing by one individual that uses the strategy of the previous tournament's winner.
-% todo: complete text based on teacher's answer
+\LA{complete text based on teacher's answer}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r0.png}
-    \caption{Match number vs Points at repetition: 1.}
+    \caption{Match number vs Points at repetition 1.}
     \label{fig:rmpipd1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r1.png}
-    \caption{Match number vs Points at repetition: 2.}
+    \caption{Match number vs Points at repetition 2.}
     \label{fig:rmpipd2}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r2.png}
-    \caption{Match number vs Points at repetition: 3.}
+    \caption{Match number vs Points at repetition 3.}
     \label{fig:rmpipd3}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r3.png}
-    \caption{Match number vs Points at repetition: 4.}
+    \caption{Match number vs Points at repetition 4.}
     \label{fig:rmpipd4}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/ridpmp-scores-10-r4.png}
-    \caption{Match number vs Points at repetition: 5.}
+    \caption{Match number vs Points at repetition 5.}
     \label{fig:rmpipd5}
 \end{figure}
 
 \newpage
-\section{Chainging rMPIPD - Round-Robin scheme} \label{crIPDMP}
-In this section a rMPIPD where strategies are allowed to mutate is implemented. The gene, a parameter, encodes the attitude of an individual to cooperate. This gene mutates randomly to choose a different strategy at each iteration. The phenotype, which is the strategy, corresponding to that gene competes in the MPIPD such that the best-fitted, which is the winner of the tournament, is determined.
+\section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
+We introduced mutability in players' strategies when testing the rMPIPD presented above.
+Strategies are allowed to mutate \FR{need to say how why and then}.
+The gene, a parameter, encodes the attitude of an individual to cooperate. This gene mutates randomly to choose a different strategy at each iteration. The phenotype, which is the strategy, corresponding to that gene competes in the MPIPD such that the best-fitted, which is the winner of the tournament, is determined.
 
-The goal of this task is to simulate the effect of genetic mutations and the effect of natura selection.
+The goal of this task is to simulate the effect of genetic mutations and the effect of natural selection.
 
-In \autoref{fig:cmpipd1} all the players change strategy at each iteration when competing against other players. \textit{Player 7} wins the tournament and the ranking is shown in \autoref{tab:cmpipd1}.
+In \autoref{fig:cmpipd1} all the players change strategy at each iteration when competing against other players. \textit{Player 7} wins the tournament and the ranking is shown in \autoref{fig:cmpipd1}.
 
-% todo: complete based on teacher's answer
+\LA{complete based on teacher's answer}
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img_v1/cidpmp-scores-10.png}
-    \caption{Match number vs Points at repetition: 1.}
+    \caption{cIPDMP, Match number vs Points at repetition 1.}
     \label{fig:cmpipd1}
 \end{figure}
 
+\section{Conclusion} \label{s:conc}
 
-
-\section{Conclusion} \label{Conclusion}
+\FR{Mention the results shall be comparable with the paper.}
 
 %\bibliographystyle{IEEEtran}
-%\bibliography{report.bib}
+%\bibliography{report}
 \end{document}
