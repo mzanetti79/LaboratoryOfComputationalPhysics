@@ -10,6 +10,8 @@ BAD  = 100
 TFT  = -1
 TF2T = -2
 GRT  = -3
+PRBL = -10 # just placeholders
+PRBH = -11
 
 class Player(object):
     """Class to describe a player with strategy and history."""
@@ -207,14 +209,27 @@ class Strategy:
 
     @staticmethod
     def generatePlayers(num_players, allow_repetitions=False):
-        # define strategies for players
-        k = [NICE, BAD, IND, TFT, TF2T, GRT] # todo check if ok
-        l = -1 if allow_repetitions else 1
-        h = 101 if allow_repetitions else 100
+        str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
+        ll = 0 if allow_repetitions else 1
+        lh = 51 if allow_repetitions else 50
+        hl = 50 if allow_repetitions else 51
+        hh = 101 if allow_repetitions else 100
+        
+        k = [] # strategies for players
         while len(k) < num_players:
-            prob = np.random.randint(l, h)
-            if (prob != IND and prob not in k) or allow_repetitions:
-                k.append(prob)
+            val = np.random.choice(str_choices)
+
+            # substitute with useful values if needed
+            if val == PRBL:
+                val = np.random.randint(ll, lh)
+                if (val != IND and val not in k) or allow_repetitions:
+                    k.append(val)
+            elif val == PRBH:
+                val = np.random.randint(hl, hh)
+                if (val != IND and val not in k) or allow_repetitions:
+                    k.append(val)
+            else:
+                k.append(val)
         return np.array(k)
     
 class ProbStrategy(Strategy):

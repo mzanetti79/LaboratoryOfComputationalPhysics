@@ -68,7 +68,7 @@ def main():
     
     repeated_players = []
     for _ in range(NUM_REPETITIONS):
-        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, True)
+        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
         # print(ranking_df.to_latex(index=False))
