@@ -11,6 +11,8 @@ def main():
 
     # number of iterations
     NUM_ITER = 50
+    NUM_PLAYERS = 8
+    NUM_REPETITIONS = 100
 
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 
@@ -33,7 +35,7 @@ def main():
 
             # repeat the match to get some statistics (mean and std)
             cum_results = { k1:[], k2:[] }
-            for _ in range(100):
+            for _ in range(NUM_REPETITIONS):
                 p1.clear_history()
                 p2.clear_history()
                 p1.play_iter(p2, NUM_ITER)
