@@ -1,8 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
-
-from mgen import generatePayoffMatrix
 from strategy import *
 
 def main():
@@ -19,9 +14,7 @@ def main():
     # define k for strategy probabilities
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
     NUM_STRAT = len(k_strategies)
-    
-    #for k1 in k_strategies:
-    #    for k2 in k_strategies[np.where(k_strategies == k1)[0][0]:]:                
+                 
     for first in range(NUM_STRAT):
         for second in range(first, NUM_STRAT):
             k1 = k_strategies[first]
@@ -80,9 +73,9 @@ def main():
                 Line2D([0], [0], color='w', marker='o', label='P.2 Defect', markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate', markerfacecolor='b')
             ])
-            # plt.show()
-            plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
-            plt.close()
+            plt.show()
+            #plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
+            #plt.close()
 
 if __name__ == "__main__":
     main()

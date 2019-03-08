@@ -1,17 +1,10 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-from mgen import generatePayoffMatrix
 from strategy import *
 
 def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=False):
     n = k_strategies.size
 
     # initialize players with given strategies
-    players = np.array([ MultiPlayer(k, changing_str) for k in k_strategies ])
-
-    # todo for _ in range(NUM_REPETITIONS): -> CLEVER but get_points needs change
+    players = np.array([MultiPlayer(k, changing_str) for k in k_strategies])
 
     # each player plays against another in a round robin scheme
     for (i, p1) in zip(np.arange(n), players):
@@ -26,7 +19,6 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
-
     ranking_df = pd.DataFrame() # all points gained by players
     matches_df = pd.DataFrame() # all matches played sorted by time
 
@@ -85,7 +77,6 @@ def main():
             # save points for each repetition
             points = p.get_points()
 
-            #points = p.get_points()
             # plt.plot(points, label=p.s)
             # plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             # plt.xlabel('Match number')
@@ -105,9 +96,11 @@ def main():
     one_round = one_round[meds.index]
     one_round.boxplot()
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
-    plt.tight_layout()
+    plt.suptitle('Mean and variance for each type - one complete round')
+    plt.ylabel('Points')
+    plt.xlabel('Player')
     plt.show()
-    plt.savefig('../img/ipdmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
+    #plt.savefig('../img/ipdmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
     plt.close()
 
     # box plot of all points
@@ -116,9 +109,11 @@ def main():
     saved_points = saved_points[meds.index]
     saved_points.boxplot()
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
-    plt.tight_layout()
+    plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
+    plt.ylabel('Points')
+    plt.xlabel('Player')
     plt.show()
-    plt.savefig('../img/ipdmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
+    #plt.savefig('../img/ipdmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
     plt.close()
 
 if __name__ == "__main__":

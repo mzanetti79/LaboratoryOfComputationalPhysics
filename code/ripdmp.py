@@ -1,9 +1,4 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
 from ipdmp import IPDRoundRobin
-from mgen import generatePayoffMatrix
 from strategy import *
     
 def main():
@@ -21,17 +16,8 @@ def main():
     
     strategies_df = pd.DataFrame() # strategies evolution
 
-    # equal split initialization
-    #kH = np.random.randint(51,100)
-    #kL = np.random.randint(0,50)
-    #k_strategies = [0, 100, kL, kH, 50, -1]
-    #for i in range(NUM_PLAYERS//6-1):
-    #    k_strategies.extend(k_strategies)
-    #if(NUM_PLAYERS%6 != 0):
-    #    k_strategies.extend(k_strategies[:(NUM_PLAYERS)%6])
-    #k_strategies = np.array(k_strategies)
-
     NUM_REPETITIONS = 0
+    
     # while not np.array_equal(k_strategies, np.repeat(k_strategies[0], k_strategies.size)):
     # this is the largest number of elements of a strategy
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4:
@@ -52,10 +38,7 @@ def main():
             k_strategies = np.append(k_strategies, players[i].s.id)
             k_strategies = np.delete(k_strategies,np.argmax(players[NUM_PLAYERS-i-1].s.id))
 
-        # print(matches_df)
-        # ranking_df = pd.DataFrame(ranking_df)
-        # matches_df = pd.DataFrame(matches_df)
-        # display(ranking_df)
+        #display(ranking_df)
         # display(matches_df)
 
     print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))

@@ -1,5 +1,10 @@
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+#from mgen import generatePayoffMatrix
 
+# Define global variables to have groundtruth about strategies
 COOPERATE = 0
 DEFECT = 1
 
@@ -12,6 +17,8 @@ TF2T = -2
 GRT  = -3
 PRBL = -10 # just placeholders
 PRBH = -11
+
+TOT_STRAT = 8 #TODO should be 10??
 
 class Player(object):
     """Class to describe a player with strategy and history."""
@@ -76,8 +83,7 @@ class Player(object):
     def change_strategy(self):
         """Change the strategy randomly."""
         # watch out: each player has a different kH, kL
-        # 8 is the total number of strategies
-        k_strategies = Strategy.generatePlayers(8, replace=False)
+        k_strategies = Strategy.generatePlayers(TOT_STRAT, replace=False)
         
         s_next = self.random_str(k_strategies)
         while s_next == self.s:
@@ -204,7 +210,6 @@ class ProbStrategy(Strategy):
 
     def __init__(self, k):
         # default value is to cooperate in case of wrong k
-        # todo: check if throwing exception is better
         self.k = k if k>=NICE and k<=BAD else NICE
         self.id = k
 
