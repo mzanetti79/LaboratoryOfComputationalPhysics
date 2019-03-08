@@ -175,11 +175,11 @@ class Strategy:
     def generatePlayers(num_players, replace=False, fixed=False):
         str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
 
-        k = np.random.choice(str_choices,num_players,replace=replace)
+        k = np.random.choice(str_choices, num_players, replace=replace)
         maskL = k==PRBL
-        k[maskL] = np.repeat(25,maskL.sum()) if fixed else np.random.choice(49,size=maskL.sum(),replace=replace) + 1 # 1 to 49 exclude nice, indifferent
+        k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
         maskH = k==PRBH
-        k[maskH] = np.repeat(75,maskL.sum()) if fixed else np.random.choice(49,size=maskH.sum(),replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+        k[maskH] = np.repeat(75, maskL.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
 
         return k
 

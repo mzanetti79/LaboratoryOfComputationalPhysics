@@ -28,6 +28,8 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
+    SAVE_IMG = False
+
     NUM_ITER = 50
     NUM_PLAYERS = 10
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
@@ -70,9 +72,11 @@ def main():
        #    matches_df = matches_df.append(df)
 
     plt.legend()
-    plt.show()
-    #plt.savefig('../img/cipdmp-scores-{}.png'.format(NUM_PLAYERS))
-    #plt.close()
+    if SAVE_IMG:
+        plt.savefig('../img/cipdmp-scores-{}.png'.format(NUM_PLAYERS))
+        plt.close()
+    else:
+        plt.show()
 
     ranking_df = ranking_df.sort_values(['W', 'D', 'L'], ascending=[False, False, True])
     print(ranking_df.to_latex())

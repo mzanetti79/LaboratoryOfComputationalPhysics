@@ -10,15 +10,16 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
+    SAVE_IMG = False
+
     NUM_ITER = 100
     NUM_PLAYERS = 8
     NUM_REPETITIONS = 5
     print("Testing repeated {}-times round-robin tournament starting with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
-    repeated_players = []
-
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False, fixed=True)
 
+    repeated_players = []
     strategies_df = pd.DataFrame() # strategies evolution
 
     for _ in range(NUM_REPETITIONS):
@@ -73,9 +74,11 @@ def main():
             plt.ylabel('Points')
     
         plt.legend()
-        plt.show()
-        #plt.savefig('../img/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
-        #plt.close()
-
+        if SAVE_IMG:
+            plt.savefig('../img/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
+            plt.close()
+        else:
+            plt.show()
+s
 if __name__ == "__main__":
     main()

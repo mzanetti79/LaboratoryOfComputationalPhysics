@@ -22,10 +22,8 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
     ranking_df = pd.DataFrame() # all points gained by players
     matches_df = pd.DataFrame() # all matches played sorted by time
 
-
     for (i, p) in zip(np.arange(n), players):
         points = p.get_points()
-        pl_strat_str = str(p.s)
         df = pd.DataFrame(
             [[p.s, int(points[-1]), p, p.s.id]],
             columns=['Player','points', 'rrp', 'labels']
@@ -51,6 +49,8 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
+    SAVE_IMG = False
+
     NUM_ITER = 50
     NUM_PLAYERS = 8
     NUM_REPETITIONS = 10
@@ -71,8 +71,7 @@ def main():
     saved_points = []
 
     # save plots
-    for (r, players) in zip(np.arange(NUM_REPETITIONS), repeated_players):
-        # should we use for players in repeated_players: ? r is not used
+    for players in repeated_players:
         for p in players:
             # save points for each repetition
             points = p.get_points()
@@ -99,9 +98,11 @@ def main():
     plt.suptitle('Mean and variance for each type - one complete round')
     plt.ylabel('Points')
     plt.xlabel('Player')
-    plt.show()
-    #plt.savefig('../img/ipdmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
-    plt.close()
+    if SAVE_IMG:
+        plt.savefig('../img/ipdmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
+        plt.close()
+    else:
+        plt.show()
 
     # box plot of all points
     saved_points = pd.DataFrame(np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS))))
@@ -112,9 +113,11 @@ def main():
     plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
     plt.ylabel('Points')
     plt.xlabel('Player')
-    plt.show()
-    #plt.savefig('../img/ipdmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
-    plt.close()
-
+    if SAVE_IMG:
+        plt.savefig('../img/ipdmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
+        plt.close()
+    else:
+        plt.show()
+    
 if __name__ == "__main__":
     main()

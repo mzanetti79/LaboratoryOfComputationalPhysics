@@ -1,10 +1,10 @@
 from strategy import *
 
 def main():
-    # compare results with other version
-    np.random.seed(1234)
+    np.random.seed(100)
+    
+    SAVE_IMG = False
 
-    # number of iterations
     NUM_ITER = 50
     NUM_PLAYERS = 8
     NUM_REPETITIONS = 100
@@ -13,10 +13,9 @@ def main():
 
     # define k for strategy probabilities
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
-    NUM_STRAT = len(k_strategies)
                  
-    for first in range(NUM_STRAT):
-        for second in range(first, NUM_STRAT):
+    for first in range(NUM_PLAYERS):
+        for second in range(first, NUM_PLAYERS):
             k1 = k_strategies[first]
             k2 = k_strategies[second]
 
@@ -43,9 +42,11 @@ def main():
             plt.xticks([1, 2], [p1.s, p2.s])
             plt.ylabel('Reward')
             plt.title("2 pl. game")
-            # plt.show()
-            plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
-            plt.close()
+            if SAVE_IMG:
+                plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
+                plt.close()
+            else:
+                plt.show()
             
             # plot cumulative rewards
             # show only the last iteration's plot
@@ -73,9 +74,11 @@ def main():
                 Line2D([0], [0], color='w', marker='o', label='P.2 Defect', markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate', markerfacecolor='b')
             ])
-            plt.show()
-            #plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
-            #plt.close()
+            if SAVE_IMG:
+                plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
+                plt.close()
+            else:
+                plt.show()
 
 if __name__ == "__main__":
     main()

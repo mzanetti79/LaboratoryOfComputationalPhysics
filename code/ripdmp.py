@@ -5,19 +5,19 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
+    SAVE_IMG = False
+
     NUM_ITER = 100
     NUM_PLAYERS = 50
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    repeated_players = []
-
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True)
     
+    NUM_REPETITIONS = 0
+    repeated_players = []
     strategies_df = pd.DataFrame() # strategies evolution
 
-    NUM_REPETITIONS = 0
-    
     # while not np.array_equal(k_strategies, np.repeat(k_strategies[0], k_strategies.size)):
     # this is the largest number of elements of a strategy
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4:
@@ -62,9 +62,11 @@ def main():
             plt.ylabel('Points')
 
         plt.legend()
-        plt.show()
-        #plt.savefig('../img/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
-        #plt.close()
+        if SAVE_IMG:
+            plt.savefig('../img/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
+            plt.close()
+        else:
+            plt.show()
 
 if __name__ == "__main__":
     main()
