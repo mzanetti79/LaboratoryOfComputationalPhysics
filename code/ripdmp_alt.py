@@ -79,6 +79,5 @@ def main():
             plt.close()
         else:
             plt.show()
-s
 if __name__ == "__main__":
     main()
