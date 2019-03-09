@@ -2,37 +2,25 @@
 %% arara: pdflatex
 % arara: pdflatex
 % arara: pdflatex
-\documentclass[journal,a4paper,10pt,twoside,draft=false]{IEEEtran}
+\documentclass[journal,a4paper,10pt,twoside]{IEEEtran} % with epstopdf, add draft=false
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-
-\usepackage{lmodern,textcomp}
+\usepackage{times,textcomp,amssymb}
+\usepackage[cmex10]{amsmath}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{parskip,microtype}
-\usepackage{subfig,float,tabularx,booktabs,multicol}
-\usepackage{hyperref}
 
-\usepackage{times,textcomp,amsfonts}
-\usepackage[cmex10]{amsmath}
-
-\usepackage{times,textcomp,amsfonts}
-%\usepackage[top=1.5cm, bottom=2cm, right=1.6cm,left=1.6cm]{geometry}
-\usepackage{breqn,cite,url} % Citation numbers sorted and properly "compressed/ranged".
-\usepackage{epstopdf}
+\usepackage{breqn,cite}
+%\usepackage{epstopdf}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[pdftex]{graphicx}
 \usepackage{subfig}
-\usepackage{array,booktabs} % nice rules in tables
-
+\usepackage[section]{placeins} % floats never go into next section
+%\let\labelindent\relax % Compact lists
+\usepackage{array,booktabs,enumitem,balance} % nice rules in tables
 
 % amsmath sets \interdisplaylinepenalty = 10000
 % preventing page breaks from occurring within multiline equations
 \interdisplaylinepenalty=2500
-
-%\let\labelindent\relax % Compact lists
-\usepackage{enumitem}
 
 %tikz figures
 \usepackage{tikz}
@@ -43,11 +31,6 @@
 \newlength\fwidth
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
-
-\usepackage{indentfirst}
-%\setlength\parindent{0pt}
-\linespread{1}
-\usepackage{placeins}
 
 \newcommand{\EB}[1]{\textit{\color{blue}EB says: #1}}
 \newcommand{\FR}[1]{\textit{\color{ForestGreen}FR says: #1}}
@@ -66,6 +49,8 @@
     urlcolor  = {dkpowder},
 }
 
+\pdfminorversion=7 % fixes warnings of eps to pdf included images
+
 %%%%%%%%%%%%%%%%
 \begin{document}
 \title{On the Iterated Prisoner's Dilemma}
@@ -73,7 +58,7 @@
 \author{%
     \IEEEauthorblockN{Elia Bonetto, Filippo Rigotto, Luca Attanasio and Francesco Savio}
 
-    \IEEEauthorblockA{Dept. of Information Engineering, University of Padova -- Via Gradenigo, 6/b, 35131 Padova, Italy}
+    \IEEEauthorblockA{Department of Information Engineering, University of Padova -- Via Gradenigo, 6/b, 35131 Padova, Italy}
     % \\Email: {\tt\{bonettoe,rigottof,attanasiol,\}@dei.unipd.it}}
 }
 
@@ -83,15 +68,15 @@
 \begin{abstract}
 In this work we analyse the Iterated Prisoner's Dilemma (IPD), under four main points of view: between two players, between multiple players, between multiple players with evolution on the population and between multiple players with randomness on the type between rounds (a Nature choice, in Game Theory terms).
 This report gives first an introduction on the Prisoner's Dilemma problem both theoretically and mathematically, defining the base structure that will be used in all the following sections.
-Then, in Section~\ref{s:str} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] we illustrate the results of our simulations for each one of the study-cases.
+Then, in Section~\ref{s:str} we illustrate the possible strategies that we have implemented for this work and in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] we present the results of our simulations for each one of the study-cases.
 At the end, on Section~\ref{s:conc}, some final thoughts and considerations on the work done.
 All the code, developed in \textit{Python 3.7}, can be found on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
 \end{abstract}
 
 \section{Introduction} 
-The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory, which attempts to model social/economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance and, as we will see shortly, if the intuition tells us that the best choice is to cooperate the only stable point and win-ever strategy in a one-shot game is to \textit{not} cooperate.
+The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory which attempts to model social/economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance and, as we will see shortly, if the intuition tells us that the best choice is to cooperate the only stable point and win-ever strategy in a one-shot game is to \textit{not} cooperate.
 
-The classical formulation of the PD is that given two prisoners, their conviction depends on their mutual cooperation, they can be either stay silent or fink, respectively cooperate or not. 
+The classical formulation of the PD is that given two prisoners in a scenario where their conviction depends on their mutual cooperation, they can either stay silent or fink, respectively cooperate or not. 
 Another possible formulation is by the means of a trade-off game called \textit{closed bag exchange}:
 
 \begin{quote}
@@ -127,15 +112,15 @@ r_1 = u_1^T M u_2
 r_2 = u_2^T M u_1
 $$
 
-For a single shot game (a game which is played only once), the best strategy(choice of action), may seem for both players to cooperate as this lead to a good payoff which maximizes the global outcome (evaluated as the sum of the payoffs for each of them). This is indeed the Pareto dominating strategy. 
+For a single-shot game (a game which is played only once), the best strategy (choice of action) may seem for both players to cooperate as this leads to a good payoff which maximizes the global outcome (evaluated as the sum of the payoffs for each of them). This is indeed the Pareto dominating strategy. 
 
-There is a problem though: if a player cooperates he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this is true for both players. 
-Given the fact that both players are rational and fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of act is to defect as this would lead to a slightly lower payoff if the opponent defect (minor punishment) but a higher one if the other player would choose to cooperate.
+There is a problem though: if a player cooperates, he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this is true for both players. 
+Given the fact that both players are rational and fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of acting is to defect as this would lead to a slightly lower payoff if the opponent defect (minor punishment) but a higher one if the other player would choose to cooperate.
 Following this, the only possible reasonable conclusion is that the only Nash Equilibrium, or the only way to win this game in a single-shot scenario, is to always defect.
 This is not Pareto optimal but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect.
 
 This reasoning is no longer true when we consider repeated games and in particular the Iterated Prisoner Dilemma (IPD) since this involves time and memory (history) and more complicated strategies can be introduced like random once, grim triggers or Tit For (Two) Tat.
-Winning a game in this setup means to achieve a better payoff in the long run. In Sec.~\ref{s:IPD2P} we will se a simple one-vs-one game, iterated through time, while in the other cases population and other dynamics will be involved.
+Winning a game in this setup means to achieve a better payoff in the long run. In Section~\ref{s:IPD2P} we will se a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
 \section{Strategies} \label{s:str}
 The strategy is represented as a function which outputs either $u_C$ or $u_D$. Depending on the strategy, such function might depend on one or both players' history of moves, or on the number of moves played till that moment and so on.
@@ -158,12 +143,12 @@ The deterministic strategies are:
     \item[Grim-Trigger (GrT)] always cooperate until the opponent's first defect move, then always defect. 
 \end{description}
 
-These strategies are fixed in time, they cannot change, except in the last cases examined in ~\ref{s:crIPDMP}.
+These strategies are fixed in time, i.e. a player cannot change the strategy it was created with, except in the last cases, examined in Section~\ref{s:crIPDMP}.
 
 \section{Two players IPD} \label{s:IPD2P}
-In this section the IPD intercourse between two players: each player has a strategy, does not know the strategy of the opponent and plays accordingly to his strategy definition without possibility to change it. This game is repeated for a fixed number of rounds, unknown to the two players. The main metric out of this game is who wins, or in other words who achieve an higher payoff at the end of the round.
+In this section the IPD intercourse between two players: each player has a strategy, does not know the strategy of the opponent and plays accordingly to his strategy definition without possibility to change it. This game is repeated for a fixed number of rounds, unknown to the two players. The main metric out of this game is who wins, or in other words who achieve a higher payoff at the end of the round.
 
-We fixed a number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match, and can be changed, but the results does not depends on it in most of the cases(the only exceptions could be the random ones).
+We fixed the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match, and can be changed, but the results does not depends on it in most of the cases (the only exceptions could be the random ones).
 
 All the possible combinations between players are evaluated, including the case of the player playing against itself.
 This is a simple repetition of the single-shot game with the addition of memory and the possibility to add as we have already seen probabilistic and more elaborated strategies.
@@ -171,9 +156,8 @@ This is a simple repetition of the single-shot game with the addition of memory 
 Since we are not concerned about population in this case (it is a simple A vs B game), as expected the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy.
 If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the run, but these are isolated cases since the only strategy that wins against all the others and draw with itself is the \textit{Bad} one.
 
-In fact in all cases, \textit{Bad guy} has a higher reward than the opponent as in \autoref{fig:badvsindiff}, \autoref{fig:badvstft}, \autoref{fig:badvsnice}, \autoref{fig:badvsmainlynice}, \autoref{fig:badvsmainlybad}. 
-On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players or almost the same respectively, but not as good as if they were playing against (mainly)good strategies. This is a first important insight as verifies and points out what we have seen only theoretically before: defect is always a winning strategy, but may be non-optimal, and if playing cooperate both players would get an advantage if they defect against the other.
-
+In fact in all cases \textit{Bad guy} has a higher reward than the opponent as in Figures~[\ref{fig:badvsindiff}, \ref{fig:badvstft}, \ref{fig:badvsnice}, \ref{fig:badvsmainlynice}, \ref{fig:badvsmainlybad}]. 
+On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players or almost the same respectively, but not as good as if they were playing against (mainly) nice strategies. This is a first important insight that verifies and points out what we have seen only theoretically before: defect is always a winning strategy, but it may be non-optimal; if playing cooperate, both players would get an advantage if they defect against the other.
 
 \begin{figure}[ht]
     \centering
@@ -217,7 +201,7 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
     \label{fig:badvsmainlybad}
 \end{figure}
 
-In fact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in \autoref{fig:indiffvsindiff}, \autoref{fig:tftvsindiff}, \autoref{fig:nicevsnice}, \autoref{fig:nicevstft}, \autoref{fig:tftvstft}. The concept is both player getting the highest reward, not just one of them, in that case would be Bad-Nice combination.
+In fact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in Figures~[\ref{fig:indiffvsindiff}, \ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}, \ref{fig:tftvstft}]. The concept is both player getting the highest reward, not just one of them, in that case it would be the Bad-Nice combination.
 
 \begin{figure}[ht]
     \centering
@@ -265,13 +249,14 @@ In conclusion, if a player wants to be sure to win over the other he/she should 
 In addition to this considerations we have run the simulation multiple times to get insight of mean and variances that rule these games. Obviously the static strategies, or the non-triggering ones, or the the ones without variation have constant mean and $0$ std. What is interesting though is for the random ones as we can see that the results can vary quite a bit.
 \textbf{insert images}
 
-If you want to have more insights about this the complete collection of the generated pictures can be found inside the repository.
-\section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
+If you want to have more insights about this part, the complete collection of the generated pictures can be found in the repository.
 
+
+\section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 In this section an IPD between multiple players (MPIPD) is discussed.
 The \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in each player playing once against each As a consequence, the number of players $n = 10$ determines the total number of matches played in the tournament, which in this case is ${n \times (n-1)}/{2} = 45$.
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole procedure.
-As in 2-player IPD, it is possible to set the number of iterations of each match (i.e. \texttt{NUM\_ITER = 50}).
+As in 2-players IPD, it is possible to set the number of iterations of each match (i.e. \texttt{NUM\_ITER = 50}).
 
 \FR{Below part needs to be adapted to current code}
 \EB{IT DEPENDS ON THE INITIAL POPULATION}
@@ -282,7 +267,6 @@ The strategies can be sorted by most number of points as follows: \textit{Bad gu
 
 The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \FR{table placeholder here}
 
-\newpage % too much floating images causes order problems. maybe put all of them at the end
 \section{Repeated multiple players IPD - RR scheme} \label{s:rIPDMP}
 We then used the previuosly defined MPIPD round-robin scheme tournament, iterating it many times to collect more advanced statistics.
 We identify this as a \textit{Repeated multiple players IPD} (rMPIPD).
@@ -292,8 +276,6 @@ At each tournament repetition, the population is increased adding players with s
 \LA{complete text based on teacher's answer}
 
 
-
-\newpage
 \section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
 We introduced mutability in players' strategies when testing the rMPIPD presented above.
 Strategies are allowed to mutate \FR{need to say how why and then}.
@@ -310,6 +292,7 @@ In \autoref{fig:cmpipd1} all the players change strategy at each iteration when 
 
 \FR{Mention the results shall be comparable with the paper.}
 
+\balance
 %\bibliographystyle{IEEEtran}
 %\bibliography{report}
 \end{document}
