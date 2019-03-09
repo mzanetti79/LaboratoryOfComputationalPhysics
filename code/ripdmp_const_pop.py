@@ -1,6 +1,6 @@
 from ipdmp import IPDRoundRobin
 from strategy import *
-    
+
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
@@ -21,7 +21,7 @@ def main():
 
     # while not np.array_equal(k_strategies, np.repeat(k_strategies[0], k_strategies.size)):
     # this is the largest number of elements of a strategy
-    while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 or NUM_REPETITIONS > MAX_ALLOWED:
+    while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
         players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
@@ -36,7 +36,6 @@ def main():
         for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
             k_strategies = np.append(k_strategies, players[i].s.id)
             k_strategies = np.delete(k_strategies,np.argmax(players[NUM_PLAYERS-i-1].s.id))
-
         #display(ranking_df)
         # display(matches_df)
 
