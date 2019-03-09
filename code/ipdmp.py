@@ -30,7 +30,7 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
         plt.title("Evolution of the game")
         plt.legend( bbox_to_anchor=(1, 1))
         if SAVE_IMG:
-            plt.savefig('../img/ipdmp-evolution-of-game-{}.png'.format(NUM_PLAYERS))
+            plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps')
             plt.close()
         else:
             plt.show()
@@ -110,7 +110,7 @@ def main():
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
-        plt.savefig('../img/ipdmp-boxplot-single-match-{}.png'.format(NUM_PLAYERS))
+        plt.savefig('../img/ipdmp/ipdmp-boxplot-single-match-{}.eps'.format(NUM_PLAYERS),format='eps')
         plt.close()
     else:
         plt.show()
@@ -125,7 +125,7 @@ def main():
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
-        plt.savefig('../img/ipdmp-boxplot-final-points-{}.png'.format(NUM_PLAYERS))
+        plt.savefig('../img/ipdmp/ipdmp-boxplot-final-points-{}.eps'.format(NUM_PLAYERS),format='eps')
         plt.close()
     else:
         plt.show()

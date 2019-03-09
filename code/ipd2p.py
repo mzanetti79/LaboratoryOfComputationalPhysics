@@ -43,7 +43,7 @@ def main():
             plt.ylabel('Reward')
             plt.title("Meand and std for {} iterations".format(NUM_REPETITIONS))
             if SAVE_IMG:
-                plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
+                plt.savefig('../img/ipd2p/ipd2p-boxplot-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps')
                 plt.close()
             else:
                 plt.show()
@@ -74,8 +74,9 @@ def main():
                 Line2D([0], [0], color='w', marker='o', label='P.2 Defect', markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate', markerfacecolor='b')
             ])
+            print()
             if SAVE_IMG:
-                plt.savefig('../img/ipd2p-rewards-{}-{}.png'.format(p1.s,p2.s))
+                plt.savefig('../img/ipd2p/ipd2p-rewards-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps')
                 plt.close()
             else:
                 plt.show()

@@ -1,14 +1,23 @@
 % !TeX spellcheck = en_US
 %% arara: pdflatex
-%% arara: bibtex
 % arara: pdflatex
 % arara: pdflatex
-\documentclass[journal,a4paper,10pt,twoside]{IEEEtran}
+\documentclass[journal,a4paper,10pt,twoside,draft=false]{IEEEtran}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{times,textcomp,amsfonts}
-\usepackage[cmex10]{amsmath}
+
+\usepackage{lmodern,textcomp,amsmath}
 \usepackage[T1]{fontenc}
+\usepackage[english]{babel,varioref}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{parskip,microtype}
+\usepackage{subfig,float,tabularx,booktabs,multicol}
+\usepackage{hyperref}
+
+\usepackage{epstopdf}
+
+\usepackage{times,textcomp,amsfonts}
 %\usepackage[top=1.5cm, bottom=2cm, right=1.6cm,left=1.6cm]{geometry}
 \usepackage{breqn,cite,url} % Citation numbers sorted and properly "compressed/ranged".
 \usepackage{epstopdf}
@@ -80,7 +89,7 @@ All the code, developed in \textit{Python 3.7}, can be found on \href{https://gi
 \end{abstract}
 
 \section{Introduction} 
-The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory, which attempts to model social/economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance, and as we will see shortly if the intuition tells us that the best choice is to cooperate the only stable point in a one-shot game is to \textit{not} cooperate.
+The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory, which attempts to model social/economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance and, as we will see shortly, if the intuition tells us that the best choice is to cooperate the only stable point and win-ever strategy in a one-shot game is to \textit{not} cooperate.
 
 The classical formulation of the PD is that given two prisoners, their conviction depends on their mutual cooperation, they can be either stay silent or fink, respectively cooperate or not. 
 Another possible formulation is by the means of a trade-off game called \textit{closed bag exchange}:
@@ -118,10 +127,10 @@ r_1 = u_1^T M u_2
 r_2 = u_2^T M u_1
 $$
 
-At a first glance, for a single shot game (a game which is played only once), the best strategy may seem for both players to cooperate, as this lead to a good payoff which maximizes the global outcome (evaluated as the sum of the payoffs for each of them). This is indeed the Pareto dominating strategy. 
+For a single shot game (a game which is played only once), the best strategy(choice of action), may seem for both players to cooperate as this lead to a good payoff which maximizes the global outcome (evaluated as the sum of the payoffs for each of them). This is indeed the Pareto dominating strategy. 
 
 There is a problem though: if a player cooperates he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this is true for both players. 
-Given the fact that both players are rational and fully aware of the rules of the game (they are \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of act is to defect as this would lead to a slightly lower payoff if the opponent defect (minor punishment) but a higher one if the other player would choose to cooperate.
+Given the fact that both players are rational and fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of act is to defect as this would lead to a slightly lower payoff if the opponent defect (minor punishment) but a higher one if the other player would choose to cooperate.
 Following this, the only possible reasonable conclusion is that the only Nash Equilibrium, or the only way to win this game in a single-shot scenario, is to always defect.
 This is not Pareto optimal but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect.
 
@@ -149,100 +158,98 @@ The deterministic strategies are:
     \item[Grim-Trigger (GrT)] always cooperate until the opponent's first defect move, then always defect. 
 \end{description}
 
-Each player may change strategy to get a higher reward during the IPD.
+These strategies are fixed in time, they cannot change, except in the last cases examined in ~\ref{s:crIPDMP}.
 
 \section{Two players IPD} \label{s:IPD2P}
-In this section the IPD between two players, who use two fixed strategies during the match, is presented.
-We set the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match.
-Additionally, each player has one and only one strategy throughout its entire history, in this stage.
+In this section the IPD intercourse between two players: each player has a strategy, does not know the strategy of the opponent and plays accordingly to his strategy definition without possibility to change it. This game is repeated for a fixed number of rounds, unknown to the two players. The main metric out of this game is who wins, or in other words who achieve an higher payoff at the end of the round.
+
+We fixed a number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match, and can be changed, but the results does not depends on it in most of the cases(the only exceptions could be the random ones).
+
 All the possible combinations between players are evaluated, including the case of the player playing against itself.
-This is a simple repetition of the single-shot game with the addition of memory.
+This is a simple repetition of the single-shot game with the addition of memory and the possibility to add as we have already seen probabilistic and more elaborated strategies.
 
 Since we are not concerned about population in this case (it is a simple A vs B game), as expected the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy.
 If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the run, but these are isolated cases since the only strategy that wins against all the others and draw with itself is the \textit{Bad} one.
 
-\EB{TODO NOT TRUE - REWRITE}\\
-Infact in all cases, \textit{Bad guy} has a higher reward than the opponent as in \autoref{fig:badvsindiff}, \autoref{fig:badvstft}, \autoref{fig:badvsnice}, \autoref{fig:badvsmainlynice}, \autoref{fig:badvsmainlybad}. 
-On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad} or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players in the first case and almost the same in the second case, meaning that they both get an advantage if defecting against the other. This is not the preferred choice if considering both players want to get a the highest reward possible.\\
-\EB{ENDTODO}
+In fact in all cases, \textit{Bad guy} has a higher reward than the opponent as in \autoref{fig:badvsindiff}, \autoref{fig:badvstft}, \autoref{fig:badvsnice}, \autoref{fig:badvsmainlynice}, \autoref{fig:badvsmainlybad}. 
+On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players or almost the same respectively, but not as good as if they were playing against (mainly)good strategies. This is a first important insight as verifies and points out what we have seen only theoretically before: defect is always a winning strategy, but may be non-optimal, and if playing cooperate both players would get an advantage if they defect against the other.
+
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Bad-Bad.png}
-    \caption{Bad guy vs bad guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Bad}
+    \caption{Bad vs Bad}
     \label{fig:badvsbad}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Bad-Indifferent.png}
-    \caption{Bad guy vs Indifferent}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Indifferent}
+    \caption{Bad vs Indifferent}
     \label{fig:badvsindiff}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Bad-TitForTat.png}
-    \caption{Bad guy vs TfT}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-TitForTat}
+    \caption{Bad vs TfT}
     \label{fig:badvstft}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Nice-Bad.png}
-    \caption{Bad guy vs Nice guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Nice}
+    \caption{Bad vs Nice}
     \label{fig:badvsnice}
 \end{figure}
 
-%fix: because there is a space in the image!
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Bad-MainlyNice (k=19).png}
-    \caption{Bad guy vs Mainly nice guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-MainlyNice(k=27)}
+    \caption{Bad vs Mainly nice}
     \label{fig:badvsmainlynice}
 \end{figure}
 
-%fix: because there is a space in the image!
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Bad-MainlyBad (k=98).png}
-    \caption{Bad guy vs Mainly bad guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-MainlyBad(k=72)}
+    \caption{Bad vs Mainly bad}
     \label{fig:badvsmainlybad}
 \end{figure}
 
-In fact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in \autoref{fig:indiffvsindiff}, \autoref{fig:tftvsindiff}, \autoref{fig:nicevsnice}, \autoref{fig:nicevstft}, \autoref{fig:tftvstft}.
+In fact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in \autoref{fig:indiffvsindiff}, \autoref{fig:tftvsindiff}, \autoref{fig:nicevsnice}, \autoref{fig:nicevstft}, \autoref{fig:tftvstft}. The concept is both player getting the highest reward, not just one of them, in that case would be Bad-Nice combination.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Indifferent-Indifferent.png}
-    \caption{Indifferent guy vs Indifferent guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Indifferent-Indifferent}
+    \caption{Indifferent vs Indifferent}
     \label{fig:indiffvsindiff}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Indifferent-TitForTat.png}
-    \caption{TfT vs Indifferent guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Indifferent-TitForTat}
+    \caption{TfT vs Indifferent}
     \label{fig:tftvsindiff}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Nice-Nice.png}
-    \caption{Nice guy vs Nice guy}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Nice-Nice}
+    \caption{Nice vs Nice}
     \label{fig:nicevsnice}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-Nice-TitForTat.png}
-    \caption{Nice guy vs TfT}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-TitForTat-Nice}
+    \caption{Nice vs TfT}
     \label{fig:nicevstft}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p-rewards-TitForTat-TitForTat.png}
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-TitForTat-TitForTat}
     \caption{TfT vs TfT}
     \label{fig:tftvstft}
 \end{figure}
@@ -251,8 +258,14 @@ The TfT strategy is interesting, because TfT leads to almost the same cumulative
 However it might be lower than one in some points \FR{Lower to \emph{what} one?}, since it replicates the previous opponent's move and not the actual move.
 A player might choose this move if he/she wants almost the same reward as the opponent.
 
+\textbf{REPETITION}
+
 In conclusion, if a player wants to be sure to win over the other he/she should chose a \textit{Bad guy} strategy, if he/she wants to cooperate as much as possible he/she might choose \textit{TfT, Nice guy} or \textit{indifferent} hoping the opponent chooses one of the strategies in this group.     
 
+In addition to this considerations we have run the simulation multiple times to get insight of mean and variances that rule these games. Obviously the static strategies, or the non-triggering ones, or the the ones without variation have constant mean and $0$ std. What is interesting though is for the random ones as we can see that the results can vary quite a bit.
+\textbf{insert images}
+
+If you want to have more insights about this the complete collection of the generated pictures can be found inside the repository.
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 
 In this section an IPD between multiple players (MPIPD) is discussed.
@@ -267,13 +280,6 @@ The culumative points after each match are shown in \autoref{fig:mpipd}.
 In \autoref{tab:ranking_df} the ranking of the torunament is determined. It can be evaluated that the three players using a \textit{Bad guy} strategy win the tournament.
 The strategies can be sorted by most number of points as follows: \textit{Bad guy}, \textit{Mainly bad guy}, \textit{Indifferent}, \textit{Mainly Nice}, \textit{TitForTat} and \textit{Nice}.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ipdmp-scores-10.png}
-    \caption{Match number vs Points}
-    \label{fig:mpipd}
-\end{figure}
-
 The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \FR{table placeholder here}
 
 \newpage % too much floating images causes order problems. maybe put all of them at the end
@@ -285,40 +291,7 @@ At each tournament repetition, the population is increased adding players with s
 %In our case the population is increasing by one individual that uses the strategy of the previous tournament's winner.
 \LA{complete text based on teacher's answer}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-scores-10-r0.png}
-    \caption{Match number vs Points at repetition 1.}
-    \label{fig:rmpipd1}
-\end{figure}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-scores-10-r1.png}
-    \caption{Match number vs Points at repetition 2.}
-    \label{fig:rmpipd2}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-scores-10-r2.png}
-    \caption{Match number vs Points at repetition 3.}
-    \label{fig:rmpipd3}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-scores-10-r3.png}
-    \caption{Match number vs Points at repetition 4.}
-    \label{fig:rmpipd4}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-scores-10-r4.png}
-    \caption{Match number vs Points at repetition 5.}
-    \label{fig:rmpipd5}
-\end{figure}
 
 \newpage
 \section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
@@ -332,12 +305,6 @@ In \autoref{fig:cmpipd1} all the players change strategy at each iteration when 
 
 \LA{complete based on teacher's answer}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/cipdmp-scores-10.png}
-    \caption{cIPDMP, Match number vs Points at repetition 1.}
-    \label{fig:cmpipd1}
-\end{figure}
 
 \section{Conclusion} \label{s:conc}
 
