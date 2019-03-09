@@ -24,6 +24,7 @@ class Player(object):
     """Class to describe a player with strategy and history."""
     
     def __str__(self):
+        """Override standard printer""" 
         return "Player with strategy: {}".format(self.s)
     
     # optional: use M = generatePayoffMatrix()
@@ -60,16 +61,16 @@ class Player(object):
         if type(self.s) == ProbStrategy:
             return self.s.get()
         elif type(self.s) == TitForTat or type(self.s) == GrimTrigger:
-            if len(opponent.playedHist) > 0:
+            if len(opponent.playedHist) > 0: #at least 1
                 return self.s.get(opponent.playedHist[-1]) # pass opponent's move
             return COOPERATE
         elif type(self.s) == TitFor2Tat:
-            if len(opponent.playedHist) > 1:
-                return self.s.get(opponent.playedHist[-2]) # pass opponent's second to lastmove
+            if len(opponent.playedHist) > 1: #at least 2
+                return self.s.get([opponent.playedHist[-2],opponent.playedHist[-1]]) # pass opponent's second to lastmove
             return COOPERATE
         
     def update(self, action1, action2, opponent):
-        """Updates the state based on the actions."""
+        """Updates the state based on the actions and if is opponent."""
         self.stratHist.append(str(self.s)) #todo check if better this or k
         if opponent:
             self.payoffHist.append(self.M2[action1,action2])
@@ -92,7 +93,7 @@ class Player(object):
         self.s = s_next
 
     def random_str(self, k_list):
-        k = np.random.choice(k_list) # gene
+        k = np.random.choice(k_list)
         if k >= 0:
             return ProbStrategy(k)
         elif k == TFT:
@@ -126,6 +127,7 @@ class MultiPlayer(Player):
         self.changing = changing
     
     def winner(self,opponent):
+        """Save the total payoff of the player"""
         self.results.append(np.sum(self.payoffHist))
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
@@ -182,31 +184,10 @@ class Strategy:
         k[maskH] = np.repeat(75, maskL.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
 
         return k
-
-        # ll = 0 if replace else 1
-        # lh = 51 if replace else 50
-        # hl = 50 if replace else 51
-        # hh = 101 if replace else 100
-        
-        # k = [] # strategies for players
-        # while len(k) < num_players:
-        #     val = np.random.choice(str_choices)
-
-        #     # substitute with useful values if needed
-        #     if val == PRBL:
-        #         val = np.random.randint(ll, lh)
-        #         if (val != IND and val not in k) or replace:
-        #             k.append(val)
-        #     elif val == PRBH:
-        #         val = np.random.randint(hl, hh)
-        #         if (val != IND and val not in k) or replace:
-        #             k.append(val)
-        #     else:
-        #         k.append(val)
-        # return np.array(k)
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""
+    """Span from always nice to always bad players"""
 
     def __init__(self, k):
         # default value is to cooperate in case of wrong k
@@ -252,8 +233,11 @@ class TitFor2Tat(TitForTat):
     def __str__(self):
         return "TitFor2Tat"
     
-    # get method remains the same, just change indexes
-    # todo but in the paper it is noted to act using both last and 2-to-last actions
+    def get(self, last_moves=None):
+        if last_moves == None:
+            return COOPERATE
+        return (last_moves[0] and last_moves[1])
+        # COOPERATE = 0, DEFECT = 1. If both 1 only case to have DEFECT as output
 
 class GrimTrigger(Strategy):
     """Cooperate at first, if opponent defects once then always defect."""
