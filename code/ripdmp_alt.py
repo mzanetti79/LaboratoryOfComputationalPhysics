@@ -10,7 +10,7 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    SAVE_IMG = False
+    SAVE_IMG = True
 
     NUM_ITER = 100
     NUM_PLAYERS = 8
