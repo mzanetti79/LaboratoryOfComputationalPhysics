@@ -6,9 +6,9 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    SAVE_IMG = True
+    SAVE_IMG = False
 
-    NUM_ITER = 100
+    NUM_ITER = 50
     NUM_PLAYERS = 50
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
@@ -16,7 +16,7 @@ def main():
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True)
 
     NUM_REPETITIONS = 0
-    MAX_ALLOWED = 10
+    MAX_ALLOWED = 5
     repeated_players = []
     strategies_df = pd.DataFrame() # strategies evolution
 
@@ -32,8 +32,6 @@ def main():
         df = pd.DataFrame([counts],columns=unique)
         strategies_df = strategies_df.append(df)
 
-        # easy fix (depending on task)
-        # add one winner strategy or multiple previous winners?
         for i in range(0,len(players)):
             draw = np.random.uniform(0,1)
             #if(i < int(NUM_PLAYERS * PERCENTAGE)):
@@ -46,8 +44,8 @@ def main():
             #    if(draw > 0.8):
             #        k_strategies = np.append(k_strategies, players[i].s.id)
             if(draw > i/len(players)):
-                   k_strategies = np.append(k_strategies, players[i].s.id)
-
+                k_strategies = np.append(k_strategies, players[i].s.id)
+                
     if(np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4 ):
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
