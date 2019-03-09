@@ -14,7 +14,7 @@ def main():
 
     NUM_ITER = 100
     NUM_PLAYERS = 8
-    NUM_REPETITIONS = 5
+    NUM_REPETITIONS = 10
     print("Testing repeated {}-times round-robin tournament starting with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False, fixed=True)
@@ -31,7 +31,7 @@ def main():
         # score['points'] = score['points']-score.min().points # to emphasize differences
         score['percentage'] = score['points']/np.sum(score['points'])
 
-        score['users_to_add'] = round((score['percentage']*10)**2) # ^2 to evaluate the difference
+        score['users_to_add'] = round((score['percentage']*len(players)))
         print(score)
 
         print('adding this many people: ', score['users_to_add'].sum())
