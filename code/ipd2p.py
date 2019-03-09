@@ -3,7 +3,7 @@ from strategy import *
 def main():
     np.random.seed(100)
     
-    SAVE_IMG = True
+    SAVE_IMG = False
 
     NUM_ITER = 50
     NUM_PLAYERS = 8

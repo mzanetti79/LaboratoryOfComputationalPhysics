@@ -152,10 +152,6 @@ class MultiPlayer(Player):
 
         # who won? check the sum of rewards
         self.winner(opponent)
-                
-        # set actual history to zero
-        self.clear_history()
-        opponent.clear_history()
     
     def rounds_played(self):
         """Number of rounds each user played."""
@@ -176,14 +172,34 @@ class Strategy:
     @staticmethod
     def generatePlayers(num_players, replace=False, fixed=False):
         str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
+        ll = 0 if replace else 1
+        lh = 51 if replace else 50
+        hl = 50 if replace else 51
+        hh = 101 if replace else 100
 
-        k = np.random.choice(str_choices, num_players, replace=replace)
-        maskL = k==PRBL
-        k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
-        maskH = k==PRBH
-        k[maskH] = np.repeat(75, maskL.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+        k = [] # strategies for players
+        while len(k) < num_players:
+            val = np.random.choice(str_choices)
 
-        return k
+            # substitute with useful values if needed
+            if val == PRBL:
+                val = np.random.randint(ll, lh)
+                if (val != IND and val not in k) or replace:
+                    k.append(val)
+            elif val == PRBH:
+                val = np.random.randint(hl, hh)
+                if (val != IND and val not in k) or replace:
+                    k.append(val)
+            else:
+                k.append(val)
+        return np.array(k)
+        #k = np.random.choice(str_choices, num_players, replace=replace)
+        #maskL = k==PRBL
+        #k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
+        #maskH = k==PRBH
+        #k[maskH] = np.repeat(75, maskL.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+
+        #return k
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""

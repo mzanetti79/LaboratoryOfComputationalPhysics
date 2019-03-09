@@ -1,17 +1,41 @@
 from strategy import *
+SAVE_IMG = False
 
-def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=False):
+def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=False, plot=False):
     n = k_strategies.size
 
     # initialize players with given strategies
     players = np.array([MultiPlayer(k, changing_str) for k in k_strategies])
 
     # each player plays against another in a round robin scheme
+    if(plot):
+        plt.figure(figsize=(12,5))
+    
+    p = {obj:[0] * num_iter for obj in players}
+    
     for (i, p1) in zip(np.arange(n), players):
         start = i if against_itself else i+1
         for (j, p2) in zip(np.arange(start, n), players[start:]):
+            p1.clear_history()
+            p2.clear_history()
             p1.play_iter(p2, num_iter)
-
+            if(plot):
+                p[p1] += np.cumsum(p1.payoffHist)
+                p[p2] += np.cumsum(p2.payoffHist)
+    if plot:
+        for i in p:
+            plt.plot(p[i],label=i.s)
+            plt.xlabel('Iteration')
+            plt.ylabel('Cum. reward')
+        plt.title("Evolution of the game")
+        plt.legend( bbox_to_anchor=(1, 1))
+        if SAVE_IMG:
+            plt.savefig('../img/ipdmp-evolution-of-game-{}.png'.format(NUM_PLAYERS))
+            plt.close()
+        else:
+            plt.show()
+    
+    
     # for cipdmp: exit without computing points and matches df
     # dirty workaround: fix later when cipdmp points comp is well defined (now they are done in main)
     if changing_str:
@@ -49,19 +73,17 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    SAVE_IMG = False
-
     NUM_ITER = 50
-    NUM_PLAYERS = 8
+    NUM_PLAYERS = 20
     NUM_REPETITIONS = 10
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS != 8))
 
     repeated_players = []
-    for _ in range(NUM_REPETITIONS):
-        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
+    for i in range(NUM_REPETITIONS):
+        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # no strategy change, not against itself
         repeated_players.append(players)
 
         # print(ranking_df.to_latex(index=False))
@@ -75,18 +97,7 @@ def main():
         for p in players:
             # save points for each repetition
             points = p.get_points()
-
-            # plt.plot(points, label=p.s)
-            # plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
-            # plt.xlabel('Match number')
-            # plt.ylabel('Points')
-
             saved_points.append(int(points[-1]))
-
-        # plt.legend()
-        # plt.show()
-        #plt.savefig('../img/ipdmp-scores-{}.png'.format(NUM_PLAYERS))
-        #plt.close()
 
     # box plot of single match
     one_round_results = [p.results for p in players]
@@ -95,7 +106,7 @@ def main():
     one_round = one_round[meds.index]
     one_round.boxplot()
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
-    plt.suptitle('Mean and variance for each type - one complete round')
+    plt.suptitle('Mean and variance for each type vs the other players \n One complete round')
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
