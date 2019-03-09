@@ -3,7 +3,7 @@ from strategy import *
 def main():
     np.random.seed(100)
     
-    SAVE_IMG = False
+    SAVE_IMG = True
 
     NUM_ITER = 50
     NUM_PLAYERS = 8
@@ -41,7 +41,7 @@ def main():
             plt.boxplot([cum_results[k1], cum_results[k2]])
             plt.xticks([1, 2], [p1.s, p2.s])
             plt.ylabel('Reward')
-            plt.title("2 pl. game")
+            plt.title("Meand and std for {} iterations".format(NUM_REPETITIONS))
             if SAVE_IMG:
                 plt.savefig('../img/ipd2p-boxplot-{}-{}.png'.format(p1.s,p2.s))
                 plt.close()
