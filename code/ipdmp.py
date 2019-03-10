@@ -1,7 +1,7 @@
 from strategy import *
 SAVE_IMG = False
 
-def IPDRoundRobin(players, num_iter, changing_str=False, against_itself=False, plot=False):
+def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
     n = len(players)
     
     # each player plays against another in a round robin scheme
@@ -13,10 +13,8 @@ def IPDRoundRobin(players, num_iter, changing_str=False, against_itself=False, p
     for (i, p1) in zip(np.arange(n), players):
         start = i if against_itself else i+1
         for (j, p2) in zip(np.arange(start, n), players[start:]):
-            if(not changing_str):
-                #todo check if necessary, this gives interesting info for the story of the tournament
-                p1.clear_history()
-                p2.clear_history()
+            p1.clear_history()
+            p2.clear_history()
             p1.play_iter(p2, num_iter)
             if(plot):
                 p[p1] += np.cumsum(p1.payoffHist)
@@ -61,9 +59,6 @@ def IPDRoundRobin(players, num_iter, changing_str=False, against_itself=False, p
             matches_df = matches_df.append(df)
 
     players = np.array(ranking_df['rrp'])
-
-    if changing_str:
-        players = MultiPlayer.change_strategy(players)
 
     ranking_df = ranking_df[['Player','points', 'labels']]
     return players, ranking_df, matches_df
