@@ -188,12 +188,10 @@ class MultiPlayer(Player):
                     t[i].s = s_next
                 else:
                     s_next = players[i].random_strategy(k_strategies)
-                    print("before {}".format(players[i].s.id))
                     while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id):
                         k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
                         s_next = players[i].random_strategy(k_strategies)
                     t[i].s = s_next
-                    print("after {}".format(t[i].s.id))
                     
         return t
 
