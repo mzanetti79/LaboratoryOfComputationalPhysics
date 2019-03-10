@@ -43,7 +43,7 @@ def main():
             plt.ylabel('Reward')
             plt.title("Meand and std for {} iterations".format(NUM_REPETITIONS))
             if SAVE_IMG:
-                plt.savefig('../img/ipd2p/ipd2p-boxplot-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps')
+                plt.savefig('../img/ipd2p/ipd2p-boxplot-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
                 plt.close()
             else:
                 plt.show()
@@ -76,7 +76,7 @@ def main():
             ])
             print()
             if SAVE_IMG:
-                plt.savefig('../img/ipd2p/ipd2p-rewards-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps')
+                plt.savefig('../img/ipd2p/ipd2p-rewards-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
                 plt.close()
             else:
                 plt.show()

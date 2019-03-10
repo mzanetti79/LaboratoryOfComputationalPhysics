@@ -72,7 +72,7 @@ def main():
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
     if SAVE_IMG:
-        plt.savefig('../img/ripdmp-incr/ripdmp-evolution-increasing-pop-{}.eps'.format(NUM_PLAYERS),format='eps')
+        plt.savefig('../img/ripdmp-incr/ripdmp-evolution-increasing-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()
@@ -89,7 +89,7 @@ def main():
         plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
 
         if SAVE_IMG:
-            plt.savefig('../img/ripdmp-incr/ripdmp-scores-increasing-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps')
+            plt.savefig('../img/ripdmp-incr/ripdmp-scores-increasing-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()

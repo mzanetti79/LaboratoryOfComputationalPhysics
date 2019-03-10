@@ -28,7 +28,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
         plt.title("Evolution of the game")
         plt.legend( bbox_to_anchor=(1, 1))
         if SAVE_IMG:
-            plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps')
+            plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()
@@ -108,7 +108,7 @@ def main():
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
-        plt.savefig('../img/ipdmp/ipdmp-boxplot-single-match-{}.eps'.format(NUM_PLAYERS),format='eps')
+        plt.savefig('../img/ipdmp/ipdmp-boxplot-single-match-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()
@@ -124,7 +124,7 @@ def main():
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
-        plt.savefig('../img/ipdmp/ipdmp-boxplot-final-points-{}.eps'.format(NUM_PLAYERS),format='eps')
+        plt.savefig('../img/ipdmp/ipdmp-boxplot-final-points-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()
