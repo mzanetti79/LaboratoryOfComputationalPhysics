@@ -161,39 +161,53 @@ class MultiPlayer(Player):
 
     def change_strategy(players):
         """Change the strategy randomly."""
-        t = players.copy()
-        k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
-        for i in range(len(players)):
-           #THIS IS JUST RANDOM
-           ##change strategy based on position achieved
-           #if np.random.uniform(0,1) < i/len(players):
-           #    s_next = players[i].random_strategy(k_strategies)
-           #    while str(s_next) == str(players[i].s):
-           #        s_next = players[i].random_strategy(k_strategies)
-           #    t[i].s = s_next
-           ##change strategy based on intrinsic behaviour of the player
-           #elif np.random.uniform(0,1) < players[i].c:
-           #    s_next = players[i].random_strategy(k_strategies)
-           #    while str(s_next) == str(players[i].s):
-           #        s_next = players[i].random_strategy(k_strategies)
-           #    t[i].s = s_next
-        #MUTATION PROBABILITY RELATED TO RESULTS
-            if np.random.uniform(0,1) < i/len(players):
-                #If lower I am tempted to NOT cooperate
-                if np.random.uniform(0,1) < players[i].c:
-                    s_next = players[i].random_strategy(k_strategies)
-                    while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id):
-                        k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
-                        s_next = players[i].random_strategy(k_strategies)
-                    t[i].s = s_next
+        c_b = 0
+        c_g = 0
+        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT))
+        for i in range(len(players)):        
+            if i < len(players)/2:
+                ##TODO TUNE THIS, maybe refer to the position
+                print("I have strategy that gives me good result - reinforce my type")
+                print("BEFORE s {}, c {}".format(players[i].s, players[i].c)) 
+                if players[i].s.id > IND:
+                    players[i].c = (players[i].c + players[i].c**2)/2
                 else:
-                    s_next = players[i].random_strategy(k_strategies)
-                    while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id):
-                        k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
+                    players[i].c = (players[i].c + players[i].c**0.5)/2  
+                print("AFTER s {}, c {}".format(players[i].s, players[i].c)) 
+            elif i > len(players)/2:
+                print("I have strategy that gives me bad result - try to change my type in the opposite direction")
+                print("BEFORE s {}, c {}".format(players[i].s, players[i].c)) 
+                if players[i].s.id > IND:
+                    players[i].c = (players[i].c + players[i].c**0.5)/2  
+                else:
+                    players[i].c = (players[i].c + players[i].c**2)/2
+                print("AFTER s {}, c {}".format(players[i].s, players[i].c)) 
+            else:
+                print("I am in the middle, I am not changing my type s {}, c {}".format(players[i].s, players[i].c)) 
+            
+            #MUTATION PROBABILITY RELATED TO RESULTS
+            if np.random.uniform(0,1) < i/len(players):
+                #If lower I am tempted to cooperate
+                if np.random.uniform(0,1) > players[i].c:
+                    print("I am going to a less cooperative behaviour")
+                    if players[i].s.id < BAD:
                         s_next = players[i].random_strategy(k_strategies)
-                    t[i].s = s_next
-                    
-        return t
+                        c_b += 1
+                        while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
+                            s_next = players[i].random_strategy(k_strategies)
+                        players[i].s = s_next
+                    print("After change of type I am {}\n\n".format(players[i].s))
+                else:
+                    print("I am going to a more cooperative behaviour")
+                    if players[i].s.id > GRT:
+                        s_next = players[i].random_strategy(k_strategies)
+                        c_g += 1
+                        while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
+                            s_next = players[i].random_strategy(k_strategies)
+                        players[i].s = s_next
+                    print("After change of type I am {}\n\n".format(players[i].s))  
+            print("\n\n")
+        return players, c_b, c_g
 
     def random_strategy(self, k_list):
         """Generate random strategy object."""

@@ -7,9 +7,9 @@ def main():
     SAVE_IMG = False
 
     NUM_ITER = 50
-    NUM_PLAYERS = 50
+    NUM_PLAYERS = 10
     NUM_REPETITIONS = 0
-    MAX_ALLOWED = 5
+    MAX_ALLOWED = 4
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     repeated_players = []
@@ -41,13 +41,9 @@ def main():
         k_strategies = np.array(k_strategies)
         playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
         
-        print("prima")
-        for p in players:
-            print(p.s)
-        players = MultiPlayer.change_strategy(players)
-        print("dopo")
-        for p in players:
-            print(p.s)
+        players, c_b, c_g = MultiPlayer.change_strategy(players)
+        print("Changed {} players to a more cooperative behaviour.".format(c_g))
+        print("Changed {} players to a less cooperative behaviour.".format(c_b))
         players = np.append(players, playersToAdd)
         
     if(np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4 ):
