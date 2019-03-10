@@ -10,10 +10,10 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    SAVE_IMG = True
+    SAVE_IMG = False
 
     NUM_ITER = 100
-    NUM_PLAYERS = 10
+    NUM_PLAYERS = 50
     NUM_REPETITIONS = 5
     print("Testing repeated {}-times round-robin tournament starting with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
@@ -24,6 +24,9 @@ def main():
 
     for _ in range(NUM_REPETITIONS):
         # change strategy at the end of each torunament
+        # todo: changing_str is useless right now because change_strategy isn't called
+        # check: we want to generate a different strategy at the start of each torunament
+        # based on the gene that tells us how much someone wants to cooperate
         k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True, fixed=True)
         print(k_strategies)
         players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, changing_str=True) # strategy change, not against itself

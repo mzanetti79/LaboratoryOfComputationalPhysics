@@ -76,7 +76,7 @@ class Player(object):
         
     def get_strategy(self, k):
         """Get strategy object given the id."""
-        if k >= 0:
+        if k >= NICE and k <= BAD:
             return ProbStrategy(k)
         elif k == TFT:
             return TitForTat()
