@@ -21,13 +21,16 @@ def main():
     NUM_REPETITIONS = 5
     print("Testing repeated {}-times round-robin tournament starting with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False, fixed=True)
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=True)
 
     repeated_players = []
     strategies_df = pd.DataFrame() # strategies evolution
 
     for _ in range(NUM_REPETITIONS):
-        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
+        # initialize players with given strategies
+        players = np.array([MultiPlayer(k) for k in k_strategies])
+        
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
         # todo: this part probably needs a fix, check if it makes sense

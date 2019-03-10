@@ -18,7 +18,49 @@ GRT  = -3
 PRBL = -10 # just placeholders
 PRBH = -11
 
-TOT_STRAT = 8 #TODO should be 10??
+class Strategy:
+    """Abstract Strategy class to derive other."""
+    TOT_STRAT = 8 #TODO should be 10??
+    
+    def __str__(self):
+        return "Base"
+
+    def get(self):
+        pass
+
+    @staticmethod
+    def generatePlayers(num_players, replace=False, fixed=False):
+        str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
+        #ll = 0 if replace else 1
+        #lh = 51 if replace else 50
+        #hl = 50 if replace else 51
+        #hh = 101 if replace else 100
+#
+        #k = [] # strategies for players
+        #while len(k) < num_players:
+        #    val = np.random.choice(str_choices)
+#
+        #    # substitute with useful values if needed
+        #    if val == PRBL:
+        #        val = np.random.randint(ll, lh)
+        #        if (val != IND and val not in k) or replace:
+        #            k.append(val)
+        #    elif val == PRBH:
+        #        val = np.random.randint(hl, hh)
+        #        if (val != IND and val not in k) or replace:
+        #            k.append(val)
+        #    else:
+        #        k.append(val)
+        #return np.array(k)
+        k = np.random.choice(str_choices, num_players, replace=replace)
+        maskL = k==PRBL
+        k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
+        maskH = k==PRBH
+        k[maskH] = np.repeat(75, maskH.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+
+        return k
+    
+
 
 class Player(object):
     """Class to describe a player with strategy and history."""
@@ -28,10 +70,13 @@ class Player(object):
         return "Player with strategy: {}".format(self.s)
     
     # optional: use M = generatePayoffMatrix()
-    def __init__(self, k=0, M=np.array([[3,0],[5,1]])):
+    def __init__(self, k=0, M=np.array([[3,0],[5,1]]), changing=False):
         self.M1 = M
         self.M2 = M.T
-
+        if changing:
+            self.c = np.random.uniform(0,1) #probability to change strategy at the end of the round
+        else:
+            self.c = 0
         self.s = self.get_strategy(k)
         self.clear_history()
     
@@ -96,7 +141,7 @@ class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
 
     def __init__(self, k, changing=False):
-        Player.__init__(self, k)
+        Player.__init__(self, k, changing=changing)
         
         # save results for multiple rounds played by user
         # this way we can save all the results from the tournament
@@ -114,25 +159,30 @@ class MultiPlayer(Player):
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
 
-    def change_strategy(self):
+    def change_strategy(players):
         """Change the strategy randomly."""
-        # watch out: each player has a different kH, kL
-        k_strategies = Strategy.generatePlayers(TOT_STRAT, replace=False)
-        
-        s_next = self.random_strategy(k_strategies)
-        while s_next == self.s:
-            s_next = self.random_strategy(k_strategies)
-
-        self.s = s_next
+        t = players.copy()
+        k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
+        for i in range(len(players)):
+            #change strategy based on position achieved
+            if np.random.uniform(0,1) < i/len(players):
+                s_next = players[i].random_strategy(k_strategies)
+                while str(s_next) == str(players[i].s):
+                    s_next = players[i].random_strategy(k_strategies)
+                t[i].s = s_next
+            #change strategy based on intrinsic behaviour of the player
+            elif np.random.uniform(0,1) < players[i].c:
+                s_next = players[i].random_strategy(k_strategies)
+                while str(s_next) == str(players[i].s):
+                    s_next = players[i].random_strategy(k_strategies)
+                t[i].s = s_next
+        return t
 
     def random_strategy(self, k_list):
         """Generate random strategy object."""
         return self.get_strategy(np.random.choice(k_list))
         
     def play_iter(self, opponent, num_iter):
-        # change strategy at the start of each match
-        # if self.changing:
-        #     self.change_strategy()
         Player.play_iter(self, opponent, num_iter)
 
         self.prevStratHist.append(self.stratHist)
@@ -159,47 +209,6 @@ class MultiPlayer(Player):
 
     def get_points(self):
         return np.cumsum(self.results)
-
-class Strategy:
-    """Abstract Strategy class to derive other."""
-
-    def __str__(self):
-        return "Base"
-
-    def get(self):
-        pass
-
-    @staticmethod
-    def generatePlayers(num_players, replace=False, fixed=False):
-        str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
-        #ll = 0 if replace else 1
-        #lh = 51 if replace else 50
-        #hl = 50 if replace else 51
-        #hh = 101 if replace else 100
-#
-        #k = [] # strategies for players
-        #while len(k) < num_players:
-        #    val = np.random.choice(str_choices)
-#
-        #    # substitute with useful values if needed
-        #    if val == PRBL:
-        #        val = np.random.randint(ll, lh)
-        #        if (val != IND and val not in k) or replace:
-        #            k.append(val)
-        #    elif val == PRBH:
-        #        val = np.random.randint(hl, hh)
-        #        if (val != IND and val not in k) or replace:
-        #            k.append(val)
-        #    else:
-        #        k.append(val)
-        #return np.array(k)
-        k = np.random.choice(str_choices, num_players, replace=replace)
-        maskL = k==PRBL
-        k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
-        maskH = k==PRBH
-        k[maskH] = np.repeat(75, maskH.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
-
-        return k
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used."""

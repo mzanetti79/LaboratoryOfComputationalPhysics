@@ -27,9 +27,12 @@ def main():
         # todo: changing_str is useless right now because change_strategy isn't called
         # check: we want to generate a different strategy at the start of each torunament
         # based on the gene that tells us how much someone wants to cooperate
-        k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True, fixed=True)
+        k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=True)
         print(k_strategies)
-        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, changing_str=True) # strategy change, not against itself
+        # initialize players with given strategies
+        players = np.array([MultiPlayer(k) for k in k_strategies])
+        
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, changing_str=True) # strategy change, not against itself
         repeated_players.append(players)
 
         # todo: this part probably needs a fix, check if it makes sense

@@ -1,12 +1,9 @@
 from strategy import *
 SAVE_IMG = False
 
-def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=False, plot=False):
-    n = k_strategies.size
-
-    # initialize players with given strategies
-    players = np.array([MultiPlayer(k, changing_str) for k in k_strategies])
-
+def IPDRoundRobin(players, num_iter, changing_str=False, against_itself=False, plot=False):
+    n = len(players)
+    
     # each player plays against another in a round robin scheme
     if(plot):
         plt.figure(figsize=(12,5))
@@ -16,12 +13,15 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
     for (i, p1) in zip(np.arange(n), players):
         start = i if against_itself else i+1
         for (j, p2) in zip(np.arange(start, n), players[start:]):
-            p1.clear_history()
-            p2.clear_history()
+            if(not changing_str):
+                #todo check if necessary, this gives interesting info for the story of the tournament
+                p1.clear_history()
+                p2.clear_history()
             p1.play_iter(p2, num_iter)
             if(plot):
                 p[p1] += np.cumsum(p1.payoffHist)
                 p[p2] += np.cumsum(p2.payoffHist)
+                
     if plot:
         for i in p:
             plt.plot(p[i],label=i.s)
@@ -34,12 +34,7 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
             plt.close()
         else:
             plt.show()
-    
-    
-    # for cipdmp: exit without computing points and matches df
-    # dirty workaround: fix later when cipdmp points comp is well defined (now they are done in main)
-    # if changing_str:
-    #     return players, None, None
+
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
@@ -66,6 +61,10 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
             matches_df = matches_df.append(df)
 
     players = np.array(ranking_df['rrp'])
+
+    if changing_str:
+        players = MultiPlayer.change_strategy(players)
+
     ranking_df = ranking_df[['Player','points', 'labels']]
     return players, ranking_df, matches_df
 
@@ -79,11 +78,14 @@ def main():
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS != 8))
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT))
 
     repeated_players = []
     for i in range(NUM_REPETITIONS):
-        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # no strategy change, not against itself
+        # initialize players with given strategies
+        players = np.array([MultiPlayer(k) for k in k_strategies])
+        
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # no strategy change, not against itself
         repeated_players.append(players)
 
         # print(ranking_df.to_latex(index=False))
