@@ -151,142 +151,209 @@ In this section the IPD intercourse between two players: each player has a strat
 We fixed the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match, and can be changed, but the results does not depends on it in most of the cases (the only exceptions could be the random ones).
 
 All the possible combinations between players are evaluated, including the case of the player playing against itself.
-This is a simple repetition of the single-shot game with the addition of memory and the possibility to add as we have already seen probabilistic and more elaborated strategies.
+This is a simple repetition of the single-shot game with the addition of memory and the possibility to add, as we have already seen, probabilistic and more elaborated strategies.
 
-Since we are not concerned about population in this case (it is a simple A vs B game), as expected the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy.
-If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the run, but these are isolated cases since the only strategy that wins against all the others and draw with itself is the \textit{Bad} one.
+Since we are not concerned about population in this case (it is a simple A vs B game), as expected the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy. 
 
-In fact in all cases \textit{Bad guy} has a higher reward than the opponent as in Figures~[\ref{fig:badvsindiff}, \ref{fig:badvstft}, \ref{fig:badvsnice}, \ref{fig:badvsmainlynice}, \ref{fig:badvsmainlybad}]. 
-On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against \textit{Mainly bad}, this leads to the same cumulative reward for both players or almost the same respectively, but not as good as if they were playing against (mainly) nice strategies. This is a first important insight that verifies and points out what we have seen only theoretically before: defect is always a winning strategy, but it may be non-optimal; if playing cooperate, both players would get an advantage if they defect against the other.
+In fact in all cases \textit{Bad guy} has a higher reward than the opponent as in Figures~[\ref{fig:badvstft}, \ref{fig:badvsnice}, \ref{fig:badvsmainlybad}]. 
+On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against \textit{Mainly bad}(\autoref{fig:badvsmainlybad}), this leads to the same cumulative reward for both players or almost the same respectively, but not as good as if they were playing against (mainly) nice strategies. This is a first important insight that verifies and points out what we have seen only theoretically before: defect is always a winning strategy, but it may be non-optimal; on the other hand if both are playing cooperate, each one of them would get an advantage if they defect against the other.
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Bad}
     \caption{Bad vs Bad}
     \label{fig:badvsbad}
 \end{figure}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Indifferent.eps}
-    \caption{Bad vs Indifferent}
-    \label{fig:badvsindiff}
-\end{figure}
-
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-TitForTat}
     \caption{Bad vs TfT}
     \label{fig:badvstft}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Nice}
     \caption{Bad vs Nice}
     \label{fig:badvsnice}
 \end{figure}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-MainlyNice(k=27)}
-    \caption{Bad vs Mainly nice}
-    \label{fig:badvsmainlynice}
-\end{figure}
-
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-MainlyBad(k=72)}
     \caption{Bad vs Mainly bad}
     \label{fig:badvsmainlybad}
 \end{figure}
 
-In fact, players might consider a different combination of strategies if they both want to get the highest reward possible: Indifferent-Indifferent, Indifferent-TfT, Nice-Nice or Nice-TfT, TfT-TfT as in Figures~[\ref{fig:indiffvsindiff}, \ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}, \ref{fig:tftvstft}]. The concept is both player getting the highest reward, not just one of them, in that case it would be the Bad-Nice combination.
+If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the run as in Figures~[\ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}]. The concept is both player getting the highest reward, not just one of them, in that case it would be the \textit{Bad}-\textit{Nice} combination. These are isolated cases that we are considering just because it is a study case since the only strategy that wins against all the others and draw with itself is the \textit{Bad} one and so this is the strategy one intelligent player should go for(remember the base-rule that we do not know the strategy of the player we are facing).
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Indifferent-Indifferent}
-    \caption{Indifferent vs Indifferent}
-    \label{fig:indiffvsindiff}
-\end{figure}
-
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Indifferent-TitForTat}
     \caption{TfT vs Indifferent}
     \label{fig:tftvsindiff}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Nice-Nice}
     \caption{Nice vs Nice}
     \label{fig:nicevsnice}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-TitForTat-Nice}
     \caption{Nice vs TfT}
     \label{fig:nicevstft}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-TitForTat-TitForTat}
     \caption{TfT vs TfT}
     \label{fig:tftvstft}
 \end{figure}
 
-The TfT strategy is interesting, because TfT leads to almost the same cumulative reward as the opponent.
-However it might be lower than one in some points \FR{Lower to \emph{what} one?}, since it replicates the previous opponent's move and not the actual move.
-A player might choose this move if he/she wants almost the same reward as the opponent.
+The TfT strategy is interesting, because TfT leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if fast-forgivin if it encouter a mainly bad strategy. 
+A player might choose this move if he/she wants almost the same reward as the opponent. This strategy will become more insteresting in the following steps.
 
-\textbf{REPETITION}
 
-In conclusion, if a player wants to be sure to win over the other he/she should chose a \textit{Bad guy} strategy, if he/she wants to cooperate as much as possible he/she might choose \textit{TfT, Nice guy} or \textit{indifferent} hoping the opponent chooses one of the strategies in this group.     
+In addition to this considerations we have run the simulation multiple times to get insight of mean and variances that rule these games. Obviously the static strategies(as the \textit{Nice-Nice} \ref{fig:box-nn}), or the non-triggering ones, or the the ones without variation have constant mean and $0$ std. What is interesting though is for the random ones as we can see that the results can vary quite a bit(as \textit{Mainly Bad-TitForTat}\ref{fig:boxmbvtft}).
 
-In addition to this considerations we have run the simulation multiple times to get insight of mean and variances that rule these games. Obviously the static strategies, or the non-triggering ones, or the the ones without variation have constant mean and $0$ std. What is interesting though is for the random ones as we can see that the results can vary quite a bit.
-\textbf{insert images}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-boxplot-Nice-Nice}
+    \caption{Nice vs Nice}
+    \label{fig:boxnn}
+\end{figure}
 
-If you want to have more insights about this part, the complete collection of the generated pictures can be found in the repository.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-boxplot-TitForTat-MainlyBad(k=72)}
+    \caption{TfT vs Mainly Bad}
+    \label{fig:boxmbvtft}
+\end{figure}
+
+If you want to have more insights about this part, the complete collection of the generated pictures can be found in the repository and in the table \ref{} statistics and results.
+\textbf{INSERT TABLE HERE}
 
 
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
-In this section an IPD between multiple players (MPIPD) is discussed.
-The \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in each player playing once against each As a consequence, the number of players $n = 10$ determines the total number of matches played in the tournament, which in this case is ${n \times (n-1)}/{2} = 45$.
-Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole procedure.
-As in 2-players IPD, it is possible to set the number of iterations of each match (i.e. \texttt{NUM\_ITER = 50}).
+The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with various strategies, not necessarily different, each player playing once against each other for a \texttt{NUM\_ITER = 50} of times. 
 
-\FR{Below part needs to be adapted to current code}
-\EB{IT DEPENDS ON THE INITIAL POPULATION}
-We propose a strategy, similar to \textit{Serie A} to assign points to each player after the outcome of the match is determined. A player gets 3 points if he/she wins, 1 point for a draw and 0 points for a loss. A player wins if he/she has a higher reward than the opponent's at the $50-th$ last iteration. He/She looses if the reward is lower and draws if it's the same as the opponent's.
-The culumative points after each match are shown in \autoref{fig:mpipd}.
-In \autoref{tab:ranking_df} the ranking of the torunament is determined. It can be evaluated that the three players using a \textit{Bad guy} strategy win the tournament.
-The strategies can be sorted by most number of points as follows: \textit{Bad guy}, \textit{Mainly bad guy}, \textit{Indifferent}, \textit{Mainly Nice}, \textit{TitForTat} and \textit{Nice}.
+Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole procedure and nobody knows the strategies of the other players.
+
+In short it is a variation of the previous case, considering multiple players and not just two, playing in a RR way. The single player will win if at the end of the tournament he has the highest cumulative payoff. The culumative points after each match are shown in \autoref{fig:mpipd20}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-evolution-of-game-20.eps}
+    \caption{Boxplot IPDMP}
+    \label{fig:boxIPDMP}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-boxplot-single-match-20.eps}
+    \caption{Boxplot IPDMP}
+    \label{fig:boxIPDMP}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-boxplot-final-points-20}
+    \caption{Boxplot IPDMP}
+    \label{fig:boxIPDMP}
+\end{figure}
 
 The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \FR{table placeholder here}
+
+The results of this game(and of the following cases) depends on the initial population and the balance between \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one \textbf{ADD CITATION}.
+
+Even in this case we can see variations of the results obtained by running the simulation multiple times and generating the boxplots.
+
+\textbf{ADD TABLE}
 
 \section{Repeated multiple players IPD - RR scheme} \label{s:rIPDMP}
 We then used the previuosly defined MPIPD round-robin scheme tournament, iterating it many times to collect more advanced statistics.
 We identify this as a \textit{Repeated multiple players IPD} (rMPIPD).
-At each tournament repetition, the population is increased adding players with strategies that depend on the results achieved in the previous iteration.
 
-%In our case the population is increasing by one individual that uses the strategy of the previous tournament's winner.
-\LA{complete text based on teacher's answer}
+We have developed three separated simulations to study the behaviour of the populations and the convergence speed. A population is said to be converged if more than $3/4$ of it has the same type at the end of a complete round. The base rules are the same(common knowledge, strategy unknown to the other players...).
 
+\subsection{Static Population}
+In this case we fixed a number of players, each one with a strategy that has the same probability of the other ones. At the end of each round the first third of the population is doubled(the third that achieves the highest cumulative payoff), and the last third is eliminated. In this way we can ensure a static total number of players and study the convergence of the population.
+We can easily see how the \textit{TfT} strategy outpaces the other in a very fast way. In requires only $4$ iterations to overcome the other strategies.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-evolution-const-pop-50}
+    \caption{Evolution RIPDMP constant population}
+    \label{fig:constR}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r0}
+    \caption{First iteration scores}
+    \label{fig:constFI}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r3}
+    \caption{Last iteration scores}
+    \label{fig:constLI}
+\end{figure}
+
+\textbf{ADD TABLE}
+
+\subsection{Increasing Population 1}
+In this case the number of players, so the total population, is increased at each iteration. After the round each player has a probability based on his ranking to, lets say, have a child of the same type; this probability can be expressed by $p(i)=1-\frac{i}{\#Number\ of\ players}$ where $i$ is the position reached. So the winner of the round is certain to be doubled($p(0)=1$), while the looser is certain to be not($p(last)=0$).
+For each player we draw a random number, accordingly to a uniform distribution, and compare it with this probability, if we are over it we effectively double it, otherwise we do not.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-evolution-increasing-pop-50}
+    \caption{Evolution RIPDMP increasing population 1}
+    \label{fig:incrR}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-scores-increasing-pop-50-r0}
+    \caption{First iteration scores}
+    \label{fig:incrFI}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-scores-increasing-pop-50-r2}
+    \caption{Middle iteration scores}
+    \label{fig:incrMI}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-scores-increasing-pop-50-r4}
+    \caption{Last iteration scores}
+    \label{fig:incrLI}
+\end{figure}
+
+In this case we do not have convergence at the fifth iteration but still the simulation exhibit the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. We can conclude that in the future(some more iterations), the population will converge to that.
+
+\textbf{ADD TABLE}
+
+\subsection{Increasing Population 2}
+\textbf{TO BE COMPLETED I DO NOT KNOW THIS}
+
+\textbf{ADD TABLE}
+
+\textbf{ADD FIGURES}
 
 \section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
-We introduced mutability in players' strategies when testing the rMPIPD presented above.
-Strategies are allowed to mutate \FR{need to say how why and then}.
-The gene, a parameter, encodes the attitude of an individual to cooperate. This gene mutates randomly to choose a different strategy at each iteration. The phenotype, which is the strategy, corresponding to that gene competes in the MPIPD such that the best-fitted, which is the winner of the tournament, is determined.
-
-The goal of this task is to simulate the effect of genetic mutations and the effect of natural selection.
-
-In \autoref{fig:cmpipd1} all the players change strategy at each iteration when competing against other players. \textit{Player 7} wins the tournament and the ranking is shown in \autoref{fig:cmpipd1}.
-
-\LA{complete based on teacher's answer}
-
+\textbf{STILL DEVELOPING}
 
 \section{Conclusion} \label{s:conc}
 
