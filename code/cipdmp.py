@@ -7,7 +7,7 @@ def main():
     SAVE_IMG = False
 
     NUM_ITER = 50
-    NUM_PLAYERS = 10
+    NUM_PLAYERS = 50
     NUM_REPETITIONS = 0
     MAX_ALLOWED = 4
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
@@ -66,7 +66,7 @@ def main():
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
     strategies_df.plot(figsize=(12,5))    
-    plt.legend(ncol=int(len(strategies_df.columns)/1), bbox_to_anchor=(1, 1))
+    plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
