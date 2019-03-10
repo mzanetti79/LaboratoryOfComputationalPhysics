@@ -1,20 +1,11 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
 from ipdmp import IPDRoundRobin
-
-
-
-
-from mgen import generatePayoffMatrix
 from strategy import *
 
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    SAVE_IMG = True
+    SAVE_IMG = False
 
     NUM_ITER = 100
     NUM_PLAYERS = 8
@@ -57,16 +48,14 @@ def main():
     print(strategies_df)
 
     # print(matches_df)
-    # ranking_df = pd.DataFrame(ranking_df)
-    # matches_df = pd.DataFrame(matches_df)
-    # display(ranking_df)
-    # display(matches_df)
+    # print(ranking_df)
 
     # # save plots
+    strategies_df = strategies_df.rename(index=str, columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
-    strategies_df.plot()
-    plt.legend(ncol=int(NUM_PLAYERS/5))
+    strategies_df.plot(figsize=(12,5))
+    plt.legend()
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
@@ -82,7 +71,7 @@ def main():
     
         plt.legend()
         if SAVE_IMG:
-            plt.savefig('../img/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
+            plt.savefig('../img/ripdmp-alt/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
             plt.close()
         else:
             plt.show()
