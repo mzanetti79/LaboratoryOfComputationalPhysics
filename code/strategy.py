@@ -164,18 +164,37 @@ class MultiPlayer(Player):
         t = players.copy()
         k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
         for i in range(len(players)):
-            #change strategy based on position achieved
+           #THIS IS JUST RANDOM
+           ##change strategy based on position achieved
+           #if np.random.uniform(0,1) < i/len(players):
+           #    s_next = players[i].random_strategy(k_strategies)
+           #    while str(s_next) == str(players[i].s):
+           #        s_next = players[i].random_strategy(k_strategies)
+           #    t[i].s = s_next
+           ##change strategy based on intrinsic behaviour of the player
+           #elif np.random.uniform(0,1) < players[i].c:
+           #    s_next = players[i].random_strategy(k_strategies)
+           #    while str(s_next) == str(players[i].s):
+           #        s_next = players[i].random_strategy(k_strategies)
+           #    t[i].s = s_next
+        #MUTATION PROBABILITY RELATED TO RESULTS
             if np.random.uniform(0,1) < i/len(players):
-                s_next = players[i].random_strategy(k_strategies)
-                while str(s_next) == str(players[i].s):
+                #If lower I am tempted to NOT cooperate
+                if np.random.uniform(0,1) < players[i].c:
                     s_next = players[i].random_strategy(k_strategies)
-                t[i].s = s_next
-            #change strategy based on intrinsic behaviour of the player
-            elif np.random.uniform(0,1) < players[i].c:
-                s_next = players[i].random_strategy(k_strategies)
-                while str(s_next) == str(players[i].s):
+                    while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id):
+                        k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
+                        s_next = players[i].random_strategy(k_strategies)
+                    t[i].s = s_next
+                else:
                     s_next = players[i].random_strategy(k_strategies)
-                t[i].s = s_next
+                    print("before {}".format(players[i].s.id))
+                    while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id):
+                        k_strategies = Strategy.generatePlayers(Strategy.TOT_STRAT, replace=False)
+                        s_next = players[i].random_strategy(k_strategies)
+                    t[i].s = s_next
+                    print("after {}".format(t[i].s.id))
+                    
         return t
 
     def random_strategy(self, k_list):

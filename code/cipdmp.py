@@ -9,7 +9,7 @@ def main():
     NUM_ITER = 50
     NUM_PLAYERS = 10
     NUM_REPETITIONS = 0
-    MAX_ALLOWED = 10
+    MAX_ALLOWED = 2
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     repeated_players = []
