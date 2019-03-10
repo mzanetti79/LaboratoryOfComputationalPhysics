@@ -38,8 +38,8 @@ def IPDRoundRobin(k_strategies, num_iter, changing_str=False, against_itself=Fal
     
     # for cipdmp: exit without computing points and matches df
     # dirty workaround: fix later when cipdmp points comp is well defined (now they are done in main)
-    if changing_str:
-        return players
+    # if changing_str:
+    #     return players, None, None
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament

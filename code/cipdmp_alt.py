@@ -3,10 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from ipdmp import IPDRoundRobin
-
-
-
-
 from mgen import generatePayoffMatrix
 from strategy import *
 
@@ -17,17 +13,20 @@ def main():
     SAVE_IMG = True
 
     NUM_ITER = 100
-    NUM_PLAYERS = 8
+    NUM_PLAYERS = 10
     NUM_REPETITIONS = 5
     print("Testing repeated {}-times round-robin tournament starting with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
 
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False, fixed=True)
+    # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True, fixed=True)
 
     repeated_players = []
     strategies_df = pd.DataFrame() # strategies evolution
 
     for _ in range(NUM_REPETITIONS):
-        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER) # no strategy change, not against itself
+        # change strategy at the end of each torunament
+        k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=True, fixed=True)
+        print(k_strategies)
+        players, ranking_df, matches_df = IPDRoundRobin(k_strategies, NUM_ITER, changing_str=True) # strategy change, not against itself
         repeated_players.append(players)
 
         # todo: this part probably needs a fix, check if it makes sense

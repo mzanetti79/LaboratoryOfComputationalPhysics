@@ -32,14 +32,7 @@ class Player(object):
         self.M1 = M
         self.M2 = M.T
 
-        if k >= 0:
-            self.s = ProbStrategy(k)
-        elif k == TFT:
-            self.s = TitForTat()
-        elif k == TF2T:
-            self.s = TitFor2Tat()
-        elif k == GRT:
-            self.s = GrimTrigger()
+        self.s = self.get_strategy(k)
         self.clear_history()
     
     def play_iter(self, opponent, num_iter):
@@ -80,20 +73,9 @@ class Player(object):
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
             self.bestPossibleHist.append(max(self.M1[action1,:]))
-
-    def change_strategy(self):
-        """Change the strategy randomly."""
-        # watch out: each player has a different kH, kL
-        k_strategies = Strategy.generatePlayers(TOT_STRAT, replace=False)
         
-        s_next = self.random_str(k_strategies)
-        while s_next == self.s:
-            s_next = self.random_str(k_strategies)
-
-        self.s = s_next
-
-    def random_str(self, k_list):
-        k = np.random.choice(k_list)
+    def get_strategy(self, k):
+        """Get strategy object given the id."""
         if k >= 0:
             return ProbStrategy(k)
         elif k == TFT:
@@ -102,7 +84,7 @@ class Player(object):
             return TitFor2Tat()
         elif k == GRT:
             return GrimTrigger()
-        
+
     def clear_history(self):
         """Clears all history of the player."""
         self.stratHist = []
@@ -131,8 +113,26 @@ class MultiPlayer(Player):
         self.results.append(np.sum(self.payoffHist))
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
+
+    def change_strategy(self):
+        """Change the strategy randomly."""
+        # watch out: each player has a different kH, kL
+        k_strategies = Strategy.generatePlayers(TOT_STRAT, replace=False)
+        
+        s_next = self.random_strategy(k_strategies)
+        while s_next == self.s:
+            s_next = self.random_strategy(k_strategies)
+
+        self.s = s_next
+
+    def random_strategy(self, k_list):
+        """Generate random strategy object."""
+        return self.get_strategy(np.random.choice(k_list))
         
     def play_iter(self, opponent, num_iter):
+        # change strategy at the start of each match
+        # if self.changing:
+        #     self.change_strategy()
         Player.play_iter(self, opponent, num_iter)
 
         self.prevStratHist.append(self.stratHist)
@@ -197,7 +197,7 @@ class Strategy:
         maskL = k==PRBL
         k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
         maskH = k==PRBH
-        k[maskH] = np.repeat(75, maskL.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+        k[maskH] = np.repeat(75, maskH.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
 
         return k
     
