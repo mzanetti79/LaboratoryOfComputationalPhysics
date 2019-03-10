@@ -20,7 +20,7 @@ PRBH = -11
 
 class Strategy:
     """Abstract Strategy class to derive other."""
-    TOT_STRAT = 8 #TODO should be 10??
+    TOT_STRAT = 8
     
     def __str__(self):
         return "Base"

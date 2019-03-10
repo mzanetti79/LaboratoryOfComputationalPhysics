@@ -68,7 +68,7 @@ def main():
     pd.set_option('display.max_columns', None)
 
     NUM_ITER = 50
-    NUM_PLAYERS = 20
+    NUM_PLAYERS = 50
     NUM_REPETITIONS = 10
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -101,6 +101,7 @@ def main():
     one_round = pd.DataFrame(one_round_results).T
     meds = one_round.median().sort_values(ascending=False)
     one_round = one_round[meds.index]
+    plt.figure(figsize=(12,5))
     one_round.boxplot()
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
     plt.suptitle('Mean and variance for each type vs the other players \n One complete round')
@@ -116,6 +117,7 @@ def main():
     saved_points = pd.DataFrame(np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS))))
     meds = saved_points.median().sort_values(ascending=False)
     saved_points = saved_points[meds.index]
+    plt.figure(figsize=(12,5))
     saved_points.boxplot()
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
     plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
