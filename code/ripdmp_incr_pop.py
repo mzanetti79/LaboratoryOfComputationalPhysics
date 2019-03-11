@@ -12,13 +12,15 @@ def main():
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=True)
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT))
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=True)
+    # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT))
 
     NUM_REPETITIONS = 0
     MAX_ALLOWED = 5
     repeated_players = []
-    strategies_df = pd.DataFrame() # strategies evolution
+    # strategies evolution
+    unique, counts = np.unique(k_strategies, return_counts=True)
+    strategies_df = pd.DataFrame([counts],columns=unique)
 
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
@@ -67,8 +69,8 @@ def main():
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
     strategies_df.plot(figsize=(12,5))    
-    plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1,1))
-    # plt.legend(bbox_to_anchor=(1,1))
+    # plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1,1))
+    plt.legend(bbox_to_anchor=(1,1))
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
