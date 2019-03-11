@@ -45,7 +45,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             columns=['Player','points', 'rrp', 'labels']
         )
         ranking_df = ranking_df.append(df)
-        ranking_df = ranking_df.sort_values(['points'], ascending=[False])
+        ranking_df = ranking_df.sort_values(['points'], ascending=False)
 
         for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots

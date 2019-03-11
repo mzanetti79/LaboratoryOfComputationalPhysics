@@ -12,6 +12,7 @@ def main():
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
+    # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=True)
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT))
 
     NUM_REPETITIONS = 0
@@ -67,6 +68,7 @@ def main():
     strategies_df = strategies_df.fillna(0)
     strategies_df.plot(figsize=(12,5))    
     plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1,1))
+    # plt.legend(bbox_to_anchor=(1,1))
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
