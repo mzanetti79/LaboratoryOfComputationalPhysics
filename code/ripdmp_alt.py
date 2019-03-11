@@ -71,7 +71,7 @@ def main():
     
         plt.legend()
         if SAVE_IMG:
-            plt.savefig('../img/ripdmp-alt/ripdmp-scores-{}-r{}.png'.format(NUM_PLAYERS, r))
+            plt.savefig('../img/ripdmp-alt/ripdmp-scores-{}-r{}.eps'.format(NUM_PLAYERS, r), format='eps')
             plt.close()
         else:
             plt.show()
