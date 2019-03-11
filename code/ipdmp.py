@@ -5,7 +5,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
     n = len(players)
     
     # each player plays against another in a round robin scheme
-    if(plot):
+    if plot:
         plt.figure(figsize=(12,5))
     
     p = {obj:[0] * num_iter for obj in players}
@@ -16,23 +16,22 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             p1.clear_history()
             p2.clear_history()
             p1.play_iter(p2, num_iter)
-            if(plot):
+            if plot:
                 p[p1] += np.cumsum(p1.payoffHist)
                 p[p2] += np.cumsum(p2.payoffHist)
                 
     if plot:
         for i in p:
-            plt.plot(p[i],label=i.s)
+            plt.plot(p[i], label=i.s)
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
         plt.title("Evolution of the game")
-        plt.legend( bbox_to_anchor=(1, 1))
+        plt.legend(bbox_to_anchor=(1,1))
         if SAVE_IMG:
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()
-
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
@@ -53,13 +52,12 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             # each match can be explored
 
             df = pd.DataFrame(
-                    [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i]]],
-                    columns=['p1','p2','p1-score','p2-score']
+                [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i]]],
+                columns=['p1','p2','p1-score','p2-score']
             )
             matches_df = matches_df.append(df)
 
     players = np.array(ranking_df['rrp'])
-
     ranking_df = ranking_df[['Player','points', 'labels']]
     return players, ranking_df, matches_df
 
@@ -80,7 +78,7 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
         
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # no strategy change, not against itself
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # not against itself, plot last rep.
         repeated_players.append(players)
 
         # print(ranking_df.to_latex(index=False))

@@ -31,42 +31,20 @@ class Strategy:
     @staticmethod
     def generatePlayers(num_players, replace=False, fixed=False):
         str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
-        #ll = 0 if replace else 1
-        #lh = 51 if replace else 50
-        #hl = 50 if replace else 51
-        #hh = 101 if replace else 100
-#
-        #k = [] # strategies for players
-        #while len(k) < num_players:
-        #    val = np.random.choice(str_choices)
-#
-        #    # substitute with useful values if needed
-        #    if val == PRBL:
-        #        val = np.random.randint(ll, lh)
-        #        if (val != IND and val not in k) or replace:
-        #            k.append(val)
-        #    elif val == PRBH:
-        #        val = np.random.randint(hl, hh)
-        #        if (val != IND and val not in k) or replace:
-        #            k.append(val)
-        #    else:
-        #        k.append(val)
-        #return np.array(k)
         k = np.random.choice(str_choices, num_players, replace=replace)
-        maskL = k==PRBL
-        k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1 # 1 to 49 exclude nice, indifferent
-        maskH = k==PRBH
-        k[maskH] = np.repeat(75, maskH.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51 # 51 to 99 exclude bad, indifferent
+        
+        # substitute with useful values if needed
+        maskL = k==PRBL # 1 to 49 exclude nice, indifferent
+        k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1
+        maskH = k==PRBH # 51 to 99 exclude bad, indifferent
+        k[maskH] = np.repeat(75, maskH.sum()) if fixed else np.random.choice(49, size=maskH.sum(), replace=replace) + 51
 
         return k
-    
-
 
 class Player(object):
     """Class to describe a player with strategy and history."""
     
     def __str__(self):
-        """Override standard printer""" 
         return "Player with strategy: {}".format(self.s)
     
     # optional: use M = generatePayoffMatrix()
@@ -120,7 +98,7 @@ class Player(object):
             self.bestPossibleHist.append(max(self.M1[action1,:]))
         
     def get_strategy(self, k):
-        """Get strategy object given the id."""
+        """Gets the strategy object given the id."""
         if k >= NICE and k <= BAD:
             return ProbStrategy(k)
         elif k == TFT:
@@ -154,11 +132,12 @@ class MultiPlayer(Player):
         self.changing = changing
     
     def winner(self,opponent):
-        """Save the total payoff of the player"""
+        """Saves the total payoff of the player."""
         self.results.append(np.sum(self.payoffHist))
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
 
+    @staticmethod
     def change_strategy(players):
         """Change the strategy randomly."""
         c_b = 0
@@ -167,7 +146,7 @@ class MultiPlayer(Player):
         for i in range(len(players)):        
             if i < len(players)/2:
                 ##TODO TUNE THIS, maybe refer to the position
-                print("I have strategy that gives me good result - reinforce my type")
+                print("Strategy that gives me good results - reinforce my type")
                 print("BEFORE s {}, c {}".format(players[i].s, players[i].c)) 
                 if players[i].s.id > IND:
                     players[i].c = (players[i].c + players[i].c**2)/2
@@ -175,7 +154,7 @@ class MultiPlayer(Player):
                     players[i].c = (players[i].c + players[i].c**0.5)/2  
                 print("AFTER s {}, c {}".format(players[i].s, players[i].c)) 
             elif i > len(players)/2:
-                print("I have strategy that gives me bad result - try to change my type in the opposite direction")
+                print("Strategy that gives me bad results - try to change my type in the opposite direction")
                 print("BEFORE s {}, c {}".format(players[i].s, players[i].c)) 
                 if players[i].s.id > IND:
                     players[i].c = (players[i].c + players[i].c**0.5)/2  
@@ -183,7 +162,7 @@ class MultiPlayer(Player):
                     players[i].c = (players[i].c + players[i].c**2)/2
                 print("AFTER s {}, c {}".format(players[i].s, players[i].c)) 
             else:
-                print("I am in the middle, I am not changing my type s {}, c {}".format(players[i].s, players[i].c)) 
+                print("In the middle, not changing my type s {}, c {}".format(players[i].s, players[i].c)) 
             
             #MUTATION PROBABILITY RELATED TO RESULTS
             if np.random.uniform(0,1) < i/len(players):
@@ -242,8 +221,8 @@ class MultiPlayer(Player):
         return np.cumsum(self.results)
     
 class ProbStrategy(Strategy):
-    """Strategy class when probability is used."""
-    """Span from always nice to always bad players"""
+    """Strategy class when probability is used.
+    Spans from always nice to always bad players"""
 
     def __init__(self, k):
         # default value is to cooperate in case of wrong k

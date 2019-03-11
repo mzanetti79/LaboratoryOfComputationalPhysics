@@ -47,11 +47,9 @@ def main():
     print(k_strategies)
     print(strategies_df)
 
-    # print(matches_df)
-    # print(ranking_df)
-
     # # save plots
-    strategies_df = strategies_df.rename(index=str, columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
+    strategies_df = strategies_df.rename(index=str,
+        columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
     strategies_df.plot(figsize=(12,5))
@@ -71,7 +69,7 @@ def main():
     
         plt.legend()
         if SAVE_IMG:
-            plt.savefig('../img/ripdmp-alt/ripdmp-scores-{}-r{}.eps'.format(NUM_PLAYERS, r), format='eps')
+            plt.savefig('../img/ripdmp-alt/ripdmp-scores-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()

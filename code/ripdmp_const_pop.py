@@ -19,8 +19,6 @@ def main():
     repeated_players = []
     strategies_df = pd.DataFrame() # strategies evolution
 
-    # while not np.array_equal(k_strategies, np.repeat(k_strategies[0], k_strategies.size)):
-    # this is the largest number of elements of a strategy
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
         # initialize players with given strategies
@@ -42,15 +40,14 @@ def main():
         #display(ranking_df)
         # display(matches_df)
 
-
-    if(np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4 ):
+    if np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")
         
     # save plots
-    strategies_df = strategies_df.rename(index=str, columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat",
-                                                                0: "Nice", 100: "Bad", 50: "Indifferent"})
+    strategies_df = strategies_df.rename(index=str,
+        columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
     for c in strategies_df.columns:
         if str.isdigit(str(c)):
             if c > 50:
@@ -58,7 +55,6 @@ def main():
             else:
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyNice (k={})".format(c)})
 
-                
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
     strategies_df.plot(figsize=(12,5))    

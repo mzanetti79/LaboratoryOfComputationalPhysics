@@ -66,7 +66,7 @@
 %%%%%%%%%%
 
 \begin{abstract}
-In this work we analyse the Iterated Prisoner's Dilemma (IPD), in different matching scenarios: between two players, between multiple players, between multiple players with evolving population and between multiple players with a random gene between rounds, representing the grade of cooperation (a Nature choice, in Game Theory terms).
+In this work we analyse the Iterated Prisoner's Dilemma (IPD) in different matching scenarios: between two players, between multiple players, between multiple players with evolving population and between multiple players with a random gene between rounds, representing the grade of cooperation (a Nature choice, in Game Theory terms).
 At first this report gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem, then it defines a base structure that will be used in the remaining of the report.
 In Section~\ref{s:str} we illustrate the possible strategies that have been implemented in this work, while in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] the results of the simulations are presented for each study-cases.
 At the end, in Section~\ref{s:conc}, some final thoughts and considerations are presented concluding the work.
@@ -186,7 +186,7 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
     \label{fig:badvsmainlybad}
 \end{figure}
 
-If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the runs as in Figures~[\ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}]. The idea behid this is that both players are getting the highest reward, not just one of them, and these choices are better compared to the \textit{Bad}-\textit{Nice} combination. These are isolated cases that we are considering just because it is a study case since the only strategy that wins against all the others and draws against itself is the \textit{Bad} one and so this is the strategy that a smart player should choose, reminding both players have \texit{common knowledge}.
+If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the runs as in Figures~[\ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}]. The idea behid this is that both players are getting the highest reward, not just one of them, and these choices are better compared to the \textit{Bad}-\textit{Nice} combination. These are isolated cases that we are considering just because it is a study case, since the only strategy that wins against all the others and draws against itself is the \textit{Bad} one and so this is the strategy a smart player should choose, reminding both players have \textit{common knowledge}.
 
 \begin{figure}[!ht]
     \centering
@@ -216,11 +216,10 @@ If we take a closer look, the combination of \textit{Nice} and one between \text
     \label{fig:tftvstft}
 \end{figure}
 
-The TfT strategy is interesting, because TfT leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if fast-forgivin if it encouters a mainly bad strategy. 
+The TfT strategy is interesting, because TfT leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if fast-forgiving if it goes against a mainly bad strategy. 
 A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more insteresting in the following sections.
 
-
-In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice} \ref{fig:box-nn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}\ref{fig:boxmbvtft}.
+In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:box-nn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}.
 
 \begin{figure}[!ht]
     \centering
@@ -236,12 +235,11 @@ In addition to these considerations simulations were performed multiple times to
     \label{fig:boxmbvtft}
 \end{figure}
 
-More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in the table \ref{} statistics and results. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT. Bad} have an higher minimum value.
+More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in Table~\ref{} statistics and results. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 \textbf{INSERT TABLE HERE}
 
-
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
-The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, in which each player plays once against others for a \texttt{NUM\_ITER = 50} of times.
+The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a \texttt{NUM\_ITER = 50} of times.
 
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole tournament. Nobody knows the strategies of the other players.
 
@@ -273,7 +271,7 @@ The outcome of each match of the tournament can be seen in \autoref{tab:match_df
 The results of the tournament (and of the following study-cases) depend on the initial population and the balance between the amount of \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one \textbf{ADD CITATION}.
 % todo: explain why TfT is the best in our case
 
-Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating the boxplots. There is no doubt about who wins the match \textbf{with the specified population as initial parameter}.
+Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating boxplots. There is no doubt about who wins the match \textbf{with the specified population as initial parameter}.
 % todo: say something about the specified population and who wins
 
 \textbf{ADD TABLE}
@@ -312,8 +310,8 @@ We can easily see how the \textit{TfT} strategy outpaces the others in a fast wa
 \textbf{ADD TABLE}
 
 \subsection{Increasing Population 1}
-In this case the number of players (population), is increased at each iteration. After each round a player has a certain probability based on his ranking to have a child of the same type; this probability is expressed in our work by $p(i)=1-\frac{i}{\#Number\ of\ players}$ where $i$ is the position reached. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, $p(last)=0$.
-For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if we are over it we effectively double it, otherwise we do not.
+In this case the number of players (population), is increased at each iteration. After each round a player has a certain probability based on his ranking to have a child of the same type; this probability is expressed in our work by $p(i)=1-\frac{i}{num\_players}$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
+For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
 
 \begin{figure}[!ht]
     \centering
@@ -343,7 +341,7 @@ For each player we draw a random number, accordingly to a uniform probability di
     \label{fig:incrLI}
 \end{figure}
 
-In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, evaluating the problem with more iterations, the population will increase with similar behaviour and \textit{TfT} converge to a higher number of strategies than the others.
+In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
 
 \textbf{ADD TABLE}
 
