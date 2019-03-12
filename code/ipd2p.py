@@ -13,6 +13,7 @@ def main():
 
     # define k for strategy probabilities
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=False)
+    matches_df = pd.DataFrame() # all matches played
                  
     for first in range(NUM_PLAYERS):
         for second in range(first, NUM_PLAYERS):
@@ -37,6 +38,16 @@ def main():
                 cum_results[k1].append(rew1[-1])
                 cum_results[k2].append(rew2[-1])
                 
+            # table
+            df = pd.DataFrame(
+                [[p1.s, p2.s, 
+                np.mean(cum_results[k1]), np.std(cum_results[k1]), 
+                np.mean(cum_results[k2]), np.std(cum_results[k2])]],
+                columns=['p1','p2','p1-avg','p1-std', 'p2-avg', 'p2-std']
+            )
+            matches_df = matches_df.append(df)
+            
+
             # boxplots for 100 matches -> A vs B
             plt.boxplot([cum_results[k1], cum_results[k2]])
             plt.xticks([1, 2], [p1.s, p2.s])
@@ -67,19 +78,21 @@ def main():
             plt.title("2 pl. game: {} - {}".format(p1.s,p2.s))
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
-            # 0 = cooperate = blue
             plt.legend(handles=[
                 Line2D([0], [0], color='w', marker='x', label='P.1 Defect', markeredgecolor='r'), 
                 Line2D([0], [0], color='w', marker='x', label='P.1 Cooperate', markeredgecolor='b'),      
                 Line2D([0], [0], color='w', marker='o', label='P.2 Defect', markerfacecolor='r'), 
                 Line2D([0], [0], color='w', marker='o', label='P.2 Cooperate', markerfacecolor='b')
             ])
-            print()
+
             if SAVE_IMG:
                 plt.savefig('../img/ipd2p/ipd2p-rewards-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
                 plt.close()
             else:
                 plt.show()
+
+    pd.set_option('precision', 2)
+    print(matches_df.to_latex())
 
 if __name__ == "__main__":
     main()

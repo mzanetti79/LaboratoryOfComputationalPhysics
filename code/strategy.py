@@ -219,6 +219,13 @@ class MultiPlayer(Player):
 
     def get_points(self):
         return np.cumsum(self.results)
+
+    def get_cooperation_count(self):
+        cooperate_count = defect_count = 0
+        for hist in self.prevPlayedHist:
+            cooperate_count += hist.count(COOPERATE)
+            defect_count += hist.count(DEFECT)
+        return cooperate_count, defect_count
     
 class ProbStrategy(Strategy):
     """Strategy class when probability is used.

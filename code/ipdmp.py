@@ -40,12 +40,14 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
 
     for (i, p) in zip(np.arange(n), players):
         points = p.get_points()
+        cooperate_count, defect_count = p.get_cooperation_count()
+
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), p, p.s.id]],
-            columns=['Player','points', 'rrp', 'labels']
+            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id]],
+            columns=['Player','points', 'cooperate_count', 'defect_count', 'rrp', 'labels']
         )
         ranking_df = ranking_df.append(df)
-        ranking_df = ranking_df.sort_values(['points'], ascending=False)
+        # ranking_df = ranking_df.sort_values(['points'], ascending=False)
 
         for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots
@@ -57,8 +59,9 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             )
             matches_df = matches_df.append(df)
 
-    players = np.array(ranking_df['rrp'])
-    ranking_df = ranking_df[['Player','points', 'labels']]
+    players = np.array(ranking_df.sort_values(['points'], ascending=False)['rrp'])
+    ranking_df = ranking_df[['Player','points', 'cooperate_count', 'defect_count', 'labels']]
+    ranking_df = ranking_df.reset_index()
     return players, ranking_df, matches_df
 
 def main():
@@ -79,22 +82,24 @@ def main():
         players = np.array([MultiPlayer(k) for k in k_strategies])
         
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # not against itself, plot last rep.
-        repeated_players.append(players)
 
+        repeated_players.append(players)
+        repeated_ranking_df = repeated_ranking_df.append(ranking_df) if i!=0 else ranking_df
         # print(ranking_df.to_latex(index=False))
         # print(matches_df.to_latex(index=False))
 
-    # save points and other stuff if necessary
-    saved_points = []
+    # print tables
+    pd.set_option('precision', 2)
 
-    # save plots
-    for players in repeated_players:
-        for p in players:
-            # save points for each repetition
-            points = p.get_points()
-            saved_points.append(int(points[-1]))
+    group = repeated_ranking_df[['points', 'cooperate_count', 'defect_count']].groupby(repeated_ranking_df.index)
+    group_mean = group.mean()
+    group_mean.columns = [str(col) + '_mean' for col in group_mean.columns]
+    group_std = group.std()
+    group_std.columns = [str(col) + '_std' for col in group_std.columns]
+    group_df = group_mean.merge(group_std, left_index=True, right_index=True, how='left')
+    print(group_df)
 
-    # box plot of single match
+    # box plot of last match
     one_round_results = [p.results for p in players]
     one_round = pd.DataFrame(one_round_results).T
     meds = one_round.median().sort_values(ascending=False)
@@ -112,12 +117,12 @@ def main():
         plt.show()
 
     # box plot of all points
-    saved_points = pd.DataFrame(np.reshape(saved_points, (NUM_REPETITIONS, int(len(saved_points)/NUM_REPETITIONS))))
-    meds = saved_points.median().sort_values(ascending=False)
-    saved_points = saved_points[meds.index]
+    # todo: it is possible to sort repeated_ranking_df by sorting group_mean, 
+    # and plotting on group.boxplot(subplots=False)
+    repeated_ranking_df.index.name = 'index'
     plt.figure(figsize=(12,5))
-    saved_points.boxplot()
-    plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
+    repeated_ranking_df[['points']].boxplot(by='index')
+    plt.xticks(np.arange(NUM_PLAYERS), repeated_ranking_df['Player'], rotation=90)
     plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
     plt.ylabel('Points')
     plt.xlabel('Player')

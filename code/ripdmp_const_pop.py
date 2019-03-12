@@ -59,6 +59,7 @@ def main():
 
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
+    print(strategies_df.to_latex(index=False))
     strategies_df.plot(figsize=(12,5))    
     plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
     plt.title('Strategies evolution')
