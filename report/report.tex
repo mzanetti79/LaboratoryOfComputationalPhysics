@@ -1,5 +1,6 @@
 % !TeX spellcheck = en_US
-%% arara: pdflatex
+% arara: pdflatex
+% arara: bibtex
 % arara: pdflatex
 % arara: pdflatex
 \documentclass[journal,a4paper,10pt,twoside]{IEEEtran} % with epstopdf, add draft=false
@@ -66,10 +67,10 @@
 %%%%%%%%%%
 
 \begin{abstract}
-In this work we analyse the Iterated Prisoner's Dilemma (IPD) in different matching scenarios: between two players, between multiple players, between multiple players with evolving population and between multiple players with a random gene between rounds, representing the grade of cooperation (a Nature choice, in Game Theory terms).
+In this work we analyze the Iterated Prisoner's Dilemma (IPD) in different matching scenarios: between two players, between multiple players, between multiple players with evolving population and between multiple players with a random gene between rounds, representing the grade of cooperation (a Nature choice, in Game Theory terms).
 At first this report gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem, then it defines a base structure that will be used in the remaining of the report.
 In Section~\ref{s:str} we illustrate the possible strategies that have been implemented in this work, while in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] the results of the simulations are presented for each study-cases.
-At the end, in Section~\ref{s:conc}, some final thoughts and considerations are presented concluding the work.
+At the end, in Section~\ref{s:conc}, some final considerations are presented concluding the work.
 All the code, developed in \textit{Python 3.7}, can be found on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
 \end{abstract}
 
@@ -93,14 +94,14 @@ T & P
 \end{pmatrix}
 $$
 
-where $T$ (Temptation), $R$ (Reward), $S$ (``Sucker's''), $P$ (Punishment) are integer numbers that satisfy the following conditions:
+where $T$ (Temptation), $R$ (Reward), $S$ (``Sucker's''), $P$ (Punishment) are integer numbers that satisfy the following conditions, as proven by Rapoport~\cite{rapoport}:
 
 $$
 T>R>P>S; \quad 2R > T+S 
 $$
 For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=2$, $S=0$. 
 
-$R$ is returned if both players cooperate, $S$ is set if who's watching the matrix cooperates and the other defects, $T$ is the opposite of $S$ and finally $P$ is set if both players defect.
+$R$ is returned if both players cooperate, $S$ is set if the player that is watching the matrix cooperates and the other defects, $T$ is for the opposite case and finally $P$ is the payoff for both players if they both defect.
 
 As for the representation of the game for a single round, each player's choice (move) can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
 
@@ -116,9 +117,11 @@ For a single-shot game, that is a game which is played only once, the best strat
 However if a player cooperates, he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this statement is valid for both players. 
 Given the fact that both players are rational and fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of acting is to defect as this would lead to a slightly lower payoff if the opponent defects (minor punishment) but a higher one if the other player chooses to cooperate.
 Following this, the only possible reasonable conclusion is that the only \textit{Nash Equilibrium}, or the only way to win this game in a single-shot scenario, is to always defect.
-This is not \textit{Pareto optimal} but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect.
+This is not \textit{Pareto optimal} but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect, as also noted by Fogel~\cite{fogelEvolvingBehaviors}.
 
 This reasoning is no longer true when repeated games are considered and in particular the Iterated Prisoner Dilemma (IPD) since the IPD involves time and memory (history). In addition, strategies like random strategies, grim triggers or Tit For (Two) Tat, can be introduced.
+\FR{cite also \cite[intro, colman par.]{yao1994experimental}}
+Also, for this game, but also for iterated games in general, the notions of Nash Equilibrium, Pareto optimality or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionarily stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies~\cite{mathieu2017}.
 Winning a game in this setup means to achieve a better payoff in the long run. In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
 \section{Strategies} \label{s:str}
@@ -146,7 +149,7 @@ The strategies are considered static in case they apply the same move at each it
 These players strategies' are generally fixed in time, i.e. a player cannot change its strategy, except in the last case, examined in Section~\ref{s:crIPDMP}.
 
 \section{Two players IPD} \label{s:IPD2P}
-In this section the IPD intercourse between two players is evaluated: each player is assigned to a strategy, he is unaware of the opponent's strategy and he plays accordingly to his strategy definition without the possibility to change it. This game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is who wins, or in other words who achieves a higher payoff at the end of the round.
+In this section the IPD intercourse between two players is evaluated: each player has an assigned strategy, he is unaware of the opponent's strategy and he plays accordingly to his strategy definition without the possibility to change it. Both players know only their respective history of moves. This game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is who wins, or in other words who achieves a higher payoff at the end of the round.
 
 We fixed the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match, and can be customized by the user. The results do not depend on this value if using deterministic strategies.
 
@@ -186,7 +189,8 @@ On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \a
     \label{fig:badvsmainlybad}
 \end{figure}
 
-If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the runs as in Figures~[\ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}]. The idea behid this is that both players are getting the highest reward, not just one of them, and these choices are better compared to the \textit{Bad}-\textit{Nice} combination. These are isolated cases that we are considering just because it is a study case, since the only strategy that wins against all the others and draws against itself is the \textit{Bad} one and so this is the strategy a smart player should choose, reminding both players have \textit{common knowledge}.
+If we take a closer look, the combination of \textit{Nice} and one between \textit{TfT} or \textit{Nice} leads to better payoffs at the end of the runs as in Figures~[\ref{fig:tftvsindiff}, \ref{fig:nicevsnice}, \ref{fig:nicevstft}]. The idea behind this is that both players are getting the highest reward, not just one of them, and these choices are better compared to the \textit{Bad}-\textit{Nice} combination.
+These are isolated cases that we are considering just because it is a study case, since the only strategy that wins against all the others and draws against itself is the \textit{Bad} one and so this is the strategy a smart player should choose, reminding both players have \textit{common knowledge}.
 
 \begin{figure}[!ht]
     \centering
@@ -216,10 +220,12 @@ If we take a closer look, the combination of \textit{Nice} and one between \text
     \label{fig:tftvstft}
 \end{figure}
 
-The TfT strategy is interesting, because TfT leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if fast-forgiving if it goes against a mainly bad strategy. 
+The \textit{TfT} strategy is interesting, because \textit{TfT} leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if fast-forgiving if it goes against a mainly bad strategy.
+Or, in other words, \textit{TfT} is robust because it never defects first and never takes advantage for more than one iteration at a time.~\cite{fogelEvolvingBehaviors}
+Axelrod also reported \textit{TfT}, a strategy submitted to him by Rapoport, to be the winner over all the strategies analyzed by him in his extensive tests based on tournaments and evolution on the IPD, thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution}.
 A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more insteresting in the following sections.
 
-In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:box-nn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}.
+In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}.
 
 \begin{figure}[!ht]
     \centering
@@ -238,32 +244,34 @@ In addition to these considerations simulations were performed multiple times to
 More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in Table~\ref{} statistics and results. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 \textbf{INSERT TABLE HERE}
 
+In the end, it is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy it is necessary to defect at the first round, to play optimally against \textit{GrT} it is necessary to cooperate.~\cite{mathieu2017}
+
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a \texttt{NUM\_ITER = 50} of times.
 
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole tournament. Nobody knows the strategies of the other players.
 
-In short, it is a variation of the previous case, in which multiple players play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff. The culumative points after each match are shown in \autoref{fig:mpipd20}.
+In short, it is a variation of the previous case, in which multiple players play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff. The culumative points after each match are shown in \autoref{}. \FR{fixme}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-evolution-of-game-50}
-    \caption{Boxplot IPDMP}
-    \label{fig:boxIPDMP}
+    \caption{Evolution of the game}
+    \label{fig:boxIPDMPevo}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-boxplot-single-match-50}
-    \caption{Boxplot IPDMP}
-    \label{fig:boxIPDMP}
+    \caption{Boxplot of a single match}
+    \label{fig:boxIPDMPsingle}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-boxplot-final-points-50}
-    \caption{Boxplot IPDMP}
-    \label{fig:boxIPDMP}
+    \caption{Boxplot of the final points}
+    \label{fig:boxIPDMPfinal}
 \end{figure}
 
 The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \FR{table placeholder here}
@@ -310,8 +318,10 @@ We can easily see how the \textit{TfT} strategy outpaces the others in a fast wa
 \textbf{ADD TABLE}
 
 \subsection{Increasing Population 1}
-In this case the number of players (population), is increased at each iteration. After each round a player has a certain probability based on his ranking to have a child of the same type; this probability is expressed in our work by $p(i)=1-\frac{i}{num\_players}$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
+In this case the number of players (population), is increased at each iteration. After each round a player has a certain probability based on his ranking to have a child of the same type; this probability is expressed in our work as $p(i)=1- i\ /\ num\_players$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
 For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
+
+\FR{\cite[2.6]{mathieu2017} contains material that can be cited here. A paragraph may be dedicated in the end to \cite[intro]{IPDnoise}}
 
 \begin{figure}[!ht]
     \centering
@@ -357,9 +367,9 @@ In this case we do not have convergence at the fifth iteration, since the popula
 
 \section{Conclusion} \label{s:conc}
 
-\FR{Mention the results shall be comparable with the paper.}
+\FR{Mention the results shall be comparable with the paper \cite{mathieu2017}.}
 
 \balance
-%\bibliographystyle{IEEEtran}
-%\bibliography{report}
+\bibliographystyle{IEEEtran}
+\bibliography{report}
 \end{document}
