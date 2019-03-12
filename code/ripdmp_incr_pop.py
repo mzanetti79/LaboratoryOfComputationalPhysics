@@ -5,10 +5,11 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
+    ALTERNATIVE = 1
     SAVE_IMG = False
 
     NUM_ITER = 50
-    NUM_PLAYERS = 50
+    NUM_PLAYERS = 8
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -16,7 +17,7 @@ def main():
     # k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT))
 
     NUM_REPETITIONS = 0
-    MAX_ALLOWED = 5
+    MAX_ALLOWED = 7
     repeated_players = []
     # strategies evolution
     unique, counts = np.unique(k_strategies, return_counts=True)
@@ -30,26 +31,40 @@ def main():
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
+        if ALTERNATIVE == 3:
+            score = ranking_df.groupby(['labels'], as_index = False).sum()
+            score = score.sort_values(by=['points'], ascending=False)
+            # to keep the same stucture as incr_pop
+            score['points'] = score.max().points-score['points']
+            score['percentage'] = score['points']/score.max().points
+            print(score)
+        
+        for i in range(len(players)):
+            draw = np.random.uniform(0,1)
+            if ALTERNATIVE == 1:
+                if draw > i/len(players):
+                    k_strategies = np.append(k_strategies, players[i].s.id)
+
+            elif ALTERNATIVE == 2:
+                if(i < int(NUM_PLAYERS * PERCENTAGE)):
+                   if(draw > 0.2):
+                       k_strategies = np.append(k_strategies, players[i].s.id)
+                elif(i < 2*int(NUM_PLAYERS * PERCENTAGE)):
+                   if(draw > 0.5):
+                       k_strategies = np.append(k_strategies, players[i].s.id)
+                else:
+                   if(draw > 0.8):
+                       k_strategies = np.append(k_strategies, players[i].s.id)
+
+            elif ALTERNATIVE == 3:
+                if draw > score[score['labels']==players[i].s.id].percentage.item():
+                    k_strategies = np.append(k_strategies, players[i].s.id)
+
+
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
         df = pd.DataFrame([counts], columns=unique)
         strategies_df = strategies_df.append(df)
-
-        for i in range(len(players)):
-            draw = np.random.uniform(0,1)
-            if draw > i/len(players):
-                k_strategies = np.append(k_strategies, players[i].s.id)
-
-            # alternative way
-            #if(i < int(NUM_PLAYERS * PERCENTAGE)):
-            #    if(draw > 0.2):
-            #        k_strategies = np.append(k_strategies, players[i].s.id)
-            #elif(i < 2*int(NUM_PLAYERS * PERCENTAGE)):
-            #    if(draw > 0.5):
-            #        k_strategies = np.append(k_strategies, players[i].s.id)
-            #else:
-            #    if(draw > 0.8):
-            #        k_strategies = np.append(k_strategies, players[i].s.id)
 
     if np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
@@ -89,7 +104,8 @@ def main():
             plt.xlabel('Match number')
             plt.ylabel('Points')
 
-        plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
+        # plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
+        plt.legend(bbox_to_anchor=(1, 1))
 
         if SAVE_IMG:
             plt.savefig('../img/ripdmp-incr/ripdmp-scores-increasing-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')
