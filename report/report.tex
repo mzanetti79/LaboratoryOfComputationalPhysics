@@ -101,9 +101,8 @@ T>R>P>S; \quad 2R > T+S
 $$
 For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=2$, $S=0$. 
 
-$R$ is returned if both players cooperate, $S$ is set if the player that is watching the matrix cooperates and the other defects, $T$ is for the opposite case and finally $P$ is the payoff for both players if they both defect.
-
-As for the representation of the game for a single round, each player's choice (move) can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
+$R$ is returned for both players if they both cooperate, $P$ if they both defect; if the two players' actions differ, $S$ is for the player who cooperated and $T$ is for the defector.
+Equivalently, for a single round each player's choice (move) can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
 
 $$
 r_1 = u_1^T M u_2
@@ -119,8 +118,9 @@ Given the fact that both players are rational and fully aware of the rules of th
 Following this, the only possible reasonable conclusion is that the only \textit{Nash Equilibrium}, or the only way to win this game in a single-shot scenario, is to always defect.
 This is not \textit{Pareto optimal} but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect, as also noted by Fogel~\cite{fogelEvolvingBehaviors}.
 
-This reasoning is no longer true when repeated games are considered and in particular the Iterated Prisoner Dilemma (IPD) since the IPD involves time and memory (history). In addition, strategies like random strategies, grim triggers or Tit For (Two) Tat, can be introduced.
-\FR{cite also \cite[intro, colman par.]{yao1994experimental}}
+This reasoning is no longer true when repeated games are considered and in particular the Iterated Prisoner Dilemma (IPD) since the IPD involves time and memory (history).
+Colman supported this indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups.~\cite{yao1994experimental}
+In addition, strategies like random, grim triggers or Tit For (Two) Tat can be introduced.
 Also, for this game, but also for iterated games in general, the notions of Nash Equilibrium, Pareto optimality or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionarily stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies~\cite{mathieu2017}.
 Winning a game in this setup means to achieve a better payoff in the long run. In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
@@ -222,7 +222,8 @@ These are isolated cases that we are considering just because it is a study case
 
 The \textit{TfT} strategy is interesting, because \textit{TfT} leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if fast-forgiving if it goes against a mainly bad strategy.
 Or, in other words, \textit{TfT} is robust because it never defects first and never takes advantage for more than one iteration at a time.~\cite{fogelEvolvingBehaviors}
-Axelrod also reported \textit{TfT}, a strategy submitted to him by Rapoport, to be the winner over all the strategies analyzed by him in his extensive tests based on tournaments and evolution on the IPD, thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution}.
+\textit{TfT} was also reported to be the winner over all the strategies analyzed by Axelrod in his extensive tests based on tournaments and evolutionary competition on the IPD, thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution} and taken up in~\cite{mathieu2017}.
+The strategy was proposed to him by Rapoport.
 A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more insteresting in the following sections.
 
 In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}.
@@ -251,7 +252,7 @@ The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, c
 
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole tournament. Nobody knows the strategies of the other players.
 
-In short, it is a variation of the previous case, in which multiple players play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff. The culumative points after each match are shown in \autoref{}. \FR{fixme}
+In short, it is a variation of the previous case, in which multiple players play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff. The culumative points after each match are shown in \autoref{}. \textbf{fixme}
 
 \begin{figure}[!ht]
     \centering
@@ -274,9 +275,10 @@ In short, it is a variation of the previous case, in which multiple players play
     \label{fig:boxIPDMPfinal}
 \end{figure}
 
-The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \FR{table placeholder here}
+The outcome of each match of the tournament can be seen in \autoref{tab:match_df}. \textbf{table placeholder here}
 
-The results of the tournament (and of the following study-cases) depend on the initial population and the balance between the amount of \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one \textbf{ADD CITATION}.
+The results of the tournament (and of the following study-cases) depend on the initial population and the balance between the amount of \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one.
+These outcomes may also be found in~\cite{mathieu2017}.
 % todo: explain why TfT is the best in our case
 
 Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating boxplots. There is no doubt about who wins the match \textbf{with the specified population as initial parameter}.
@@ -292,6 +294,7 @@ Three separated simulations have been developed to study the behaviour of the po
 
 \subsection{Static Population}
 In this case a certain number of players was fixed. Each player implements a strategy choosing it with equal probability from the strategies set. At the end of each round the first third of the population is doubled (the third that achieves the highest cumulative payoff), and the last third is removed. In this way we can ensure a static number of players and study the convergence of the population.
+This method also resembles how Axelrod made his tests~\cite{axelrod1984evolution}~\cite[\S 2.6]{mathieu2017}.
 We can easily see how the \textit{TfT} strategy outpaces the others in a fast way: it requires only $4$ iterations for \textit{TfT} to overcome the other strategies.
 
 \begin{figure}[!ht]
@@ -320,8 +323,6 @@ We can easily see how the \textit{TfT} strategy outpaces the others in a fast wa
 \subsection{Increasing Population 1}
 In this case the number of players (population), is increased at each iteration. After each round a player has a certain probability based on his ranking to have a child of the same type; this probability is expressed in our work as $p(i)=1- i\ /\ num\_players$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
 For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
-
-\FR{\cite[2.6]{mathieu2017} contains material that can be cited here. A paragraph may be dedicated in the end to \cite[intro]{IPDnoise}}
 
 \begin{figure}[!ht]
     \centering
@@ -353,6 +354,8 @@ For each player we draw a random number, accordingly to a uniform probability di
 
 In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
 
+It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's players go unpunished) or contrition (avoid respond to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations in this work.
+
 \textbf{ADD TABLE}
 
 \subsection{Increasing Population 2}
@@ -366,8 +369,6 @@ In this case we do not have convergence at the fifth iteration, since the popula
 \textbf{STILL DEVELOPING}
 
 \section{Conclusion} \label{s:conc}
-
-\FR{Mention the results shall be comparable with the paper \cite{mathieu2017}.}
 
 \balance
 \bibliographystyle{IEEEtran}
