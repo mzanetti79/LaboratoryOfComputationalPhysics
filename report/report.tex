@@ -293,68 +293,84 @@ We identify this schema as a \textit{Repeated multiple players IPD} (rMPIPD).
 Three separated simulations have been developed to study the behaviour of the populations and the convergence speed. A population is said to be converging if more than $3/4$ of it has the same strategy type at the end of a complete round. The base rules are the same as pointed out in the previous sections (\textit{common knowledge}, ...).
 
 \subsection{Static Population}
-In this case a certain number of players was fixed. Each player implements a strategy choosing it with equal probability from the strategies set. At the end of each round the first third of the population is doubled (the third that achieves the highest cumulative payoff), and the last third is removed. In this way we can ensure a static number of players and study the convergence of the population.
-This method also resembles how Axelrod made his tests~\cite{axelrod1984evolution}~\cite[\S 2.6]{mathieu2017}.
+In this case the number of players is fixed. Each player implements a strategy choosing it with equal probability from the strategies set. At the end of each round the first third of the population is doubled (the third that achieves the highest cumulative payoff), and the last third is removed. In this way we can ensure a static number of players and then study the convergence of the population through consecutive rounds.
+Convergence is declared when more than $3/4$ of the players have their strategies of the same type, or when a maximum number of repetitions are reached.
+This method also resembles how Axelrod made his tests~\cite[\S 2.6]{mathieu2017}~\cite{axelrod1984evolution}.
 We can easily see how the \textit{TfT} strategy outpaces the others in a fast way: it requires only $4$ iterations for \textit{TfT} to overcome the other strategies.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-evolution-const-pop-50}
-    \caption{Evolution RIPDMP constant population}
+    \caption{Evolution of rIPDMP, constant population of 50}
     \label{fig:constR}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r0}
-    \caption{First iteration scores}
+    \caption{First iteration scores ($it=0$)}
     \label{fig:constFI}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r3}
-    \caption{Last iteration scores}
+    \caption{Last iteration scores ($it=3$)}
     \label{fig:constLI}
 \end{figure}
+\textbf{Discussion citing figures as for subsec below}
 
 \textbf{ADD TABLE}
 
-\subsection{Increasing Population 1}
-In this case the number of players (population), is increased at each iteration. After each round a player has a certain probability based on his ranking to have a child of the same type; this probability is expressed in our work as $p(i)=1- i\ /\ num\_players$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
-For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
+\subsection{Increasing Population}
+In this case the number of players (population) is increased at each iteration. We implemented three different way of modifying the population between rounds: the method may be statically chosen by setting the \texttt{ALTERNATIVE} variable.
+
+After each round a player has a certain probability based on his ranking to have a child of the same type:
+\begin{enumerate}
+    \item The probability is $p(i)=1- i\ /\ num\_players$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
+    For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
+    \item We draw a random number $d$ and split the rank-ordered population in three sets of equal size $A,B,C$; the player is doubled if:
+    \begin{itemize}
+        \item $d>0.2$ if the player belongs to $A$
+        \item $d>0.5$ if the player belongs to $B$
+        \item $d>0.8$ if the player belongs to $C$        
+    \end{itemize}
+    This is an alternative way to promote best strategies and obstruct less performant players.
+    \item We define a player's score as its obtained points divided by the maximum obtained score in the whole population; we double the player if a drawn random number is greater than its score.
+\end{enumerate}
+We used by default the first of the three proposed methods.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-evolution-increasing-pop-50}
-    \caption{Evolution RIPDMP increasing population 1}
+    \caption{Evolution of rIPDMP, increasing population of 50}
     \label{fig:incrR}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-scores-increasing-pop-50-r0}
-    \caption{First iteration scores}
+    \caption{First iteration scores ($it=0$)}
     \label{fig:incrFI}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-scores-increasing-pop-50-r2}
-    \caption{Middle iteration scores}
+    \caption{Middle iteration scores ($it=2$)}
     \label{fig:incrMI}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/ripdmp-scores-increasing-pop-50-r4}
-    \caption{Last iteration scores}
+    \caption{Last iteration scores ($it=4$)}
     \label{fig:incrLI}
 \end{figure}
 
-In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
+Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of the population of 50 players over four iteration. In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
 
-It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's players go unpunished) or contrition (avoid respond to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations in this work.
+It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's players go unpunished) or contrition (avoid respond to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations of the \textit{TfT} strategy in this work.
 
 \textbf{ADD TABLE}
 
