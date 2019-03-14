@@ -96,6 +96,8 @@ def main():
     group_std = group.std()
     group_std.columns = [str(col) + '_std' for col in group_std.columns]
     group_df = group_mean.merge(group_std, left_index=True, right_index=True, how='left')
+    group_df['cooperation_perc'] = group_df['cooperate_count_mean']/(group_df['cooperate_count_mean']+group_df['defect_count_mean'])
+    group_df['str'] = repeated_ranking_df['Player'][:NUM_PLAYERS]
     print(group_df)
 
     # box plot of last match
@@ -123,7 +125,7 @@ def main():
     temp_df['index'] = np.repeat(np.arange(50), NUM_REPETITIONS)
     plt.figure(figsize=(12,5))
     temp_df.boxplot(column='points', by='index')
-    plt.xticks(np.arange(NUM_PLAYERS)+1, repeated_ranking_df['Player'][:NUM_PLAYERS][group_median.index], rotation=90)
+    plt.xticks(np.arange(NUM_PLAYERS)+1, group_df['str'][group_median.index], rotation=90)
     plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
     plt.ylabel('Points')
     plt.xlabel('Player')
