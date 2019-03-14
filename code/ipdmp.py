@@ -31,7 +31,8 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
         else:
-            plt.show()
+            # plt.show()
+            pass
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
