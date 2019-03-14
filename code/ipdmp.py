@@ -31,7 +31,8 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
         else:
-            plt.show()
+            # plt.show()
+            pass
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
@@ -52,7 +53,6 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
         for j in range(i, len(p.results)):
             # can now access any property from p1 or p2 for plots
             # each match can be explored
-
             df = pd.DataFrame(
                 [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i]]],
                 columns=['p1','p2','p1-score','p2-score']
@@ -60,8 +60,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             matches_df = matches_df.append(df)
 
     players = np.array(ranking_df.sort_values(['points'], ascending=False)['rrp'])
-    ranking_df = ranking_df[['Player','points', 'cooperate_count', 'defect_count', 'labels']]
-    ranking_df = ranking_df.reset_index()
+    ranking_df = ranking_df.drop(columns=['rrp']).reset_index(drop=True)
     return players, ranking_df, matches_df
 
 def main():
@@ -117,18 +116,14 @@ def main():
         plt.show()
 
     # box plot of all points
-    temp = repeated_ranking_df.sort_index()
-    meds1 = temp.groupby(temp.index)['points'].median()
-    meds1 = meds1.sort_values(ascending=False)
-    df = repeated_ranking_df.iloc[0:50,:].loc[meds1.index,:]
-    df.iloc[0:50,0] = np.arange(50)
-    for i in range(2,11):
-        df = df.append(repeated_ranking_df.iloc[50*(i-1):50*i,:].loc[meds1.index,:])
-        df.iloc[50*(i-1):50*i,0] = np.arange(50)
-    repeated_ranking_df = df
+    group_median = group.median().sort_values(by=['points'], ascending=False)
+    temp_df = pd.DataFrame()
+    for index in group_median.index:
+        temp_df = temp_df.append(group.get_group(index))
+    temp_df['index'] = np.repeat(np.arange(50), NUM_REPETITIONS)
     plt.figure(figsize=(12,5))
-    repeated_ranking_df.boxplot(column='points', by='index')
-    plt.xticks(np.arange(NUM_PLAYERS)+1, repeated_ranking_df['Player'], rotation=90)
+    temp_df.boxplot(column='points', by='index')
+    plt.xticks(np.arange(NUM_PLAYERS)+1, repeated_ranking_df['Player'][:NUM_PLAYERS][group_median.index], rotation=90)
     plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
     plt.ylabel('Points')
     plt.xlabel('Player')
