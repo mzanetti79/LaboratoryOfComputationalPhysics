@@ -28,12 +28,9 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
             plt.ylabel('Cum. reward')
         plt.title("Evolution of the game")
         plt.legend(bbox_to_anchor=(1,1))
-        if SAVE_IMG:
+        if SAVE_IMG: # TODO we save images in ipdmp dir but this method is called also by other scripts
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
-        else:
-            # plt.show()
-            pass
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
@@ -42,7 +39,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
 
     for (i, p) in zip(np.arange(n), players):
         points = p.get_points()
-        cooperate_count, defect_count = p.get_cooperation_count()
+        cooperate_count, defect_count = p.get_coop_def_count()
 
         df = pd.DataFrame(
             [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id]],

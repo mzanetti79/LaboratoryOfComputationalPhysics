@@ -30,6 +30,7 @@ class Strategy:
 
     @staticmethod
     def generatePlayers(num_players, replace=False, fixed=False):
+        """Generates a set of players with random strategies."""
         str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
         k = np.random.choice(str_choices, num_players, replace=replace)
 
@@ -52,7 +53,7 @@ class Player(object):
         self.M1 = M
         self.M2 = M.T
         if changing:
-            self.c = np.random.uniform(0,1) #probability to change strategy at the end of the round
+            self.c = np.random.uniform(0,1) # probability to change strategy at the end of the round
         else:
             self.c = 0
         self.s = self.get_strategy(k)
@@ -77,11 +78,11 @@ class Player(object):
         if type(self.s) == ProbStrategy:
             return self.s.get()
         elif type(self.s) == TitForTat or type(self.s) == GrimTrigger:
-            if len(opponent.playedHist) > 0: #at least 1
+            if len(opponent.playedHist) > 0: # at least 1
                 return self.s.get(opponent.playedHist[-1]) # pass opponent's move
             return COOPERATE
         elif type(self.s) == TitFor2Tat:
-            if len(opponent.playedHist) > 1: #at least 2
+            if len(opponent.playedHist) > 1: # at least 2
                 return self.s.get([opponent.playedHist[-2],opponent.playedHist[-1]]) # pass opponent's second to lastmove
             return COOPERATE
 
@@ -131,17 +132,11 @@ class MultiPlayer(Player):
         self.results = []
         self.changing = changing
 
-    def winner(self,opponent):
-        """Saves the total payoff of the player."""
-        self.results.append(np.sum(self.payoffHist))
-        if opponent.s != self.s:
-            opponent.results.append(np.sum(opponent.payoffHist))
-
     # TODO:  Un parametro del nostro grado di cooperazione potrebbe essere la percentuale sul
     # totale di volte che una strategia ha cooperato durante il torneo precedente.
     @staticmethod
     def change_strategy(players):
-        """Change the strategy randomly."""
+        """Change the players' strategy randomly."""
         c_b = 0
         c_g = 0
         k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT))
@@ -195,8 +190,10 @@ class MultiPlayer(Player):
         return self.get_strategy(np.random.choice(k_list))
 
     def play_iter(self, opponent, num_iter):
+        """Plays the game against an opponent num_iter times."""
         Player.play_iter(self, opponent, num_iter)
 
+        # save history for both players
         self.prevStratHist.append(self.stratHist)
         self.prevPayoffHist.append(self.payoffHist)
         self.prevPlayedHist.append(self.playedHist)
@@ -212,17 +209,24 @@ class MultiPlayer(Player):
         if self.s != opponent.s:
             opponent.prevOpponent.append(self)
 
-        # who won? check the sum of rewards
+        # check the sum of rewards to detect the winner
         self.winner(opponent)
 
-    def rounds_played(self):
+    def winner(self, opponent):
+        """Saves the total payoff of the player."""
+        self.results.append(np.sum(self.payoffHist))
+        if opponent.s != self.s:
+            opponent.results.append(np.sum(opponent.payoffHist))
+
         """Number of rounds each user played."""
         return len(self.prevStratHist)
 
     def get_points(self):
+        """Current gained points."""
         return np.cumsum(self.results)
 
-    def get_cooperation_count(self):
+    def get_coop_def_count(self):
+        """Number of times the user cooperated and defected."""
         cooperate_count = defect_count = 0
         for hist in self.prevPlayedHist:
             cooperate_count += hist.count(COOPERATE)
@@ -269,7 +273,7 @@ class TitForTat(Strategy):
         return last_move # repeat past opponent move
 
 class TitFor2Tat(TitForTat):
-    """Plays opponent's second to last move."""
+    """Defects only if the opponent has defected last two times."""
 
     def __init__(self):
         self.id = TF2T

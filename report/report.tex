@@ -290,13 +290,14 @@ Similarly to what was pointed out previously, we can see variations of the resul
 The previuosly defined MPIPD round-robin scheme tournament was iterated many times to collect more advanced statistics.
 We identify this schema as a \textit{Repeated multiple players IPD} (rMPIPD).
 
-Three separated simulations have been developed to study the behaviour of the populations and the convergence speed. A population is said to be converging if more than $3/4$ of it has the same strategy type at the end of a complete round. The base rules are the same as pointed out in the previous sections (\textit{common knowledge}, ...).
+Two separated scenarios have been developed to study the behaviour of the populations and the convergence speed by simulations. A population is said to be converging if more than $3/4$ of it has the same strategy type at the end of a complete round. The base rules are the same as pointed out in the previous sections (\textit{common knowledge}, ...).
 
 \subsection{Static Population}
 In this case the number of players is fixed. Each player implements a strategy choosing it with equal probability from the strategies set. At the end of each round the first third of the population is doubled (the third that achieves the highest cumulative payoff), and the last third is removed. In this way we can ensure a static number of players and then study the convergence of the population through consecutive rounds.
 Convergence is declared when more than $3/4$ of the players have their strategies of the same type, or when a maximum number of repetitions are reached.
 This method also resembles how Axelrod made his tests~\cite[\S 2.6]{mathieu2017}~\cite{axelrod1984evolution}.
-We can easily see how the \textit{TfT} strategy outpaces the others in a fast way: it requires only $4$ iterations for \textit{TfT} to overcome the other strategies.
+
+Figures~[\ref{fig:constR},\ref{fig:constFI},\ref{fig:constLI}] show the evolution of a population of 50 players over some iterations. We can easily see how the \textit{TfT} strategy outpaces the others in a fast way: it requires only $4$ iterations for \textit{TfT} to overcome the other strategies.
 
 \begin{figure}[!ht]
     \centering
@@ -318,27 +319,27 @@ We can easily see how the \textit{TfT} strategy outpaces the others in a fast wa
     \caption{Last iteration scores ($it=3$)}
     \label{fig:constLI}
 \end{figure}
-\textbf{Discussion citing figures as for subsec below}
 
 \textbf{ADD TABLE}
 
 \subsection{Increasing Population}
-In this case the number of players (population) is increased at each iteration. We implemented three different way of modifying the population between rounds: the method may be statically chosen by setting the \texttt{ALTERNATIVE} variable.
-
-After each round a player has a certain probability based on his ranking to have a child of the same type:
+In this case the number of players (population) is increased at each iteration. We implemented three different way of modifying the population between rounds; after each round a player has a certain probability based on his ranking to have a child of the same type:
 \begin{enumerate}
     \item The probability is $p(i)=1- i\ /\ num\_players$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
     For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
-    \item We draw a random number $d$ and split the rank-ordered population in three sets of equal size $A,B,C$; the player is doubled if:
+    \item We draw a random number $d$ and split the rank-ordered population in three sets of equal size $A,B,C$. The player is doubled if:
     \begin{itemize}
         \item $d>0.2$ if the player belongs to $A$
         \item $d>0.5$ if the player belongs to $B$
         \item $d>0.8$ if the player belongs to $C$        
     \end{itemize}
     This is an alternative way to promote best strategies and obstruct less performant players.
-    \item We define a player's score as its obtained points divided by the maximum obtained score in the whole population; we double the player if a drawn random number is greater than its score.
+    \item We define a player's score as its obtained points divided by the maximum obtained score in the whole population. We double the player if a drawn random number is greater than its score.
 \end{enumerate}
-We used by default the first of the three proposed methods.
+
+We used by default the first of the three proposed methods, but the method may be statically set using the \texttt{ALTERNATIVE} variable.
+
+Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iteration. In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
 
 \begin{figure}[!ht]
     \centering
@@ -368,23 +369,15 @@ We used by default the first of the three proposed methods.
     \label{fig:incrLI}
 \end{figure}
 
-Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of the population of 50 players over four iteration. In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
+\textbf{ADD TABLE}
 
 It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's players go unpunished) or contrition (avoid respond to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations of the \textit{TfT} strategy in this work.
 
-\textbf{ADD TABLE}
-
-\subsection{Increasing Population 2}
-\textbf{TO BE COMPLETED I DO NOT KNOW THIS}
-
-\textbf{ADD TABLE}
-
-\textbf{ADD FIGURES}
-
 \section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
-\textbf{STILL DEVELOPING}
+We finally also made another step further by allowing players to change their strategies in the rIPDMP setup, of which the main structure is unaltered. The change of strategy is again based on players' ranking: a strategy that gives good results is enhanced and a bad strategy leads to a change towards the ``opposite'' direction.
+\textbf{Left loose on purpose because of the todo in change_strategy calling for review. Will be more detailed}
 
-\section{Conclusion} \label{s:conc}
+\section{Conclusions} \label{s:conc}
 
 \balance
 \bibliographystyle{IEEEtran}
