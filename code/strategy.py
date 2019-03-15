@@ -21,7 +21,7 @@ PRBH = -11
 class Strategy:
     """Abstract Strategy class to derive other."""
     TOT_STRAT = 8
-    
+
     def __str__(self):
         return "Base"
 
@@ -32,7 +32,7 @@ class Strategy:
     def generatePlayers(num_players, replace=False, fixed=False):
         str_choices = [NICE, BAD, IND, TFT, TF2T, GRT, PRBL, PRBH]
         k = np.random.choice(str_choices, num_players, replace=replace)
-        
+
         # substitute with useful values if needed
         maskL = k==PRBL # 1 to 49 exclude nice, indifferent
         k[maskL] = np.repeat(25, maskL.sum()) if fixed else np.random.choice(49, size=maskL.sum(), replace=replace) + 1
@@ -43,10 +43,10 @@ class Strategy:
 
 class Player(object):
     """Class to describe a player with strategy and history."""
-    
+
     def __str__(self):
         return "Player with strategy: {}".format(self.s)
-    
+
     # optional: use M = generatePayoffMatrix()
     def __init__(self, k=0, M=np.array([[3,0],[5,1]]), changing=False):
         self.M1 = M
@@ -57,17 +57,17 @@ class Player(object):
             self.c = 0
         self.s = self.get_strategy(k)
         self.clear_history()
-    
+
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
         for _ in range(num_iter):
             self.play(opponent)
 
-    def play(self, opponent): 
+    def play(self, opponent):
         """Plays the game against an opponent."""
         action1 = self.act(opponent)
         action2 = opponent.act(self)
-                
+
         self.update(action1, action2, False)
         if opponent.s != self.s:
             opponent.update(action1, action2, True)
@@ -84,7 +84,7 @@ class Player(object):
             if len(opponent.playedHist) > 1: #at least 2
                 return self.s.get([opponent.playedHist[-2],opponent.playedHist[-1]]) # pass opponent's second to lastmove
             return COOPERATE
-        
+
     def update(self, action1, action2, opponent):
         """Updates the state based on the actions and if is opponent."""
         self.stratHist.append(str(self.s)) #todo check if better this or k
@@ -96,7 +96,7 @@ class Player(object):
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
             self.bestPossibleHist.append(max(self.M1[action1,:]))
-        
+
     def get_strategy(self, k):
         """Gets the strategy object given the id."""
         if k >= NICE and k <= BAD:
@@ -120,7 +120,7 @@ class MultiPlayer(Player):
 
     def __init__(self, k, changing=False):
         Player.__init__(self, k, changing=changing)
-        
+
         # save results for multiple rounds played by user
         # this way we can save all the results from the tournament
         self.prevStratHist = []
@@ -130,40 +130,42 @@ class MultiPlayer(Player):
         self.prevOpponent = []
         self.results = []
         self.changing = changing
-    
+
     def winner(self,opponent):
         """Saves the total payoff of the player."""
         self.results.append(np.sum(self.payoffHist))
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
 
+    # TODO:  Un parametro del nostro grado di cooperazione potrebbe essere la percentuale sul
+    # totale di volte che una strategia ha cooperato durante il torneo precedente.
     @staticmethod
     def change_strategy(players):
         """Change the strategy randomly."""
         c_b = 0
         c_g = 0
         k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT))
-        for i in range(len(players)):        
+        for i in range(len(players)):
             if i < len(players)/2:
                 ##TODO TUNE THIS, maybe refer to the position
                 print("Strategy that gives me good results - reinforce my type")
-                print("BEFORE s {}, c {}".format(players[i].s, players[i].c)) 
+                print("BEFORE s {}, c {}".format(players[i].s, players[i].c))
                 if players[i].s.id > IND:
                     players[i].c = (players[i].c + players[i].c**2)/2
                 else:
-                    players[i].c = (players[i].c + players[i].c**0.5)/2  
-                print("AFTER s {}, c {}".format(players[i].s, players[i].c)) 
+                    players[i].c = (players[i].c + players[i].c**0.5)/2
+                print("AFTER s {}, c {}".format(players[i].s, players[i].c))
             elif i > len(players)/2:
                 print("Strategy that gives me bad results - try to change my type in the opposite direction")
-                print("BEFORE s {}, c {}".format(players[i].s, players[i].c)) 
+                print("BEFORE s {}, c {}".format(players[i].s, players[i].c))
                 if players[i].s.id > IND:
-                    players[i].c = (players[i].c + players[i].c**0.5)/2  
+                    players[i].c = (players[i].c + players[i].c**0.5)/2
                 else:
                     players[i].c = (players[i].c + players[i].c**2)/2
-                print("AFTER s {}, c {}".format(players[i].s, players[i].c)) 
+                print("AFTER s {}, c {}".format(players[i].s, players[i].c))
             else:
-                print("In the middle, not changing my type s {}, c {}".format(players[i].s, players[i].c)) 
-            
+                print("In the middle, not changing my type s {}, c {}".format(players[i].s, players[i].c))
+
             #MUTATION PROBABILITY RELATED TO RESULTS
             if np.random.uniform(0,1) < i/len(players):
                 #If lower I am tempted to cooperate
@@ -184,14 +186,14 @@ class MultiPlayer(Player):
                         while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
                             s_next = players[i].random_strategy(k_strategies)
                         players[i].s = s_next
-                    print("After change of type I am {}\n\n".format(players[i].s))  
+                    print("After change of type I am {}\n\n".format(players[i].s))
             print("\n\n")
         return players, c_b, c_g
 
     def random_strategy(self, k_list):
         """Generate random strategy object."""
         return self.get_strategy(np.random.choice(k_list))
-        
+
     def play_iter(self, opponent, num_iter):
         Player.play_iter(self, opponent, num_iter)
 
@@ -199,20 +201,20 @@ class MultiPlayer(Player):
         self.prevPayoffHist.append(self.payoffHist)
         self.prevPlayedHist.append(self.playedHist)
         self.prevBestPossibleHist.append(self.bestPossibleHist)
-        
+
         if self.s != opponent.s:
             opponent.prevStratHist.append(opponent.stratHist)
             opponent.prevPayoffHist.append(opponent.payoffHist)
             opponent.prevPlayedHist.append(opponent.playedHist)
             opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
-        
+
         self.prevOpponent.append(opponent)
         if self.s != opponent.s:
             opponent.prevOpponent.append(self)
 
         # who won? check the sum of rewards
         self.winner(opponent)
-    
+
     def rounds_played(self):
         """Number of rounds each user played."""
         return len(self.prevStratHist)
@@ -226,7 +228,7 @@ class MultiPlayer(Player):
             cooperate_count += hist.count(COOPERATE)
             defect_count += hist.count(DEFECT)
         return cooperate_count, defect_count
-    
+
 class ProbStrategy(Strategy):
     """Strategy class when probability is used.
     Spans from always nice to always bad players"""
@@ -251,7 +253,7 @@ class ProbStrategy(Strategy):
             return "MainlyNice (k={})".format(self.k)
         else:
             return "Indifferent"
-        
+
 class TitForTat(Strategy):
     """Plays opponent's last move."""
 
@@ -274,7 +276,7 @@ class TitFor2Tat(TitForTat):
 
     def __str__(self):
         return "TitFor2Tat"
-    
+
     def get(self, last_moves=None):
         if last_moves == None:
             return COOPERATE
