@@ -96,7 +96,7 @@ def main():
     group_df = group_mean.merge(group_std, left_index=True, right_index=True, how='left')
     group_df['cooperation_perc'] = group_df['cooperate_count_mean']/(group_df['cooperate_count_mean']+group_df['defect_count_mean'])
     group_df['str'] = repeated_ranking_df['Player'][:NUM_PLAYERS]
-    print(group_df)
+    print(group_df.to_latex(index=False))
 
     # box plot of last match
     one_round_results = [p.results for p in players]

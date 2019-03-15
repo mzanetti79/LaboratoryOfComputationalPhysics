@@ -92,7 +92,7 @@ def main():
                 plt.show()
 
     pd.set_option('precision', 2)
-    print(matches_df.to_latex())
+    print(matches_df.to_latex(index=False))
 
 if __name__ == "__main__":
     main()

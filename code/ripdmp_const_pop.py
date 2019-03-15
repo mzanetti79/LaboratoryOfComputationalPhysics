@@ -4,6 +4,7 @@ from strategy import *
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
+    pd.set_option('precision', 2)
 
     SAVE_IMG = False
 
