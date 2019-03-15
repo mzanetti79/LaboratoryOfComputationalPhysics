@@ -83,20 +83,17 @@ class Player(object):
             return COOPERATE
         elif type(self.s) == TitFor2Tat:
             if len(opponent.playedHist) > 1: # at least 2
-                return self.s.get([opponent.playedHist[-2],opponent.playedHist[-1]]) # pass opponent's second to lastmove
+                return self.s.get([opponent.playedHist[-2],opponent.playedHist[-1]]) # pass opponent's previous two moves
             return COOPERATE
 
     def update(self, action1, action2, opponent):
         """Updates the state based on the actions and if is opponent."""
-        self.stratHist.append(str(self.s)) #todo check if better this or k
         if opponent:
             self.payoffHist.append(self.M2[action1,action2])
             self.playedHist.append(action2)
-            self.bestPossibleHist.append(max(self.M2[:,action2]))
         else:
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
-            self.bestPossibleHist.append(max(self.M1[action1,:]))
 
     def get_strategy(self, k):
         """Gets the strategy object given the id."""
@@ -111,10 +108,8 @@ class Player(object):
 
     def clear_history(self):
         """Clears all history of the player."""
-        self.stratHist = []
         self.payoffHist = []
         self.playedHist = []
-        self.bestPossibleHist = []
 
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
@@ -124,10 +119,7 @@ class MultiPlayer(Player):
 
         # save results for multiple rounds played by user
         # this way we can save all the results from the tournament
-        self.prevStratHist = []
-        self.prevPayoffHist = []
         self.prevPlayedHist = []
-        self.prevBestPossibleHist = []
         self.prevOpponent = []
         self.results = []
         self.changing = changing
@@ -194,16 +186,9 @@ class MultiPlayer(Player):
         Player.play_iter(self, opponent, num_iter)
 
         # save history for both players
-        self.prevStratHist.append(self.stratHist)
-        self.prevPayoffHist.append(self.payoffHist)
         self.prevPlayedHist.append(self.playedHist)
-        self.prevBestPossibleHist.append(self.bestPossibleHist)
-
         if self.s != opponent.s:
-            opponent.prevStratHist.append(opponent.stratHist)
-            opponent.prevPayoffHist.append(opponent.payoffHist)
             opponent.prevPlayedHist.append(opponent.playedHist)
-            opponent.prevBestPossibleHist.append(opponent.bestPossibleHist)
 
         self.prevOpponent.append(opponent)
         if self.s != opponent.s:
@@ -217,9 +202,6 @@ class MultiPlayer(Player):
         self.results.append(np.sum(self.payoffHist))
         if opponent.s != self.s:
             opponent.results.append(np.sum(opponent.payoffHist))
-
-        """Number of rounds each user played."""
-        return len(self.prevStratHist)
 
     def get_points(self):
         """Current gained points."""
