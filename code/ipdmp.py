@@ -2,6 +2,7 @@ from strategy import *
 SAVE_IMG = False
 
 def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
+    """Round Robin tournament."""
     n = len(players)
 
     # each player plays against another in a round robin scheme
