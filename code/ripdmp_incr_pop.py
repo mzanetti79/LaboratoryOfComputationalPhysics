@@ -1,6 +1,6 @@
 from ipdmp import IPDRoundRobin
 from strategy import *
-    
+
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
@@ -28,7 +28,7 @@ def main():
         NUM_REPETITIONS += 1
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
-        
+
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
@@ -39,7 +39,7 @@ def main():
             score['points'] = score.max().points-score['points']
             score['percentage'] = score['points']/score.max().points
             print(score)
-        
+
         for i in range(len(players)):
             draw = np.random.uniform(0,1)
             if ALTERNATIVE == 1:
@@ -71,7 +71,7 @@ def main():
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")
-        
+
     # save plots
     strategies_df = strategies_df.rename(index=str,
         columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
@@ -81,11 +81,11 @@ def main():
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyBad (k={})".format(c)})
             else:
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyNice (k={})".format(c)})
-                
+
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
     print(strategies_df.to_latex(index=False))
-    strategies_df.plot(figsize=(12,5))    
+    strategies_df.plot(figsize=(12,5))
     # plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1,1))
     plt.legend(bbox_to_anchor=(1,1))
     plt.title('Strategies evolution')
@@ -114,6 +114,6 @@ def main():
             plt.close()
         else:
             plt.show()
-            
+
 if __name__ == "__main__":
     main()
