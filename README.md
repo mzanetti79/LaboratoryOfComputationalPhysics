@@ -1,5 +1,13 @@
 # Final Project
 
+Open the [Jupyter notebook](IPD.ipynb) to see a brief interactive description of the work done.
+
+More complete information can be found in the [full report](report/report.pdf).
+
+Source code and output images (plots) are in their respective folders.
+
+------
+
 In this branch you find all the necessary to complete your final project.
 
 The branch is named after the group of students a given project is assigned to. The name is left generic, "GroupN", on purpose, the actual group members are listed in the `Members.txt` file.
