@@ -10,13 +10,13 @@ def main():
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
-    NUM_REPETITIONS = opt.nrep
+    NUM_REPETITIONS = 0 # arg override
     MAX_ALLOWED = opt.maxrep
     FIXED = opt.fixed
+    LATEX = opt.latex
 	
 #    ALTERNATIVE = opt.altern
 #    PERCENTAGE = opt.percent
-	
 
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -60,8 +60,8 @@ def main():
         print("Convergence not reached")
         
     # save plots
-    strategies_df = strategies_df.rename(index=str, columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat",
-                                                                0: "Nice", 100: "Bad", 50: "Indifferent"})
+    strategies_df = strategies_df.rename(index=str,
+        columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
     for c in strategies_df.columns:
         if str.isdigit(str(c)):
             if c > 50:
@@ -69,10 +69,16 @@ def main():
             else:
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyNice (k={})".format(c)})
 
-                
-    print(strategies_df)
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
+    if LATEX:
+        if NUM_PLAYERS > 8:
+            print(strategies_df.T.to_latex()) # too large, transpose
+        else:
+            print(strategies_df.to_latex(index=False))
+    else:
+        print(strategies_df)
+
     strategies_df.plot(figsize=(12,5))    
     plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
     plt.title('Strategies evolution')
@@ -92,8 +98,7 @@ def main():
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             plt.xlabel('Match number')
             plt.ylabel('Points')
-
-        plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
+        plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1)) # TODO maybe use col=5 loc=2 even here
 
         if SAVE_IMG:
             plt.savefig('../img/cipdmp-incr/cipdmp-scores-increasing-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps')

@@ -258,8 +258,7 @@ class TitForTat(Strategy):
 
     def get(self, last_move=None):
         if last_move == None:
-            return COOPERATE
-        # first time
+            return COOPERATE # first time
         return last_move # repeat past opponent move
 
 class TitFor2Tat(TitForTat):

@@ -1,7 +1,7 @@
 from strategy import *
 from base_options import *
 
-def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=False):
+def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=False):
     """Round Robin tournament."""
     n = len(players)
 
@@ -37,7 +37,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=
             plt.ylabel('Cum. reward')
         plt.title("Evolution of the game")
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
-        if SAVE_IMG: # TODO we save images in ipdmp dir but this method is called also by other scripts
+        if save_img: # we only save images for ipdmp script
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
 
@@ -51,8 +51,8 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=
         cooperate_count, defect_count = p.get_coop_def_count()
 
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id, np.mean(yields[p])]],
-            columns=['Player','points', 'cooperate_count', 'defect_count', 'rrp', 'labels', 'yield']
+            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id, 100*np.mean(yields[p])]],
+            columns=['Player','points', 'coop_count', 'defect_count', 'rrp', 'labels', 'yield']
         )
         ranking_df = ranking_df.append(df)
         # ranking_df = ranking_df.sort_values(['points'], ascending=False)
@@ -81,7 +81,7 @@ def main():
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
     FIXED = opt.fixed
-	
+    LATEX = opt.latex
 	
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -93,26 +93,29 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1)), SAVE_IMG=SAVE_IMG) # not against itself, plot last rep.
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1)), save_img=SAVE_IMG) # not against itself, plot last rep.
 
         repeated_players.append(players)
         repeated_ranking_df = repeated_ranking_df.append(ranking_df) if i!=0 else ranking_df
-        # print(ranking_df.to_latex(index=False))
-        # print(matches_df.to_latex(index=False))
 
     # print tables
     pd.set_option('precision', 2)
 
-    group = repeated_ranking_df[['points', 'cooperate_count', 'defect_count','yield']].groupby(repeated_ranking_df.index)
+    group = repeated_ranking_df[['points', 'coop_count', 'defect_count']].groupby(repeated_ranking_df.index)
     group_mean = group.mean()
     group_mean.columns = [str(col) + '_mean' for col in group_mean.columns]
     group_std = group.std()
     group_std.columns = [str(col) + '_std' for col in group_std.columns]
     group_df = group_mean.merge(group_std, left_index=True, right_index=True, how='left')
-    group_df['cooperation_perc'] = group_df['cooperate_count_mean']*100/(group_df['cooperate_count_mean']+group_df['defect_count_mean'])
+    group_df['coop_perc'] = group_df['coop_count_mean']*100/(group_df['coop_count_mean']+group_df['defect_count_mean'])
     group_df['str'] = repeated_ranking_df['Player'][:NUM_PLAYERS]
-#    print(group_df.to_latex(index=False))
-    display(group_df)
+    group_df['yield'] = repeated_ranking_df['yield'][:NUM_PLAYERS]
+    group_df = group_df[['str','points_mean','points_std','yield',
+        'coop_count_mean','coop_count_std','defect_count_mean','defect_count_std','coop_perc']] # column reordering
+    if LATEX:
+        print(group_df.to_latex(index=False))
+    else:
+        print(group_df)
     
     # box plot of last match
     one_round_results = [p.results for p in players]

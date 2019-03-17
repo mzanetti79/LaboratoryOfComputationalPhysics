@@ -11,6 +11,7 @@ def main():
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
     FIXED = opt.fixed
+    LATEX = opt.latex
 
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 
@@ -59,7 +60,7 @@ def main():
                 np.mean(yields[k1])*100, np.mean(achieves[k1])*100,
                 np.mean(cum_results[k2]), np.std(cum_results[k2]),
                 np.mean(yields[k2])*100, np.mean(achieves[k2])*100]],
-                columns=['p1','p2','p1-avg','p1-std', 'p1-yeild', 'p1-achieves',
+                columns=['p1','p2','p1-avg','p1-std', 'p1-yield', 'p1-achieves',
                          'p2-avg', 'p2-std','p2-yield', 'p2-achieves']
             )
             matches_df = matches_df.append(df)
@@ -108,7 +109,10 @@ def main():
                 plt.show()
 
     pd.set_option('precision', 2)
-    print(matches_df.to_latex(index=False))
+    if LATEX:
+        print(matches_df.to_latex(index=False))
+    else:
+        print(matches_df)
 
 if __name__ == "__main__":
     main()

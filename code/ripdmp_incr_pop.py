@@ -11,11 +11,12 @@ def main():
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
-    NUM_REPETITIONS = opt.nrep
+    NUM_REPETITIONS = 0 # arg override
     MAX_ALLOWED = opt.maxrep
     ALTERNATIVE = opt.altern
     PERCENTAGE = opt.percent
     FIXED = opt.fixed
+    LATEX = opt.latex
 	
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -65,7 +66,6 @@ def main():
                 if draw > score[score['labels']==players[i].s.id].percentage.item():
                     k_strategies = np.append(k_strategies, players[i].s.id)
 
-
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
         df = pd.DataFrame([counts], columns=unique)
@@ -88,7 +88,14 @@ def main():
 
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0)
-    print(strategies_df.to_latex(index=False))
+    if LATEX:
+        if NUM_PLAYERS > 8:
+            print(strategies_df.T.to_latex()) # too large, transpose
+        else:
+            print(strategies_df.to_latex(index=False))
+    else:
+        print(strategies_df)
+    
     strategies_df.plot(figsize=(12,5))
     # plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1,1))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
