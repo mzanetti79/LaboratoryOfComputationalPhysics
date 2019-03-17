@@ -13,7 +13,7 @@ def main():
     PERCENTAGE = 0.3
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT))
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT)) # TODO or both fixed or both free
 
     NUM_REPETITIONS = 0
     MAX_ALLOWED = 10
@@ -50,7 +50,7 @@ def main():
         
     # save plots
     strategies_df = strategies_df.rename(index=str,
-        columns={-3: "TitForTwoTat", -2: "GrimTrigger", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
+        columns={-3: "GrimTrigger", -2: "TitForTwoTat", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
     for c in strategies_df.columns:
         if str.isdigit(str(c)):
             if c > 50:

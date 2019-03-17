@@ -94,7 +94,7 @@ def main():
     group_std = group.std()
     group_std.columns = [str(col) + '_std' for col in group_std.columns]
     group_df = group_mean.merge(group_std, left_index=True, right_index=True, how='left')
-    group_df['cooperation_perc'] = group_df['cooperate_count_mean']/(group_df['cooperate_count_mean']+group_df['defect_count_mean'])
+    group_df['cooperation_perc'] = group_df['cooperate_count_mean']*100/(group_df['cooperate_count_mean']+group_df['defect_count_mean'])
     group_df['str'] = repeated_ranking_df['Player'][:NUM_PLAYERS]
     print(group_df.to_latex(index=False))
 
