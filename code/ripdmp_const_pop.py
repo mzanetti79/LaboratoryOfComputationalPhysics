@@ -1,22 +1,24 @@
 from ipdmp import IPDRoundRobin
 from strategy import *
+from base_options import *
 
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
     pd.set_option('precision', 2)
 
-    SAVE_IMG = False
-
-    NUM_ITER = 100
-    NUM_PLAYERS = 50
-    PERCENTAGE = 0.3
+    opt = BaseOptions().parse(ripdmp=True)
+    SAVE_IMG = opt.saveimg
+    NUM_ITER = opt.niter
+    NUM_PLAYERS = opt.nplay
+    NUM_REPETITIONS = opt.nrep
+    MAX_ALLOWED = opt.maxallow
+    PERCENTAGE = opt.percent
+	
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT)) # TODO or both fixed or both free
 
-    NUM_REPETITIONS = 0
-    MAX_ALLOWED = 10
     repeated_players = []
     # strategies evolution
     unique, counts = np.unique(k_strategies, return_counts=True)

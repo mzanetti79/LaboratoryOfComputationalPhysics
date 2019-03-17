@@ -15,4 +15,5 @@ def generatePayoffMatrix(max=20, use_positive=True):
         T = 2*R-S-1
         if T>R and R>P and P>S and 2*R>T+S:
             ok = True
-    return np.array([[R,S],[T,P]])
+    M = np.array([[R,S],[T,P]])	
+    return M

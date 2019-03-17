@@ -1,15 +1,21 @@
 from ipdmp import IPDRoundRobin
 from strategy import *
+from base_options import *
+
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    SAVE_IMG = False
+    opt = BaseOptions().parse(cipdmp=True)
+    SAVE_IMG = opt.saveimg
+    NUM_ITER = opt.niter
+    NUM_PLAYERS = opt.nplay
+    NUM_REPETITIONS = opt.nrep
+    MAX_ALLOWED = opt.maxallow
+#    ALTERNATIVE = opt.altern
+#    PERCENTAGE = opt.percent
+	
 
-    NUM_ITER = 50
-    NUM_PLAYERS = 50
-    NUM_REPETITIONS = 0
-    MAX_ALLOWED = 4
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     repeated_players = []

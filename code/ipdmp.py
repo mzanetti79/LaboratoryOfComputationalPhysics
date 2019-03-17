@@ -1,7 +1,7 @@
 from strategy import *
-SAVE_IMG = False
+from base_options import *
 
-def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
+def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=False):
     """Round Robin tournament."""
     n = len(players)
 
@@ -64,10 +64,13 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False):
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
-
-    NUM_ITER = 50
-    NUM_PLAYERS = 50
-    NUM_REPETITIONS = 10
+    
+    opt = BaseOptions().parse()
+    SAVE_IMG = opt.saveimg
+    NUM_ITER = opt.niter
+    NUM_PLAYERS = opt.nplay
+    NUM_REPETITIONS = opt.nrep
+	
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
@@ -78,7 +81,7 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1))) # not against itself, plot last rep.
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1)), SAVE_IMG=SAVE_IMG) # not against itself, plot last rep.
 
         repeated_players.append(players)
         repeated_ranking_df = repeated_ranking_df.append(ranking_df) if i!=0 else ranking_df
