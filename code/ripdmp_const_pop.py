@@ -46,7 +46,7 @@ def main():
         #display(ranking_df)
         # display(matches_df)
 
-    if np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4:
+    if np.unique(k_strategies, return_counts=True)[1].max() >= k_strategies.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")
