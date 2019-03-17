@@ -6,12 +6,14 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    opt = BaseOptions().parse(cipdmp=True)
+    opt = BaseOptions().parse(type=BaseOptions.cipdmp)
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
     MAX_ALLOWED = opt.maxallow
+    FIXED = opt.fixed
+	
 #    ALTERNATIVE = opt.altern
 #    PERCENTAGE = opt.percent
 	
@@ -22,7 +24,7 @@ def main():
     strategies_df = pd.DataFrame() # strategies evolution
 
     # define k for strategy probabilities
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS,replace=(NUM_PLAYERS > Strategy.TOT_STRAT))
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS,replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
 
     # initialize players with given strategies
     players = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
@@ -47,7 +49,7 @@ def main():
         k_strategies = np.array(k_strategies)
         playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
         
-        players, c_b, c_g = MultiPlayer.change_strategy(players)
+        players, c_b, c_g = MultiPlayer.change_strategy(players, FIXED)
         print("Changed {} players to a more cooperative behaviour.".format(c_g))
         print("Changed {} players to a less cooperative behaviour.".format(c_b))
         players = np.append(players, playersToAdd)

@@ -7,17 +7,18 @@ def main():
     pd.set_option('display.max_columns', None)
     pd.set_option('precision', 2)
 
-    opt = BaseOptions().parse(ripdmp=True)
+    opt = BaseOptions().parse(type=BaseOptions.ripdmp_const)
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
     MAX_ALLOWED = opt.maxallow
     PERCENTAGE = opt.percent
+    FIXED = opt.fixed
 	
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT)) # TODO or both fixed or both free
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=FIXED) # TODO or both fixed or both free
 
     repeated_players = []
     # strategies evolution
@@ -64,7 +65,7 @@ def main():
     strategies_df = strategies_df.fillna(0)
     print(strategies_df.to_latex(index=False))
     strategies_df.plot(figsize=(12,5))    
-    plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
+    plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
@@ -83,7 +84,8 @@ def main():
             plt.xlabel('Match number')
             plt.ylabel('Points')
 
-        plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
+        plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
+        
 
         if SAVE_IMG:
             plt.savefig('../img/ripdmp-const/ripdmp-scores-const-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')

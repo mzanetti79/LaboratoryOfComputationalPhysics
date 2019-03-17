@@ -3,18 +3,19 @@ from base_options import *
 
 def main():
     np.random.seed(100)
-    opt = BaseOptions().parse()
+    opt = BaseOptions().parse(type=BaseOptions.ipd2p)
 	
     SAVE_IMG = opt.saveimg
 
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
+    FIXED = opt.fixed
 
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 
     # define k for strategy probabilities
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT))
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed = FIXED)
     matches_df = pd.DataFrame() # all matches played
                  
     for first in range(NUM_PLAYERS):

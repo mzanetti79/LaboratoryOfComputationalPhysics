@@ -27,7 +27,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=
             plt.xlabel('Iteration')
             plt.ylabel('Cum. reward')
         plt.title("Evolution of the game")
-        plt.legend(bbox_to_anchor=(1,1))
+        plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
         if SAVE_IMG: # TODO we save images in ipdmp dir but this method is called also by other scripts
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
@@ -65,16 +65,18 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
     
-    opt = BaseOptions().parse()
+    opt = BaseOptions().parse(type=BaseOptions.ipdmp)
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
+    FIXED = opt.fixed
+	
 	
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT))
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
 
     repeated_players = []
     for i in range(NUM_REPETITIONS):
@@ -107,7 +109,7 @@ def main():
     meds = one_round.median().sort_values(ascending=False)
     one_round = one_round[meds.index]
     plt.figure(figsize=(12,5))
-    one_round.boxplot()
+    one_round.boxplot(figsize=(12,5))
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
     plt.suptitle('Mean and variance for each type vs the other players \n One complete round')
     plt.ylabel('Points')
@@ -119,13 +121,13 @@ def main():
         plt.show()
 
     # box plot of all points
+    plt.figure(figsize=(12,5))
     group_median = group.median().sort_values(by=['points'], ascending=False)
     temp_df = pd.DataFrame()
     for index in group_median.index:
         temp_df = temp_df.append(group.get_group(index))
-    temp_df['index'] = np.repeat(np.arange(50), NUM_REPETITIONS)
-    plt.figure(figsize=(12,5))
-    temp_df.boxplot(column='points', by='index')
+    temp_df['index'] = np.repeat(np.arange(NUM_PLAYERS), NUM_REPETITIONS)
+    temp_df.boxplot(column='points', by='index', figsize=(12,5))
     plt.xticks(np.arange(NUM_PLAYERS)+1, group_df['str'][group_median.index], rotation=90)
     plt.suptitle(("Mean and variance for each type at the end of the tournament - {} repetitions").format(NUM_REPETITIONS))
     plt.ylabel('Points')

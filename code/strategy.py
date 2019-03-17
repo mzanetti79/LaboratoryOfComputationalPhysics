@@ -127,11 +127,11 @@ class MultiPlayer(Player):
     # TODO:  Un parametro del nostro grado di cooperazione potrebbe essere la percentuale sul
     # totale di volte che una strategia ha cooperato durante il torneo precedente.
     @staticmethod
-    def change_strategy(players):
+    def change_strategy(players, fixed):
         """Change the players' strategy randomly."""
         c_b = 0
         c_g = 0
-        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT))
+        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
         for i in range(len(players)):
             if i < len(players)/2:
                 ##TODO TUNE THIS, maybe refer to the position
