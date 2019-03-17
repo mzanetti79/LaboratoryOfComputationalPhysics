@@ -11,7 +11,7 @@ def main():
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
-    MAX_ALLOWED = opt.maxallow
+    MAX_ALLOWED = opt.maxrep
     FIXED = opt.fixed
 	
 #    ALTERNATIVE = opt.altern

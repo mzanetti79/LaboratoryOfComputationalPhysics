@@ -10,16 +10,25 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=
         plt.figure(figsize=(12,5))
 
     p = {obj:[0] * num_iter for obj in players}
-
+    yields = {obj:[] for obj in players}
     for (i, p1) in zip(np.arange(n), players):
         start = i if against_itself else i+1
         for (j, p2) in zip(np.arange(start, n), players[start:]):
             p1.clear_history()
             p2.clear_history()
             p1.play_iter(p2, num_iter)
+
+            rew1 = np.cumsum(p1.payoffHist)
+            rew2 = np.cumsum(p2.payoffHist)
+            yield1 = np.cumsum(p1.bestGivenOther)
+            yield2 = np.cumsum(p2.bestGivenOther)
+
+            yields[p1].append(rew1[-1]/yield1[-1])
+            yields[p2].append(rew2[-1]/yield2[-1])
+            
             if plot:
-                p[p1] += np.cumsum(p1.payoffHist)
-                p[p2] += np.cumsum(p2.payoffHist)
+                p[p1] += rew1
+                p[p2] += rew2
 
     if plot:
         for i in p:
@@ -42,8 +51,8 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=
         cooperate_count, defect_count = p.get_coop_def_count()
 
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id]],
-            columns=['Player','points', 'cooperate_count', 'defect_count', 'rrp', 'labels']
+            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id, np.mean(yields[p])]],
+            columns=['Player','points', 'cooperate_count', 'defect_count', 'rrp', 'labels', 'yield']
         )
         ranking_df = ranking_df.append(df)
         # ranking_df = ranking_df.sort_values(['points'], ascending=False)
@@ -59,6 +68,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, SAVE_IMG=
 
     players = np.array(ranking_df.sort_values(['points'], ascending=False)['rrp'])
     ranking_df = ranking_df.drop(columns=['rrp']).reset_index(drop=True)
+    
     return players, ranking_df, matches_df
 
 def main():
@@ -93,7 +103,7 @@ def main():
     # print tables
     pd.set_option('precision', 2)
 
-    group = repeated_ranking_df[['points', 'cooperate_count', 'defect_count']].groupby(repeated_ranking_df.index)
+    group = repeated_ranking_df[['points', 'cooperate_count', 'defect_count','yield']].groupby(repeated_ranking_df.index)
     group_mean = group.mean()
     group_mean.columns = [str(col) + '_mean' for col in group_mean.columns]
     group_std = group.std()
@@ -101,8 +111,9 @@ def main():
     group_df = group_mean.merge(group_std, left_index=True, right_index=True, how='left')
     group_df['cooperation_perc'] = group_df['cooperate_count_mean']*100/(group_df['cooperate_count_mean']+group_df['defect_count_mean'])
     group_df['str'] = repeated_ranking_df['Player'][:NUM_PLAYERS]
-    print(group_df.to_latex(index=False))
-
+#    print(group_df.to_latex(index=False))
+    display(group_df)
+    
     # box plot of last match
     one_round_results = [p.results for p in players]
     one_round = pd.DataFrame(one_round_results).T
