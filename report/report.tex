@@ -49,6 +49,9 @@
     citecolor = {dkpowder},
     urlcolor  = {dkpowder},
 }
+\addto\extrasenglish{%
+  \renewcommand{\sectionautorefname}{Section}%
+}
 
 \pdfminorversion=7 % fixes warnings of eps to pdf included images
 
@@ -67,16 +70,21 @@
 %%%%%%%%%%
 
 \begin{abstract}
-In this work we analyze the Iterated Prisoner's Dilemma (IPD) in different matching scenarios: between two players, between multiple players, between multiple players with evolving population and between multiple players with a random gene between rounds, representing the grade of cooperation (a Nature choice, in Game Theory terms).
-At first this report gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem, then it defines a base structure that will be used in the remaining of the report.
-In Section~\ref{s:str} we illustrate the possible strategies that have been implemented in this work, while in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] the results of the simulations are presented for each study-cases.
-At the end, in Section~\ref{s:conc}, some final considerations are presented concluding the work.
-All the code, developed in \textit{Python 3.7}, can be found on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
+The popular Iterated Prisoner's Dilemma game is analyzed in different scenarios: (i) the classic version between two players, (ii) a generalization to multiple players, (iii) allowing the population of players to evolve in the previous setup, and (iv) also allowing players' strategies to randomly change between rounds, according to a gene representing the grade of cooperation. % (a Nature choice, in Game Theory terms).
+Statistics of rounds are collected to have an insight on what strategy is the best, if there is an absolute winner, and what is the evolution and the players' score of each scenario.
 \end{abstract}
 
 \section{Introduction} \label{s:intro}
-The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory which attempts to model social and economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance. As we will see shortly, if the intuition tells us that the best choice is to cooperate, the only stable point and win-ever strategy in a one-shot game is to \textit{not} cooperate (defect).
+The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory which attempts to model social and economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance. The game is based on a player that has to make a decision whether to cooperate or not with its opponent. As we will see shortly, if the intuition tells us that the best choice is to \textit{cooperate}, the only win-ever strategy in a one-shot game is to \textit{not} cooperate (\textit{defect}).
 
+The rest of the paper is organized as follows.
+First, \autoref{s:game} gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem and on its iterated version, then a base structure that will be used in the remaining of the study is defined.
+In \autoref{s:str} we illustrate the possible strategies that have been implemented, while in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] we explore the results of the simulations for each study-case.
+At the end, in \autoref{s:conc}, some final considerations concluding the analysis are presented.
+
+All the code, developed in \textit{Python 3}, is available on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
+
+\section{The dilemma explained} \label{s:game}
 The classical formulation of the PD is that given two prisoners, in a scenario where their conviction depends on their mutual cooperation, they can either stay silent or fink, respectively cooperate or defect.
 Another possible formulation is by the means of a trade-off game called \textit{closed bag exchange}:
 
@@ -102,7 +110,8 @@ $$
 For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=2$, $S=0$. 
 
 $R$ is returned for both players if they both cooperate, $P$ if they both defect; if the two players' actions differ, $S$ is for the player who cooperated and $T$ is for the defector.
-Equivalently, for a single round each player's choice (move) can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
+
+Equivalently, each player's choice (move or action) for a single round can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
 
 $$
 r_1 = u_1^T M u_2
@@ -122,14 +131,14 @@ This reasoning is no longer true when repeated games are considered and in parti
 Colman supported this indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups.~\cite{yao1994experimental}
 In addition, strategies like random, grim triggers or Tit For (Two) Tat can be introduced.
 Also, for this game, but also for iterated games in general, the notions of Nash Equilibrium, Pareto optimality or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionarily stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies~\cite{mathieu2017}.
-Winning a game in this setup means to achieve a better payoff in the long run. In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
+Winning a game in this setup simply means to achieve a better payoff in the long run.
+%In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
 \section{Strategies} \label{s:str}
 The strategy is represented as a function which outputs either $u_C$ or $u_D$. Based on the strategy, such function might depend on one or both players' history of moves, or on the number of moves played till that moment and so on.
 The strategy is based on a probability density function. In this project both probabilistic and deterministic strategies are used.
 
 The strategies based on probability are:
-
 \begin{description}
     \item[Nice guy] always cooperate (function's output is always $u_C$).
     \item[Bad guy] always defect (function's output is always $u_D$).
@@ -141,19 +150,19 @@ The strategies based on probability are:
 The deterministic strategies are:
 \begin{description}
     \item[Tit-for-Tat (TfT)] start by cooperating the first time, then repeat opponent's previous move.
-    \item[Tit-for-Two-Tat (Tf2T)] start by cooperating the first two times, then defect only if the opponent defected last two times.
+    \item[Tit-for-Two-Tat (Tf2T)] cooperate the first two times, then defect only if the opponent defected last two times.
     \item[Grim-Trigger (GrT)] always cooperate until the opponent's first defect move, then always defect. 
 \end{description}
 
 The strategies are considered static in case they apply the same move at each iteration as in \textit{Nice guy}, \textit{Bad guy} and dinamic elsewhere.
-These players strategies' are generally fixed in time, i.e. a player cannot change its strategy, except in the last case, examined in Section~\ref{s:crIPDMP}.
+These players strategies' are generally fixed in time, i.e. a player cannot change its strategy between rounds, unless specifically requested by the study case rules.% (for an example, see Section~\ref{s:crIPDMP}).
 
 \section{Two players IPD} \label{s:IPD2P}
 In this section the IPD intercourse between two players is evaluated: each player has an assigned strategy, he is unaware of the opponent's strategy and he plays accordingly to his strategy definition without the possibility to change it. Both players know only their respective history of moves. Each game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is who wins, or in other words who achieves a higher payoff at the end of the round.
 
 We fixed the number of iterations to \texttt{NUM\_ITER = 50}. This could also be seen as the number of moves during the match, and can be customized by the user. The results do not depend on this value if using deterministic strategies.
 
-All the possible combinations between players assigned to strategies presented in \ref{s:intro} are evaluated, including the case in which the player plays against itself (or, equivalently, a player with the same strategy).
+All the possible combinations between players assigned to strategies presented in \autoref{s:str} are evaluated, including the case in which the player plays against itself (or, equivalently, a player with the same strategy).
 This is a simple repetition of the single-shot game with the addition of memory and the possibility to add probabilistic and more elaborated strategies, as it has already be seen.
 
 Since we are not concerned about population in this study-case (which is a single A vs B game), the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy, as expected.
@@ -274,7 +283,7 @@ The \textit{TfT} strategy is interesting, because \textit{TfT} leads to almost t
 Or, in other words, \textit{TfT} is robust because it never defects first and never takes advantage for more than one iteration at a time.~\cite{fogelEvolvingBehaviors}
 \textit{TfT} was also reported to be the winner over all the strategies analyzed by Axelrod in his extensive tests based on tournaments and evolutionary competition on the IPD, thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution} and taken up in~\cite{mathieu2017}.
 The strategy was proposed to him by Anatol Rapoport.
-A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more insteresting in the following sections.
+A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more interesting in the following sections.
 
 In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}.
 
@@ -292,7 +301,7 @@ In addition to these considerations simulations were performed multiple times to
     \label{fig:boxmbvtft}
 \end{figure}
 
-More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in \autoref{tab:ipd2p}, where collected statistics are presented\footnote{~For compactness, strategies in the tables of this report are abbreviated with their short names. The $k$ value, if needed, is in parenthesis.}. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
+More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in \autoref{tab:ipd2p}, where collected statistics are presented\footnote{~For compactness, strategies in the tables of this paper are abbreviated with their short names. The $k$ value, if needed, is in parenthesis.}. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 
 In the end, it is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy it is necessary to defect at the first round, to play optimally against \textit{GrT} it is necessary to cooperate.~\cite{mathieu2017}
 
@@ -303,7 +312,7 @@ Each player chooses its fixed strategy at the beginning of the tournament and ho
 
 In short, it is a variation of the previous case, in which multiple players play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff.
 
-Tournament statistics, like points and counts of cooperation and defection moves, along with the percentage of cooperations, are shown in \autoref{tab:ipdmp}.
+Tournament statistics, like points and counts of cooperation and defection moves, along with the percentage of cooperation, are shown in \autoref{tab:ipdmp}.
 
 \begin{table}[ht]
     \caption{50-players IPD, sorted by points, statistics}
@@ -507,15 +516,17 @@ Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] sho
     \end{tabular}
 \end{table}
 
-It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's players go unpunished) or contrition (avoid respond to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations of the \textit{TfT} strategy in this work.
+It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's defections go unpunished) or contrition (avoid responding to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations of the \textit{TfT} strategy in this work.
 
 \section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
 We finally also made another step further by allowing players to change their strategies in the rIPDMP setup, of which the main structure is unaltered. The change of strategy is again based on players' ranking: a strategy that gives good results is enhanced and a bad strategy leads to a change towards the ``opposite'' direction.
 \textbf{Left loose on purpose because of the todo in change_strategy calling for review. Will be more detailed}
 
 \section{Conclusions} \label{s:conc}
+\textbf{TODO some conclusion to blend with introduction}
 
-\textbf{future work paragraph here}
+This work can easily be extended in many ways in a future development: for example, a lot of new and more complex strategies were created since the original tournaments made by Axelrod and these may be incorporated in the analysis aside of the present ones.
+Moreover, neural networks and artificial intelligence techniques can also be used to tackle this problem: for examples on the use of reinforcement learning approaches we refer the reader to \cite{plosRLdominant,coopSeqRL,kedaoRL} and to \cite{shashiEvoAlg} for an example using evolutionary algorithms.
 
 \balance
 \bibliographystyle{IEEEtran}
