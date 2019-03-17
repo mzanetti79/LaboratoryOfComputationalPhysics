@@ -142,9 +142,9 @@ The strategies based on probability are:
 \begin{description}
     \item[Nice guy] always cooperate (function's output is always $u_C$).
     \item[Bad guy] always defect (function's output is always $u_D$).
-    \item[Indifferent] randomly defect half $(k=50\%)$ of the times.
     \item[Mainly nice] randomly defect $k\%$ of the times, $k<50$.% and cooperate $100-k\%$, with $k<50$.
     \item[Mainly bad] randomly defect $k\%$ of the times, $k>50$.% and cooperate $100-k\%$, with $k>50$.
+    \item[Indifferent] randomly defect half $(k=50\%)$ of the times.
 \end{description}
 
 The deterministic strategies are:
@@ -285,7 +285,7 @@ Or, in other words, \textit{TfT} is robust because it never defects first and ne
 The strategy was proposed to him by Anatol Rapoport.
 A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more interesting in the following sections.
 
-In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}.
+In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}. Anyway this does not imply that \textit{TitForTat} could ever win against such a strategy, it is only pointing out that there is a variation on subsequent runs based on the randomness of at least one of the two players: the \textit{TfT} strategy is a reactive strategy so it will be always "late", meaning that a player applying it will have always at most the same points of the opponent at the end of the game.
 
 \begin{figure}[!ht]
     \centering
@@ -303,14 +303,14 @@ In addition to these considerations simulations were performed multiple times to
 
 More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in \autoref{tab:ipd2p}, where collected statistics are presented\footnote{~For compactness, strategies in the tables of this paper are abbreviated with their short names. The $k$ value, if needed, is in parenthesis.}. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 
-In the end, it is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy it is necessary to defect at the first round, to play optimally against \textit{GrT} it is necessary to cooperate.~\cite{mathieu2017}
+In the end, it is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy it is necessary to defect at the first round, to play optimally against \textit{GrT} it is necessary to cooperate.~\cite{mathieu2017} One should know in advance the type of the player he is facing and adapt his strategy but this is not possible due to the rules of the game. 
 
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a \texttt{NUM\_ITER = 50} of times.
 
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole tournament. Nobody knows the strategies of the other players.
 
-In short, it is a variation of the previous case, in which multiple players play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff.
+In short, it is a variation of the previous case, in which multiple players, with possibly different strategies, play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff.
 
 Tournament statistics, like points and counts of cooperation and defection moves, along with the percentage of cooperation, are shown in \autoref{tab:ipdmp}.
 
@@ -397,6 +397,9 @@ Tournament statistics, like points and counts of cooperation and defection moves
 
 The results of the tournament (and of the following study-cases) depend on the initial population and the balance between the amount of \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one.
 These outcomes may also be found in~\cite{mathieu2017}.
+
+\textbf{ADD FIGURE}
+We can easily see that in a 20 players game(Figure \ref{fig:}) the best strategy overall is the \textit{Bad} one. We link this behaviour to a subtle balance between "good" and "bad" strategies: since \textit{TfT} as we have already seen is a reactive strategy to win a tournament it should be coupled with enough (mainly)good players otherwise the bad one will easily overcome. We could not found this consideration in the scientific community, but we believe that is important and worth noticing even if this can be easily explained by the game's instrinsics. Notice this would help to interpret results and give them the right meaning. \textit{TfT} is \textit{not} the best strategy(even if we admit that such a strategy exists), but is the best strategy in some particular tournaments. Even though, surely, \textit{TfT} is one of the best strategies that helps to maximize the score.
 % todo: explain why TfT is the best in our case
 
 Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating boxplots. There is no doubt about who wins the match \textbf{with the specified population as initial parameter}.
@@ -522,12 +525,23 @@ It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behavi
 We finally also made another step further by allowing players to change their strategies in the rIPDMP setup, of which the main structure is unaltered. The change of strategy is again based on players' ranking: a strategy that gives good results is enhanced and a bad strategy leads to a change towards the ``opposite'' direction.
 \textbf{Left loose on purpose because of the todo in change_strategy calling for review. Will be more detailed}
 
+
+\section{Adding Machine Learning}
+\textbf{ADD THIS IN THE INTRODUCTION}
+Since the birth of this subject studies have been developed to help us find an insight that may be lay under the problem, some pattern that we could not figure out. \textbf{CITE PAPER FROM 60s}
+\textbf{Go on}
+
+
 \section{Conclusions} \label{s:conc}
 \textbf{TODO some conclusion to blend with introduction}
 
 This work can easily be extended in many ways in a future development: for example, a lot of new and more complex strategies were created since the original tournaments made by Axelrod and these may be incorporated in the analysis aside of the present ones.
 Moreover, neural networks and artificial intelligence techniques can also be used to tackle this problem: for examples on the use of reinforcement learning approaches we refer the reader to \cite{plosRLdominant,coopSeqRL,kedaoRL} and to \cite{shashiEvoAlg} for an example using evolutionary algorithms.
 
+\textbf{THIS IS PASTED FROM A WEBSITE REWRITE!!!}
+When paired with a mindless strategy like RANDOM, TIT FOR TAT sinks to its opponent's level. For that reason, TIT FOR TAT cannot be called a "best" strategy.
+
+It must be realized that there really is no "best" strategy for prisoner's dilemma. Each individual strategy will work best when matched against a "worse" strategy. In order to win, a player must figure out his opponent's strategy and then pick a strategy that is best suited for the situation.
 \balance
 \bibliographystyle{IEEEtran}
 \bibliography{report}
