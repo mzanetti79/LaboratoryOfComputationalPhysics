@@ -1,12 +1,12 @@
-from ipdmp import IPDRoundRobin
 from strategy import *
 from base_options import *
+from ipdmp import IPDRoundRobin
 
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
-    opt = BaseOptions().parse(type=BaseOptions.cipdmp)
+    opt = BaseOptions().parse(BaseOptions.CIPDMP)
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay

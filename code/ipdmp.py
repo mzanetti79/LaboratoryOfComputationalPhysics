@@ -75,7 +75,7 @@ def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
     
-    opt = BaseOptions().parse(type=BaseOptions.ipdmp)
+    opt = BaseOptions().parse(BaseOptions.IPDMP)
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay

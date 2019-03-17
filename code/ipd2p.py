@@ -3,7 +3,7 @@ from base_options import *
 
 def main():
     np.random.seed(100)
-    opt = BaseOptions().parse(type=BaseOptions.ipd2p)
+    opt = BaseOptions().parse(BaseOptions.IPD2P)
 	
     SAVE_IMG = opt.saveimg
 
