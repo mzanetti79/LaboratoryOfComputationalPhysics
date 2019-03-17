@@ -31,8 +31,8 @@ def main():
 
             # repeat the match to get some statistics (mean and std)
             cum_results = { k1:[], k2:[] }
-            hope = {k1:[], k2:[]}
             yields = {k1:[], k2:[]}
+            achieves = {k1:[], k2:[]}
             for _ in range(NUM_REPETITIONS):
                 p1.clear_history()
                 p2.clear_history()
@@ -42,24 +42,27 @@ def main():
                 rew2 = np.cumsum(p2.payoffHist)
                 yield1 = np.cumsum(p1.bestGivenOther)
                 yield2 = np.cumsum(p2.bestGivenOther)
+                best1 = np.cumsum(p1.bestAch)
+                best2 = np.cumsum(p2.bestAch)
                 
                 cum_results[k1].append(rew1[-1])
                 cum_results[k2].append(rew2[-1])
                 yields[k1].append(rew1[-1]/yield1[-1])
                 yields[k2].append(rew2[-1]/yield2[-1])
+                achieves[k1].append(rew1[-1]/best1[-1])
+                achieves[k2].append(rew2[-1]/best2[-1])
                 
             # table
             df = pd.DataFrame(
                 [[p1.s, p2.s, 
                 np.mean(cum_results[k1]), np.std(cum_results[k1]), 
-                np.mean(yields[k1])*100, 
+                np.mean(yields[k1])*100, np.mean(achieves[k1])*100,
                 np.mean(cum_results[k2]), np.std(cum_results[k2]),
-                np.mean(yields[k2])*100]],
-                columns=['p1','p2','p1-avg','p1-std', 'p1-yeild', 
-                         'p2-avg', 'p2-std','p2-yield']
+                np.mean(yields[k2])*100, np.mean(achieves[k2])*100]],
+                columns=['p1','p2','p1-avg','p1-std', 'p1-yeild', 'p1-achieves',
+                         'p2-avg', 'p2-std','p2-yield', 'p2-achieves']
             )
             matches_df = matches_df.append(df)
-            
 
             # boxplots for 100 matches -> A vs B
             plt.boxplot([cum_results[k1], cum_results[k2]])

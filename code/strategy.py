@@ -93,10 +93,12 @@ class Player(object):
             self.playedHist.append(action2)
             #COOP = 0 DEFECT = 1
             self.bestGivenOther.append(1 if action1 else 5)
+            self.bestAch.append(5 if action2 else 3)
         else:
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
             self.bestGivenOther.append(1 if action2 else 5)
+            self.bestAch.append(5 if action1 else 3)
 
     def get_strategy(self, k):
         """Gets the strategy object given the id."""
@@ -114,6 +116,7 @@ class Player(object):
         self.payoffHist = []
         self.playedHist = []
         self.bestGivenOther = []
+        self.bestAch = []
 
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
@@ -255,7 +258,7 @@ class TitForTat(Strategy):
 
     def get(self, last_move=None):
         if last_move == None:
-            return 
+            return COOPERATE
         # first time
         return last_move # repeat past opponent move
 
