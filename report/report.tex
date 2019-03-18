@@ -70,17 +70,18 @@
 %%%%%%%%%%
 
 \begin{abstract}
-The popular Iterated Prisoner's Dilemma game is analyzed in different scenarios: (i) the classic version between two players, (ii) a generalization to multiple players, (iii) allowing the population of players to evolve in the previous setup, and (iv) also allowing players' strategies to randomly change between rounds, according to a gene representing the grade of cooperation. % (a Nature choice, in Game Theory terms).
-Statistics of rounds are collected to have an insight on what strategy is the best, if there is an absolute winner, and what is the evolution and the players' score of each scenario.
+% matching = accoppiamento
+In this work the popular Iterated Prisoner's Dilemma game is analyzed in different matching scenarios: (i) the classical version between two players, (ii) a generalization of the classical version between multiple players, (iii) an extensions of (ii) allowing the population of players to evolve or (iv) allowing players' strategies to randomly change between rounds, according to a gene representing the grade of cooperation. % (a Nature choice, in Game Theory terms).
+Rounds' statistics are collected to have an insight on which is the best strategy, if there is an absolute winner, which is the evolution and which is the players' score of each scenario.
 \end{abstract}
 
 \section{Introduction} \label{s:intro}
-The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory which attempts to model social and economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance. The game is based on a player that has to make a decision whether to cooperate or not with its opponent. As we will see shortly, if the intuition tells us that the best choice is to \textit{cooperate}, the only win-ever strategy in a one-shot game is to \textit{not} cooperate (\textit{defect}).
+The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory which attempts to model social and economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human society or in general in animal society, it fails badly at a first glance. The game is based on a player that has to make a decision on whether to cooperate or not with its opponent. As we will see shortly, if the intuition tells us that the best choice is to \textit{cooperate}, the only win-ever strategy in a one-shot game is to \textit{not} cooperate (\textit{defect}).
 
 The rest of the paper is organized as follows.
 \autoref{s:game} gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem and on its iterated version, then a base structure that will be used in the remaining of the study is defined.
 In \autoref{s:str} we illustrate the possible strategies that have been implemented, while in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] we explore the results of the simulations for each study-case.
-At the end, in \autoref{s:conc}, some final considerations concluding the analysis are presented.
+At the end, in \autoref{s:conc}, some final considerations summarizing the analysis are presented.
 
 All the code, developed in \textit{Python 3}, is available on \href{https://github.com/eliabntt/LaboratoryOfComputationalPhysics/tree/Group9}{GitHub}.
 
@@ -107,11 +108,11 @@ where $T$ (Temptation), $R$ (Reward), $S$ (``Sucker's''), $P$ (Punishment) are i
 $$
 T>R>P>S; \quad 2R > T+S 
 $$
-For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=1$, $S=0$, the default for all our experiments. 
+For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=1$, $S=0$, the default for all our experiments.
 
-$R$ is returned for both players if they both cooperate, $P$ if they both defect; if the two players' actions differ, $S$ is for the player who cooperated and $T$ is for the defector.
+$R$ is returned for both players if they both cooperate, $P$ if they both defect; if the two players' actions differ, $S$ is for the player who cooperated and $T$ is for who defected.
 
-Equivalently, each player's choice (move or action) for a single round can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first coordinate stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
+Equivalently, each player's choice (move or action) for a single round can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first axis stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
 
 $$
 r_1 = u_1^T M u_2
@@ -122,16 +123,16 @@ $$
 
 For a single-shot game, that is, a game which is played only once, the best strategy (choice of action) may seem for both players to cooperate. If both players cooperate, this leads to a good payoff which maximizes the global outcome, evaluated as the sum of the payoffs for each of them. This is indeed the \textit{Pareto dominating strategy}.
 
-However if a player cooperates, he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this statement is valid for both players. 
+However if a player cooperates, he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this statement is true for both players. 
 Given the fact that both players are rational and fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of acting is to defect as this would lead to a slightly lower payoff if the opponent defects (minor punishment) but a higher one if the other player chooses to cooperate.
 Following this, the only possible reasonable conclusion is that the only \textit{Nash Equilibrium}, or the only way to win this game in a single-shot scenario, is to always defect.
 This is not \textit{Pareto optimal} but playing cooperate, as we have just seen, is not feasible: the only strategy in which nobody wants to deviate is to defect, as also noted by Fogel~\cite{fogelEvolvingBehaviors}.
 
-This reasoning is no longer true when repeated games are considered and in particular the Iterated Prisoner Dilemma (IPD) since the IPD involves time and memory (history).
+This reasoning is no longer true if repeated games are considered. In particular this is the case of the multiplayer Iterated Prisoner Dilemma (IPD), since time and memory (history) must be considered.
 Colman supported this indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups.~\cite{yao1994experimental}
 In addition, strategies like random, grim triggers or Tit For (Two) Tat can be introduced.
-Also, for this game, but also for iterated games in general, the notions of Nash Equilibrium, Pareto optimality or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionarily stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies~\cite{mathieu2017}.
-Winning a game in this setup simply means to achieve a better payoff in the long run.
+Moreover, in this game, or more generally in iterated games, the notions of Nash Equilibrium, Pareto optimality or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionarily stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies~\cite{mathieu2017}.
+Winning a game in this setup simply means achieving a better payoff in the long run.
 %In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
 \section{Strategies} \label{s:str}
@@ -311,7 +312,7 @@ The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, c
 
 Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole tournament. Nobody knows the strategies of the other players.
 
-In short, it is a variation of the previous case, in which multiple players, with possibly different strategies, play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it he has the highest cumulative payoff.
+In short, it is a variation of the previous case, in which multiple players, with possibly different strategies, play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it, he has the highest cumulative payoff.
 
 Tournament statistics, like points and counts of cooperation and defection moves, along with the percentage of cooperation, are shown in \autoref{tab:ipdmp}.
 
@@ -423,11 +424,11 @@ The results of the tournament (and of the following study-cases) depend on the i
 These outcomes may also be found in~\cite{mathieu2017}.
 
 \textbf{ADD FIGURE of 8 players}
-We can easily see that in a 8 players game (Figure \ref{fig:}) the best strategy overall is the \textit{Bad} one. We link this behaviour to a subtle balance between ``good'' and ``bad'' strategies: since \textit{TfT} as we have already seen is a reactive strategy to win a tournament it should be coupled with enough (mainly)good players otherwise the bad one will easily overcome and win the tournament. In the end we found out after various tries that a good setup is where we have more ``good'' strategies with respect to the bad ones to have a \textit{TfT} winner. We could not found this consideration in the literature, but we believe that is important and worth noticing even if this can be easily explained by the game's instrinsics. Notice this would help to interpret results and give them the right meaning. \textit{TfT} is \textit{not} the best strategy(even if we admit that such a strategy exists), but is the best strategy in some particular tournaments. Even though, surely, \textit{TfT} is one of the best strategies that helps to maximize the score.
+It is noticed that in an 8 players game (Figure \ref{fig:}) the best overall strategy is \textit{Bad guy}. This behaviour is linked to a subtle balance between ``good'' and ``bad'' strategies. As pointed out previously, \textit{TfT} is a reactive strategy to win a tournament and it should be coupled with enough (mainly) good players, otherwise the bad players will easily overcome and win the tournament. In the end, after various tries, we found out that a good setup includes more ``good'' strategies with respect to the ``bad'' strategies in order to have a \textit{TfT} winner. This consideration is not available in literature but it is important and worth noticing it, although it can be explained by the game's instrinsics. This statement helps to interpret results and assign them the right meaning. \textit{TfT} is considered one of the best strategies to win the tournament since it surely is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases that depend on the initial population.
 % todo: explain why TfT is the best in our case
 
-Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating boxplots. 
-Since we have introduced the random strategies, the result of a one-shot complete game may differ with respect to the average results; a simple example of this is the 8 players game where on average the \textit{Bad} guy wins but there may be runs where the \textit{GrT} strategy wins (as evidenced in \autoref{fig: da8}) 
+In each tournament, variations of the results can be obtained by running the simulations multiple times and generating boxplots.
+Since we have introduced the random strategies, the result of a one-shot complete game may differ with respect to the average results; a simple example of this is the 8 players game where on average the \textit{Bad} guy wins but there may be runs where the \textit{GrT} strategy wins (as evidenced in \autoref{fig: da8}).
 % todo: say something about the specified population and who wins
 
 \section{Repeated multiple players IPD - RR scheme} \label{s:rIPDMP}
@@ -481,23 +482,23 @@ We can easily see how the \textit{TfT} strategy outpaces the others in a fast wa
 \end{table*}
 
 \subsection{Increasing Population}
-In this case the number of players (population) is increased at each iteration. We implemented three different way of modifying the population between rounds; after each round a player has a certain probability based on his ranking to have a child of the same type:
+In this case the number of players (population) is increased at each iteration. We implemented three different ways of adding population between rounds; after each round a player has a certain probability based on his ranking to have a child of the same type:
 \begin{enumerate}
     \item The probability is $p(i)=1- i\ /\ num\_players$ where $i$ is the position reached by the player. The winner of the round is indeed doubled, because $p(0)=1$, while the looser is not, as $p(last)=0$.
-    For each player we draw a random number, accordingly to a uniform probability distribution, and compare it with $p(i)$, if it is greater we effectively double it, otherwise we do not.
-    \item We draw a random number $d$ and split the rank-ordered population in three sets of equal size $A,B,C$. The player is doubled if:
+    For each player a random number is drawn, accordingly to a uniform probability distribution, and compared with $p(i)$. If $p(i)$ is greater than the random number the population is effectively doubled, otherwise not.
+    \item A random number $d$ is drawn and it splits the rank-ordered population in three sets of equal size $A,B,C$. The player's strategy population is doubled if:
     \begin{itemize}
         \item $d>0.2$ if the player belongs to $A$
         \item $d>0.5$ if the player belongs to $B$
         \item $d>0.8$ if the player belongs to $C$
     \end{itemize}
     This is an alternative way to promote best strategies and obstruct less performant players.
-    \item We define a player's score as its obtained points divided by the maximum obtained score in the whole population. We double the player if a drawn random number is greater than its score.
+    \item A player's score is defined as its obtained points divided by the maximum obtained score in the whole population. The player's strategy population is doubled if a drawn random number is greater than its score.
 \end{enumerate}
 
-We used by default the first of the three proposed methods, but the method may be statically set using the \texttt{ALTERNATIVE} variable.
+In our software, by default, the first of the three proposed methods is used. Other methods can be set using the \texttt{ALTERNATIVE} variable.
 
-Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iteration. In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
+Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iterations. In this case we do not have convergence at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
 
 \begin{figure}[!ht]
     \centering
@@ -544,10 +545,10 @@ Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] sho
     \end{tabular}
 \end{table}
 
-It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's defections go unpunished) or contrition (avoid responding to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note however that we do not implement these two variations of the \textit{TfT} strategy in this work.
+It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's defections go unpunished) or contrition (avoid responding to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note, however, that in this work these two variations of the \textit{TfT} strategy are not implemented.
 
 \section{Changing rMPIPD - RR scheme} \label{s:crIPDMP}
-We finally also made another step further by allowing players to change their strategies in the rIPDMP setup, of which the main structure is unaltered. The change of strategy is again based on players' ranking: a strategy that gives good results is enhanced and a bad strategy leads to a change towards the ``opposite'' direction.
+We made a step further by allowing players to change their strategies in the rIPDMP setup, from which the main structure is unaltered. The change of strategy is again based on players' ranking: a strategy that gives good results is enhanced and a bad strategy leads to a change towards the ``opposite'' direction.
 \textbf{Left loose on purpose because of the todo in change_strategy calling for review. Will be more detailed}
 
 \section{Adding Machine Learning}
@@ -561,14 +562,13 @@ Moreover, neural networks and artificial intelligence techniques can also be use
 
 \section{Conclusions} \label{s:conc}
 \textbf{TODO some conclusion to blend with introduction}
-This work can easily be extended in many ways in a future development: for example, a lot of new and more complex strategies were created since the original tournaments made by Axelrod and these may be incorporated in the analysis aside of the present ones.
-Moreover, we could try to investigate further in getting a good metric to use with reinforcement learning. \textbf{rewrite after paper reading}
+This work can easily be extended in many ways in a future development: for example, a lot of new and more complex strategies were created since the original tournaments made by Axelrod and these may be incorporated in the analysis aside of the available ones.
+Moreover, we could further investigate to get a good metric to be used for reinforcement learning. \textbf{rewrite after paper reading}
 
-\textbf{THIS IS PASTED FROM A WEBSITE REWRITE!!!}
-When paired with a mindless strategy like RANDOM, TIT FOR TAT sinks to its opponent's level. For that reason, TIT FOR TAT cannot be called a ``best'' strategy.
-\textbf{TfT non punta a vincere le battaglie ma la guerra}
+\textbf{TODO: PLACE IN THE CORRECT POSITION}
+When paired with a mindless strategy like probability strategies, \textit{TfT} sinks to its opponent's level. For this reason, \textit{TfT} isn't the ``best'' strategy. In addition \textit{TfT} aims at winning the whole tournament and not single rounds.
 
-It must be realized that there really is no ``best'' strategy for prisoner's dilemma. Each individual strategy will work best when matched against a ``worst'' strategy. In order to win, a player must figure out his opponent's strategy and then pick a strategy that is best suited for the situation.
+It must be pointed out that there is no ``best'' strategy for prisoner's dilemma. Each individual strategy will work better when matched against a ``worse'' strategy. In order to win, a player must figure out his opponent's strategy and then pick a strategy that is best suited for the situation.
 
 \balance
 \bibliographystyle{IEEEtran}
