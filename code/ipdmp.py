@@ -25,7 +25,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
 
             yields[p1].append(rew1[-1]/yield1[-1])
             yields[p2].append(rew2[-1]/yield2[-1])
-            
+
             if plot:
                 p[p1] += rew1
                 p[p2] += rew2
@@ -68,13 +68,13 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
 
     players = np.array(ranking_df.sort_values(['points'], ascending=False)['rrp'])
     ranking_df = ranking_df.drop(columns=['rrp']).reset_index(drop=True)
-    
+
     return players, ranking_df, matches_df
 
 def main():
     np.random.seed(100)
     pd.set_option('display.max_columns', None)
-    
+
     opt = BaseOptions().parse(BaseOptions.IPDMP)
     SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
@@ -82,7 +82,7 @@ def main():
     NUM_REPETITIONS = opt.nrep
     FIXED = opt.fixed
     LATEX = opt.latex
-	
+
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define k for strategy probabilities
@@ -112,11 +112,12 @@ def main():
     group_df['yield'] = repeated_ranking_df['yield'][:NUM_PLAYERS]
     group_df = group_df[['str','points_mean','points_std','yield',
         'coop_count_mean','coop_count_std','defect_count_mean','defect_count_std','coop_perc']] # column reordering
+    group_df = group_df.sort_values(by=['points_mean'], ascending=False)
     if LATEX:
         print(group_df.to_latex(index=False))
     else:
         print(group_df)
-    
+
     # box plot of last match
     one_round_results = [p.results for p in players]
     one_round = pd.DataFrame(one_round_results).T
