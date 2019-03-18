@@ -78,7 +78,7 @@ Statistics of rounds are collected to have an insight on what strategy is the be
 The Prisoner's Dilemma (PD) is a classical game analyzed in Game Theory which attempts to model social and economical interactions. It is a \textit{dilemma} because, if exploited to explain the emergence of altruism in human or in general in animal society, it fails badly at a first glance. The game is based on a player that has to make a decision whether to cooperate or not with its opponent. As we will see shortly, if the intuition tells us that the best choice is to \textit{cooperate}, the only win-ever strategy in a one-shot game is to \textit{not} cooperate (\textit{defect}).
 
 The rest of the paper is organized as follows.
-First, \autoref{s:game} gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem and on its iterated version, then a base structure that will be used in the remaining of the study is defined.
+\autoref{s:game} gives a theoretical and mathematical introduction on the Prisoner's Dilemma problem and on its iterated version, then a base structure that will be used in the remaining of the study is defined.
 In \autoref{s:str} we illustrate the possible strategies that have been implemented, while in Sections [\ref{s:IPD2P}, \ref{s:IPDMP}, \ref{s:rIPDMP}, \ref{s:crIPDMP}] we explore the results of the simulations for each study-case.
 At the end, in \autoref{s:conc}, some final considerations concluding the analysis are presented.
 
@@ -107,7 +107,7 @@ where $T$ (Temptation), $R$ (Reward), $S$ (``Sucker's''), $P$ (Punishment) are i
 $$
 T>R>P>S; \quad 2R > T+S 
 $$
-For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=2$, $S=0$. 
+For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=1$, $S=0$, the default for all our experiments. 
 
 $R$ is returned for both players if they both cooperate, $P$ if they both defect; if the two players' actions differ, $S$ is for the player who cooperated and $T$ is for the defector.
 
@@ -120,7 +120,7 @@ r_1 = u_1^T M u_2
 r_2 = u_2^T M u_1
 $$
 
-For a single-shot game, that is a game which is played only once, the best strategy (choice of action) may seem for both players to cooperate. If both players cooperate, this leads to a good payoff which maximizes the global outcome, evaluated as the sum of the payoffs for each of them. This is indeed the \textit{Pareto dominating strategy}.
+For a single-shot game, that is, a game which is played only once, the best strategy (choice of action) may seem for both players to cooperate. If both players cooperate, this leads to a good payoff which maximizes the global outcome, evaluated as the sum of the payoffs for each of them. This is indeed the \textit{Pareto dominating strategy}.
 
 However if a player cooperates, he has an incentive to deviate from his choice and so to betray the other player and defect as this leads to a better payoff for himself, and this statement is valid for both players. 
 Given the fact that both players are rational and fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms) and that they move simultaneously, both of them will easily conclude that the best way of acting is to defect as this would lead to a slightly lower payoff if the opponent defects (minor punishment) but a higher one if the other player chooses to cooperate.
@@ -285,7 +285,7 @@ Or, in other words, \textit{TfT} is robust because it never defects first and ne
 The strategy was proposed to him by Anatol Rapoport.
 A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more interesting in the following sections.
 
-In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}. Anyway this does not imply that \textit{TitForTat} could ever win against such a strategy, it is only pointing out that there is a variation on subsequent runs based on the randomness of at least one of the two players: the \textit{TfT} strategy is a reactive strategy so it will be always "late", meaning that a player applying it will have always at most the same points of the opponent at the end of the game.
+In addition to these considerations simulations were performed multiple times to get insights of the mean and variance of the rewards that rule these games. Obviously the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the the ones without variations have a constant mean and $0$ std. On the other hand, it is interesting to notice that random strategies have a non null variance as shown in \textit{Mainly Bad-TitForTat}, \autoref{fig:boxmbvtft}. Anyway this does not imply that \textit{TitForTat} could ever win against such a strategy, it is only pointing out that there is a variation on subsequent runs based on the randomness of at least one of the two players: the \textit{TfT} strategy is a reactive strategy so it will be always ``late'', meaning that a player applying it will have always at most the same points of the opponent at the end of the game.
 
 \begin{figure}[!ht]
     \centering
@@ -303,7 +303,8 @@ In addition to these considerations simulations were performed multiple times to
 
 More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in \autoref{tab:ipd2p}, where collected statistics are presented\footnote{~For compactness, strategies in the tables of this paper are abbreviated with their short names. The $k$ value, if needed, is in parenthesis.}. Furthermore, we can see that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 
-In the end, it is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy it is necessary to defect at the first round, to play optimally against \textit{GrT} it is necessary to cooperate.~\cite{mathieu2017} One should know in advance the type of the player he is facing and adapt his strategy but this is not possible due to the rules of the game. 
+In the end, it is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy it is necessary to defect at the first round, to play optimally against \textit{GrT} it is necessary to cooperate until the last round where you should defect.~\cite{mathieu2017}
+But the number of rounds is unknown to the players and they should know in advance the type of the opponent: this would allow them to adapt their strategy, but this is not possible based on the rules of the game. 
 
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a \texttt{NUM\_ITER = 50} of times.
@@ -374,6 +375,29 @@ Tournament statistics, like points and counts of cooperation and defection moves
     \end{tabular}
 \end{table}
 
+% python ipdmp.py --saveimg --nplay 8 --latex
+\textbf{REPLACE TABLES, UNSORTED}
+\begin{table}[ht]
+    \caption{8-players IPD, sorted by points, statistics}
+    \label{tab:ipdmp8}
+    \centering
+	\begin{tabular}{lrrrrrrrr}
+		\toprule
+		         & \multicolumn{2}{c}{Points} &        & \multicolumn{2}{c}{Coop. count} & \multicolumn{2}{c}{Defect count} &        \\
+		Strategy &   avg &                std &  yield &   avg &                     std &   avg &                      std &   C \% \\
+		\midrule
+		Bad      & 874.0 &              29.51 & 100.00 &   0.0 &                    0.00 & 350.0 &                     0.00 &   0.00 \\
+		Tf2T     & 680.5 &              16.99 &  71.16 & 213.5 &                    9.11 & 136.5 &                     9.11 &  61.00 \\
+		GrT      & 850.3 &              31.69 &  98.28 &   7.0 &                    0.00 & 343.0 &                     0.00 &   2.00 \\
+		Ind      & 740.6 &              15.43 &  68.23 & 175.9 &                    5.43 & 174.1 &                     5.43 &  50.26 \\
+		MN (27)  & 671.3 &              16.29 &  54.68 & 256.8 &                    8.98 &  93.2 &                     8.98 &  73.37 \\
+		TfT      & 729.8 &              11.55 &  77.10 & 178.9 &                    5.59 & 171.1 &                     5.59 &  51.11 \\
+		MB (72)  & 818.1 &              31.31 &  80.80 &  95.0 &                    6.46 & 255.0 &                     6.46 &  27.14 \\
+		Nice     & 528.3 &              19.67 &  39.70 & 350.0 &                    0.00 &   0.0 &                     0.00 & 100.00 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-evolution-of-game-50}
@@ -398,11 +422,12 @@ Tournament statistics, like points and counts of cooperation and defection moves
 The results of the tournament (and of the following study-cases) depend on the initial population and the balance between the amount of \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one.
 These outcomes may also be found in~\cite{mathieu2017}.
 
-\textbf{ADD FIGURE}
-We can easily see that in a 20 players game(Figure \ref{fig:}) the best strategy overall is the \textit{Bad} one. We link this behaviour to a subtle balance between "good" and "bad" strategies: since \textit{TfT} as we have already seen is a reactive strategy to win a tournament it should be coupled with enough (mainly)good players otherwise the bad one will easily overcome. We could not found this consideration in the scientific community, but we believe that is important and worth noticing even if this can be easily explained by the game's instrinsics. Notice this would help to interpret results and give them the right meaning. \textit{TfT} is \textit{not} the best strategy(even if we admit that such a strategy exists), but is the best strategy in some particular tournaments. Even though, surely, \textit{TfT} is one of the best strategies that helps to maximize the score.
+\textbf{ADD FIGURE of 8 players}
+We can easily see that in a 8 players game (Figure \ref{fig:}) the best strategy overall is the \textit{Bad} one. We link this behaviour to a subtle balance between ``good'' and ``bad'' strategies: since \textit{TfT} as we have already seen is a reactive strategy to win a tournament it should be coupled with enough (mainly)good players otherwise the bad one will easily overcome and win the tournament. In the end we found out after various tries that a good setup is where we have more ``good'' strategies with respect to the bad ones to have a \textit{TfT} winner. We could not found this consideration in the literature, but we believe that is important and worth noticing even if this can be easily explained by the game's instrinsics. Notice this would help to interpret results and give them the right meaning. \textit{TfT} is \textit{not} the best strategy(even if we admit that such a strategy exists), but is the best strategy in some particular tournaments. Even though, surely, \textit{TfT} is one of the best strategies that helps to maximize the score.
 % todo: explain why TfT is the best in our case
 
-Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating boxplots. There is no doubt about who wins the match \textbf{with the specified population as initial parameter}.
+Similarly to what was pointed out previously, we can see variations of the results obtained by running the simulations multiple times and generating boxplots. 
+Since we have introduced the random strategies, the result of a one-shot complete game may differ with respect to the average results; a simple example of this is the 8 players game where on average the \textit{Bad} guy wins but there may be runs where the \textit{GrT} strategy wins (as evidenced in \autoref{fig: da8}) 
 % todo: say something about the specified population and who wins
 
 \section{Repeated multiple players IPD - RR scheme} \label{s:rIPDMP}
@@ -525,23 +550,26 @@ It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behavi
 We finally also made another step further by allowing players to change their strategies in the rIPDMP setup, of which the main structure is unaltered. The change of strategy is again based on players' ranking: a strategy that gives good results is enhanced and a bad strategy leads to a change towards the ``opposite'' direction.
 \textbf{Left loose on purpose because of the todo in change_strategy calling for review. Will be more detailed}
 
-
 \section{Adding Machine Learning}
 \textbf{ADD THIS IN THE INTRODUCTION}
 Since the birth of this subject studies have been developed to help us find an insight that may be lay under the problem, some pattern that we could not figure out. \textbf{CITE PAPER FROM 60s}
+
+Moreover, neural networks and artificial intelligence techniques can also be used to tackle this problem: for examples on the use of reinforcement learning approaches we refer the reader to \cite{sandholmRL,plosRLdominant,coopSeqRL,kedaoRL} and to \cite{shashiEvoAlg} for an example using evolutionary algorithms.
+
 \textbf{Go on}
 
 
 \section{Conclusions} \label{s:conc}
 \textbf{TODO some conclusion to blend with introduction}
-
 This work can easily be extended in many ways in a future development: for example, a lot of new and more complex strategies were created since the original tournaments made by Axelrod and these may be incorporated in the analysis aside of the present ones.
-Moreover, neural networks and artificial intelligence techniques can also be used to tackle this problem: for examples on the use of reinforcement learning approaches we refer the reader to \cite{plosRLdominant,coopSeqRL,kedaoRL} and to \cite{shashiEvoAlg} for an example using evolutionary algorithms.
+Moreover, we could try to investigate further in getting a good metric to use with reinforcement learning. \textbf{rewrite after paper reading}
 
 \textbf{THIS IS PASTED FROM A WEBSITE REWRITE!!!}
-When paired with a mindless strategy like RANDOM, TIT FOR TAT sinks to its opponent's level. For that reason, TIT FOR TAT cannot be called a "best" strategy.
+When paired with a mindless strategy like RANDOM, TIT FOR TAT sinks to its opponent's level. For that reason, TIT FOR TAT cannot be called a ``best'' strategy.
+\textbf{TfT non punta a vincere le battaglie ma la guerra}
 
-It must be realized that there really is no "best" strategy for prisoner's dilemma. Each individual strategy will work best when matched against a "worse" strategy. In order to win, a player must figure out his opponent's strategy and then pick a strategy that is best suited for the situation.
+It must be realized that there really is no ``best'' strategy for prisoner's dilemma. Each individual strategy will work best when matched against a ``worst'' strategy. In order to win, a player must figure out his opponent's strategy and then pick a strategy that is best suited for the situation.
+
 \balance
 \bibliographystyle{IEEEtran}
 \bibliography{report}
