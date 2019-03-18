@@ -19,12 +19,12 @@ class BaseOptions():
             parser.add_argument('--nrep',  type=int, default=10, help='number of repetitions of the game')
         elif case > BaseOptions.IPDMP:
             #TODO CHECK HERE WHAT IS NECESSARY for cripdmp
-            parser.add_argument('--maxrep', type=int, default=10, help='max number of allowed repetitions')
+            parser.add_argument('--maxrep', type=int, default=(5 if case==BaseOptions.RIPDMP_I else 10), help='max number of allowed repetitions')
             parser.add_argument('--percent', type=float, default=0.3, help='percentage of the population to be considered [if applicable]')
             if case == BaseOptions.RIPDMP_I or case == BaseOptions.CIPDMP:
-                parser.add_argument('--altern', type=int, default=1, help='method to be used when changing population (details in the report)')	
+                parser.add_argument('--altern', type=int, default=1, help='method to be used when changing population [details in the report]')	
 
-        parser.add_argument('--fixed',   action='store_true', default=False, help='fix Mainly bad/good probabilities to 75/25%')
+        parser.add_argument('--fixed',   action='store_true', default=False, help='fix Mainly bad/good probabilities to 0.75/0.25')
         parser.add_argument('--saveimg', action='store_true', default=False, help='save output images instead of showing them')
         parser.add_argument('--latex',   action='store_true', default=False, help='output dataframes as latex code')
 

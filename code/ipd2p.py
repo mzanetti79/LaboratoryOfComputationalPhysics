@@ -69,7 +69,7 @@ def main():
             plt.boxplot([cum_results[k1], cum_results[k2]])
             plt.xticks([1, 2], [p1.s, p2.s])
             plt.ylabel('Reward')
-            plt.title("Meand and std for {} iterations".format(NUM_REPETITIONS))
+            plt.title("Means and std for {} iterations".format(NUM_REPETITIONS))
             if SAVE_IMG:
                 plt.savefig('../img/ipd2p/ipd2p-boxplot-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
                 plt.close()

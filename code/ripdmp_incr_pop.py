@@ -22,15 +22,14 @@ def main():
 
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=FIXED) 
 
-    NUM_REPETITIONS = 0
-    MAX_ALLOWED = 7
-    repeated_players = []
-    # strategies evolution
+    repeated_players = [] # strategies evolution
     unique, counts = np.unique(k_strategies, return_counts=True)
     strategies_df = pd.DataFrame([counts],columns=unique)
 
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
+        print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, k_strategies.size))
+
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
