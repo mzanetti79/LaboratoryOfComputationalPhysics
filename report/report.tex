@@ -171,7 +171,6 @@ Since we are not concerned about population in this study-case (which is a singl
 In fact in all scenarios, \textit{Bad guy} has a higher reward than the opponent as in Figures~[\ref{fig:badvstft},\ref{fig:badvsnice},\ref{fig:badvsmainlybad}]. 
 On the other hand, when \textit{Bad guy} plays against \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against \textit{Mainly bad} (\autoref{fig:badvsmainlybad}), this leads to the same cumulative reward for both players or almost the same respectively. The obtained reward is not as good as if players were playing against (mainly) nice strategies. This is a first important insight that verifies and points out what has been seen from a theoretical point of view earlier: defect is always a winning strategy, but it may be non-optimal; on the other hand, if both are cooperating, each of them would get an advantage if they defect against the other.
 
-
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/ipd2p/ipd2p-rewards-Bad-Bad}
@@ -267,6 +266,7 @@ Each player chooses its fixed strategy at the beginning of the tournament and ho
 In short, it is a variation of the previous case, in which multiple players, with possibly different strategies, play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it, he has the highest cumulative payoff.
 
 Tournament statistics, like points and counts of cooperation and defection moves, along with the percentage of cooperation, are shown in \autoref{tab:ipdmp50}.
+\textbf{add images from software and cite the \href{http://www2.econ.iastate.edu/tesfatsi/demos/axelrod/axelrodt.htm}{Axelrod Tournament Demo}}
 
 \begin{figure}[!ht]
     \centering
@@ -300,11 +300,11 @@ The results of the tournament (and of the following study-cases) depend on the i
 These outcomes may also be found in~\cite{mathieu2017}.
 
 It is noticed that in an 8 players game (Figure \ref{fig:boxIPDMPevo8}) the best overall strategy is \textit{Bad guy}. This behaviour is linked to a subtle balance between ``good'' and ``bad'' strategies. As pointed out previously, \textit{TfT} is a reactive strategy to win a tournament and it should be coupled with enough (mainly) good players, otherwise the bad players will easily overcome and win the tournament. In the end, after various tries, we found out that a good setup includes more ``good'' strategies with respect to the ``bad'' strategies in order to have a \textit{TfT} winner. This consideration is not available in literature but it is important and worth noticing it, although it can be explained by the game's instrinsics. This statement helps to interpret results and assign them the right meaning. \textit{TfT} is considered one of the best strategies to win the tournament since it surely is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases that depend on the initial population.
-% todo: explain why TfT is the best in our case
+\textbf{explain why TfT is the best in our case}
 
 In each tournament, variations of the results can be obtained by running the simulations multiple times and generating boxplots.
 Since we have introduced the random strategies, the result of a one-shot complete game may differ with respect to the average results; a simple example of this is the 8 players game where on average the \textit{Bad} guy wins but there may be runs where the \textit{GrT} strategy wins (as evidenced in \autoref{fig:boxIPDMPevo8}).
-% todo: say something about the specified population and who wins
+\textbf{say something about the specified population and who wins}
 
 \section{Repeated multiple players IPD - RR scheme} \label{s:rIPDMP}
 The previuosly defined MPIPD round-robin scheme tournament was iterated many times to collect more advanced statistics.
