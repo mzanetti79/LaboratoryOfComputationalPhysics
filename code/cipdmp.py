@@ -15,8 +15,8 @@ def main():
     FIXED = opt.fixed
     LATEX = opt.latex
 	
-#    ALTERNATIVE = opt.altern
-#    PERCENTAGE = opt.percent
+    ALTERNATIVE = opt.altern
+    # PERCENTAGE = opt.percent
 
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
@@ -49,7 +49,7 @@ def main():
         k_strategies = np.array(k_strategies)
         playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
         
-        players, c_b, c_g = MultiPlayer.change_strategy(players, FIXED)
+        players, c_b, c_g = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
         print("Changed {} players to a more cooperative behaviour.".format(c_g))
         print("Changed {} players to a less cooperative behaviour.".format(c_b))
         players = np.append(players, playersToAdd)
