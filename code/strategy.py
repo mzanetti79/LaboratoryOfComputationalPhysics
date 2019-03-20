@@ -136,18 +136,16 @@ class MultiPlayer(Player):
     @staticmethod
     def change_strategy(players, fixed, alternative):
         """Change the players' strategy randomly."""
+        #FIX: cooperativity order, if flags and choose between random/closest in altetnative 1
         c_b = c_g = 0
-	moreCoop = NICE
-	lessCoop = BAD
+        moreCoop = NICE
+        lessCoop = BAD
         # c in [0, 1] where
         # 0 means not cooperative, 1 means coperative
         if alternative == 1:
-            # TODO: this is a draft, not based on ranking
-            # TODO: change generatePlayers behaviour to more deterministic?
-	    # [EB] We can fix them for a static 10 players list with 1 random high, 1 random low, 1 for each other. If randomhigh/randomlow selected change just that one/ regenerate the list
+            # not based on ranking
             k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
             for i in range(len(players)):
-                # change c randomly
                 old_c = players[i].c
                 print("BEFORE s {}, c {}".format(players[i].s, players[i].c))
                 players[i].c = np.random.uniform(0,1)
@@ -156,29 +154,25 @@ class MultiPlayer(Player):
                 THRESHOLD = 0.1
                 if np.abs(old_c - players[i].c) > THRESHOLD:
                     # if new c is lower than the old one I am going to a less cooperative behaviour
-                    # TODO: change generatePlayers behaviour to more deterministic?
+                    # another idea is to get a strategy based on old_c - players[i].c
                     if old_c > players[i].c:
                         print("I am going to a less cooperative behaviour")
                         if players[i].s.id < lessCoop:
-                            # s_next = players[i].random_strategy(k_strategies)
-                            s_next = players[i].closest_strategy(k_strategies)
-                        if players[i].s.id < lessCoop:
-                            s_next = players[i].random_strategy(k_strategies)
                             c_b += 1
-                            while str(s_next) == str(players[i].s) or s_next.id < players[i].s.id:
-                                # s_next = players[i].random_strategy(k_strategies)
-                                s_next = players[i].closest_strategy(k_strategies)
+                            # s_next = players[i].closest_strategy(k_strategies)
+                            s_next = players[i].random_strategy(k_strategies)
+                            while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
+                                s_next = players[i].random_strategy(k_strategies)
                             players[i].s = s_next
                         print("After change of type I am {}\n\n".format(players[i].s))
                     else:
                         print("I am going to a more cooperative behaviour")
-                        if players[i].s.id != moreCoop:
-                            # s_next = players[i].random_strategy(k_strategies)
-                            s_next = players[i].closest_strategy(k_strategies, True)
+                        if players[i].s.id > GRT:
                             c_g += 1
-                            while str(s_next) == str(players[i].s) or s_next.id > players[i].s.id:
-                                # s_next = players[i].random_strategy(k_strategies)
-                                s_next = players[i].closest_strategy(k_strategies, True)
+                            # s_next = players[i].closest_strategy(k_strategies, True)
+                            s_next = players[i].random_strategy(k_strategies)
+                            while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
+                                s_next = players[i].random_strategy(k_strategies)
                             players[i].s = s_next
                         print("After change of type I am {}\n\n".format(players[i].s))
 
@@ -191,7 +185,7 @@ class MultiPlayer(Player):
                         players[i].c = (players[i].c + players[i].c**2)/2
                     else:
                         players[i].c = (players[i].c + players[i].c**0.5)/2
-                elif i > len(players)/2:
+                else:
                     if players[i].s.id > IND:
                         players[i].c = (players[i].c + players[i].c**0.5)/2
                     else:
@@ -203,8 +197,8 @@ class MultiPlayer(Player):
                     if np.random.uniform(0,1) > players[i].c:
                         print("I am going to a less cooperative behaviour")
                         if players[i].s.id < lessCoop:
-                            s_next = players[i].random_strategy(k_strategies)
                             c_b += 1
+                            s_next = players[i].random_strategy(k_strategies)
                             while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
                                 s_next = players[i].random_strategy(k_strategies)
                             players[i].s = s_next
@@ -212,8 +206,8 @@ class MultiPlayer(Player):
                     else:
                         print("I am going to a more cooperative behaviour")
                         if players[i].s.id != moreCoop:
-                            s_next = players[i].random_strategy(k_strategies)
                             c_g += 1
+                            s_next = players[i].random_strategy(k_strategies)
                             while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
                                 s_next = players[i].random_strategy(k_strategies)
                             players[i].s = s_next
@@ -221,24 +215,24 @@ class MultiPlayer(Player):
         return players, c_b, c_g
 
     def closest_strategy(self, k_list, coop = False):
-        """Generate deterministic strategy object to get the closest to the actual strategy."""
+        """Generate cloeset deterministic strategy object more or less cooperative based on flag than the actual strategy."""
+        # i.e. [34, 43, 100] given s.id=40, coop=False returns 43
+        # i.e. [34, 43, 100] given s.id=40, coop=True returns 34
         k_list = k_list[k_list != self.s.id] # remove strategies equal to the actual one
 
-        temp_k_list = k_list - self.s.id
-        maskP = temp_k_list > 0
-        maskN = temp_k_list < 0
+        maskP = k_list > self.s.id
+        maskN = k_list < self.s.id
 
-        temp_positive_k = temp_k_list[maskP]
         positive_k = k_list[maskP]
-
-        temp_negative_k = temp_k_list[maskN]
         negative_k = k_list[maskN]
         
         # lowest positive
-        if not coop:
-            return self.get_strategy(positive_k[temp_positive_k.argmin()])
+        if positive_k.size != 0 and not coop:
+            return self.get_strategy(positive_k[positive_k.argmin()])
         # largest negative
-        return self.get_strategy(negative_k[temp_negative_k.argmax()])
+        elif negative_k.size != 0 and coop:
+            return self.get_strategy(negative_k[negative_k.argmax()])
+        return self.s
 
     def random_strategy(self, k_list):
         """Generate random strategy object."""
