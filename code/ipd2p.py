@@ -55,16 +55,15 @@ def main():
                 
             # table
             df = pd.DataFrame(
-                [[p1.s, p2.s, 
+                [[str(p1.s), str(p2.s), 
                 np.mean(cum_results[k1]), np.std(cum_results[k1]), 
                 np.mean(yields[k1])*100, np.mean(achieves[k1])*100,
                 np.mean(cum_results[k2]), np.std(cum_results[k2]),
                 np.mean(yields[k2])*100, np.mean(achieves[k2])*100]],
-                columns=['p1','p2','p1-avg','p1-std', 'p1-yield', 'p1-achieves',
-                         'p2-avg', 'p2-std','p2-yield', 'p2-achieves']
+                columns=['p1','p2','p1-avg','p1-std','p1-yield','p1-achieve',
+                         'p2-avg','p2-std','p2-yield','p2-achieve']
             )
             matches_df = matches_df.append(df)
-
 
             # boxplots for 100 matches -> A vs B
             plt.boxplot([cum_results[k1], cum_results[k2]])
@@ -108,19 +107,30 @@ def main():
                 plt.close()
             else:
                 plt.show()
+    """
+    p1s = matches_df.groupby(['p1'],as_index=False)['p1','p1-yield','p1-achieve'].sum()
+    p2s = matches_df.groupby(['p2'],as_index=False)['p2','p2-yield','p2-achieve'].sum()
+    p2s = p2s.rename(index=str, columns={"p2": "p1","p2-yield": "p1-yield","p2-achieve": "p1-achieve"})
+    p = pd.merge(p1s, p2s, on=['p1']).set_index(['p1']).groupby(['p1']).sum(axis=1)
+    """
 
-#    p1s = matches_df.groupby(['p1'])['p1-yield','p1-achieve'].sum()
-#    p2s = matches_df.groupby(['p2'])['p2-yield','p2-achieve'].sum()
-#   p2s.rename(index=str, columns={"p2": "p1","p2-yield": "p1-yield","p2-achieve": "p1-achieve"})
-#    p = pd.merge(p1s, p2s, on=['p1']).set_index(['p1']).sum(axis=1)
-#    p.loc[:'p1-yield'] /= NUM_PLAYERS
-#    p.loc[:'p1-achieve'] /= NUM_PLAYERS
-
+    p1s = matches_df.groupby(['p1'],as_index=False)['p1','p1-yield','p1-achieve'].sum()
+    p2s = matches_df.groupby(['p2'],as_index=False)['p2','p2-yield','p2-achieve'].sum()
+    # manual merge - ugly but works
+    avg_df = p1s.copy()
+    avg_df[['p1-yield']] = p1s['p1-yield'] + p2s['p2-yield']
+    avg_df[['p1-achieve']] = p1s['p1-achieve'] + p2s['p2-achieve']
+    avg_df = avg_df.rename(index=str, columns={'p1':'player','p1-yield':'yield','p1-achieve':'achieve'})
+    avg_df['yield'] /= (NUM_PLAYERS+1)
+    avg_df['achieve'] /= (NUM_PLAYERS+1)
+    
     pd.set_option('precision', 2)
     if LATEX:
         print(matches_df.to_latex(index=False))
+        print(avg_df.to_latex(index=False))
     else:
         print(matches_df)
+        print(avg_df)
 
 if __name__ == "__main__":
     main()
