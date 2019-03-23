@@ -141,8 +141,8 @@ class MultiPlayer(Player):
         lessCoop = BAD
 		
 		#TODO choose which one
-	k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-	#k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
+        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
+        #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
             
         if alternative == 1:
             for i in range(len(players)):
@@ -163,10 +163,6 @@ class MultiPlayer(Player):
                             #     s_next = players[i].random_strategy(k_strategies)
                             players[i].s = players[i].random_trig_strategy(s_next)
                             print("After change of type I am {}\n\n".format(players[i].s))
-							
-			    #TODO CHOOSE WHICH ONE
-                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
                     else:
                         print("I am {} going to a more cooperative behaviour".format(players[i].s))
                         if players[i].s.id > moreCoop:
@@ -178,9 +174,9 @@ class MultiPlayer(Player):
                             players[i].s = players[i].random_trig_strategy(s_next)
                             print("After change of type I am {}\n\n".format(players[i].s))
 							
-                            #TODO CHOOSE WHICH ONE
-                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
+                    #TODO CHOOSE WHICH ONE
+                    k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
+                    #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
 
         elif alternative == 2:
             for i in range(len(players)):
@@ -215,9 +211,9 @@ class MultiPlayer(Player):
                             players[i].s = players[i].random_trig_strategy(s_next)
                             print("After change of type I am {}\n\n".format(players[i].s))
 						
-                #TODO CHOOSE WHICH ONE
-                k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-                #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
+                            #TODO CHOOSE WHICH ONE
+                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
+                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
                     else:
                         print("I am {} going to a more cooperative behaviour".format(players[i].s))
                         if players[i].s.id > moreCoop:
