@@ -133,7 +133,7 @@ This is not \textit{Pareto optimal} but playing cooperate, as it has just been s
 This reasoning is no longer true if repeated games are considered. In particular this is the case of the multiplayer Iterated Prisoner Dilemma (IPD), since time and memory (history) must be considered.
 Colman supported this indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups.~\cite{yao1994experimental}
 In addition, strategies like random, grim triggers or Tit For (Two) Tat can be introduced.
-Moreover, in this game, or more generally in iterated games, the notions of Nash Equilibrium, Pareto optimality or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionarily stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies. \cite{mathieu2017}
+Moreover, in this game, or more generally in iterated games, the notions of Nash Equilibrium, Pareto optimal or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionary stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies. \cite{mathieu2017}
 Winning a game in this setup simply means achieving a better payoff in the long run.
 %In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
@@ -157,16 +157,19 @@ The deterministic strategies are:
     \item[Grim-Trigger (GrT)] always cooperate until the opponent's first defect move, then always defect. 
 \end{description}
 
-The strategies are considered static in case they apply the same move at each iteration as in \textit{Nice guy}, \textit{Bad guy} and dinamic elsewhere.
+The strategies are considered static in case they apply the same move at each iteration as in \textit{Nice guy}, \textit{Bad guy} and dynamic elsewhere.
 These players' strategies are generally fixed in time, i.e. a player cannot change its strategy between rounds, unless specifically requested by the study case rules.% (for an example, see Section~\ref{s:crIPDMP}).
+Many more and much complicated strategy can be analyzed and our implementation is open and structured such that adding one would be easy and immediate changing just a couple of code lines.
 
 \section{Two players IPD} \label{s:IPD2P}
 In this section the IPD intercourse between two players is evaluated: each player has an assigned strategy, he is unaware of the opponent's strategy and he plays accordingly to his strategy definition without the possibility to change it. Both players know only their respective history of moves. Each game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is who wins, or in other words who achieves a higher payoff at the end of the round.
 
-The number of iterations was fixed to \texttt{NUM\_ITER = 50} and can be modified by the means of a simple option when launching the program. This could also be seen as the number of moves during the match, and is a factor which is unknown to the players: otherwise an optimal strategy for example against a player adopting the \textit{Nice}(or \textit{TfT}) strategy would be to cooperate in all but the last rounds, so gaining advantage from knowing the number of runs. The results do not depend on this value if using only deterministic strategies, instead it will influence slightly the random ones. Note that in every simulation we fix a \texttt{seed} value to have reproducible results as we are using pseudo-random generators.
+The number of iterations was fixed to \texttt{NUM\_ITER = 50} and can be modified by the means of a simple option when launching the program. This could also be seen as the number of moves during the match, and is a factor which is unknown to the players otherwise a smart player could adopt a supposed optimal strategy: for example against a player adopting the \textit{Nice}(or \textit{TfT}) strategy the best choice of action would be to cooperate in all but the last round, so gaining advantage from knowing the number of runs. 
+
+The results do not depend on this value if using only deterministic strategies, instead it will influence slightly the random ones. Note that in every simulation we fix a \texttt{seed} value to have reproducible results as we are using pseudo-random generators.
 \\
 
-All the possible combinations between players assigned to strategies presented in \autoref{s:str} are evaluated, including the case in which the player plays against itself (or, equivalently, a player with the same strategy).
+All the possible combinations between players assigned to strategies presented in \autoref{s:str} are evaluated, including the case in which the player plays against itself (or, equivalently, against a player with the same strategy).
 This is a simple repetition of the single-shot game with the addition of memory and the possibility to add probabilistic and more elaborated strategies, as it has already be seen.
 
 Since population is not a concern in this study-case (which is a single A vs B game), the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy, as expected.
@@ -267,7 +270,7 @@ The \textit{yield} metric backs up our claim that \textit{Bad} is the only win-a
 
 The \textit{achieve} column is a coupled metric, taking into account both player A and B. We notice once again that, ruling out the same-strategy couples, \textit{TfT, Tf2T} and \textit{GrT} strategies achieve results (almost)always comparable with the opponents, meaning they are at least as good as them.
 
-\textbf{DO THE AVERAGE FOR EACH KIND OF PLAYER FOR EACH METRIC(AKA BAD avg yield avg achieve)}
+\textbf{TODO THE AVERAGE FOR EACH KIND OF PLAYER FOR EACH METRIC(AKA BAD avg yield avg achieve)}
 
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a fixed \texttt{NUM\_ITER} of times (in our simulation this value is set to \texttt{50}).
