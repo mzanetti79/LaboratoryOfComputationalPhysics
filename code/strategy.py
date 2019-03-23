@@ -186,9 +186,9 @@ class MultiPlayer(Player):
             for i in range(len(players)):
                 #TODO CHOOSE
                 if players[i].s.id > IND: # I am BAD
-                    players[i].c = (players[i].c + i/len(players))/2 # If I am high in the chart I go more bad (0.1+0)/2 = 0.05, if I am low in the chart I go towards good  (0.1+1)/2 = 0.55
+                    players[i].c = (players[i].c + (i/len(players))**2)/2 # If I am high in the chart I go more bad (0.1+0)/2 = 0.05, if I am low in the chart I go towards good  (0.1+1)/2 = 0.55
                 else:
-                    players[i].c = (players[i].c + (1-i/len(players)))/2 # If I am high in the chart I go more good (0.1+(1-0))/2 = 0.55, if I am low in the chart I go towards bad  (0.5+(1-1))/2 = 0.25
+                    players[i].c = (players[i].c + (1-i/len(players))**2)/2 # If I am high in the chart I go more good (0.1+(1-0))/2 = 0.55, if I am low in the chart I go towards bad  (0.5+(1-1))/2 = 0.25
 					
                 #if i <= len(players)/2:
                     ##TODO TUNE THIS, maybe refer to the position
