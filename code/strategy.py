@@ -139,7 +139,7 @@ class MultiPlayer(Player):
         #WATCH OUT: GRT CAN ONLY GO TO A LESS COOPERATIVE BEHAVIOUR
         # c in [0, 1] where 0 means not cooperative, 1 means coperative
         c_b = c_g = 0
-        moreCoop = TF2T
+        moreCoop = NICE
         lessCoop = BAD
         if alternative == 1:
             k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
@@ -216,9 +216,12 @@ class MultiPlayer(Player):
 
     def random_trig_strategy(self, s, p = 1/3):
         """Generate random jolly strategy based on parameter strategy."""
-        if s.id in range(IND, 60) and np.random.uniform(0,1) < p:
-            return self.get_strategy(GRT)
-        # other constraints can be added to make TFT, TF2T as jolly
+        if np.random.uniform(0,1) < p:
+            if s.id in range(IND, 60):
+                return self.get_strategy(GRT)
+            if s.id in range(NICE, BAD):
+                return self.get_strategy(np.random.choice([TFT, TF2T]))
+
         return self.get_strategy(s.id)
 
     def closest_strategy(self, k_list, coop = False):
@@ -229,6 +232,8 @@ class MultiPlayer(Player):
         k_list = k_list[k_list != self.s.id]
         # remove jolly strategies
         k_list = k_list[k_list != GRT]
+        k_list = k_list[k_list != TFT]
+        k_list = k_list[k_list != TF2T]
 
         maskP = k_list > self.s.id
         maskN = k_list < self.s.id
