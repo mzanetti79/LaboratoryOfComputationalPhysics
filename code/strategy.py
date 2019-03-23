@@ -133,61 +133,75 @@ class MultiPlayer(Player):
 
     @staticmethod
     def change_strategy(players, fixed, alternative):
-        """Change the players' strategy randomly."""
-        #WATCH OUT: GRT CAN ONLY GO TO A LESS COOPERATIVE BEHAVIOUR
-        # c in [0, 1] where 0 means not cooperative, 1 means coperative
-        c_b = c_g = 0
-        moreCoop = NICE
-        lessCoop = BAD
+        """Changes the players' strategy randomly."""
+        count_bad = count_good = 0
+        more_coop = NICE
+        less_coop = BAD
 		
 		#TODO choose which one
-        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
+        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
         #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
             
         if alternative == 1:
             for i in range(len(players)):
+                # c in [0,1] where 0 means not cooperative, 1 means coperative
                 old_c = players[i].c
                 players[i].c = np.random.uniform(0,1)
 
                 THRESHOLD = 0.1
-                # if new c is lower than the old one I am going to a less cooperative behaviour
-                # another idea is to get a strategy based on old_c - players[i].c
                 if np.abs(old_c - players[i].c) > THRESHOLD:
+                    # TODO another idea is to get a strategy based on old_c - players[i].c
                     if old_c > players[i].c:
-                        print("I am {} going to a less cooperative behaviour".format(players[i].s))
-                        if players[i].s.id < lessCoop:
-                            c_b += 1
+                        # if new c is lower than the old one go to a less coop behaviour
+                        if players[i].s.id < less_coop:
+                            print("{} \tto less coop: ".format(players[i].s), end='')
+                            count_bad += 1
+
+                            # get closest strategy towards bad region
                             s_next = players[i].closest_strategy(k_strategies)
+                            
                             # s_next = players[i].random_strategy(k_strategies)
                             # while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
                             #     s_next = players[i].random_strategy(k_strategies)
-                            players[i].s = players[i].random_trig_strategy(s_next)
-                            print("After change of type I am {}\n\n".format(players[i].s))
+                            
+                            # randomly substitute with jolly strategy
+                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            print("new = {}\n\n".format(players[i].s))
                     else:
-                        print("I am {} going to a more cooperative behaviour".format(players[i].s))
-                        if players[i].s.id > moreCoop:
-                            c_g += 1
+                        # if new c is greater than the old one go to a more coop behaviour
+                        if players[i].s.id > more_coop:
+                            print("{} \tto more coop: ".format(players[i].s), end='')
+                            count_good += 1
+
+                            # get closest strategy towards good region
                             s_next = players[i].closest_strategy(k_strategies, True)
+
                             # s_next = players[i].random_strategy(k_strategies)
                             # while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
                             #     s_next = players[i].random_strategy(k_strategies)
-                            players[i].s = players[i].random_trig_strategy(s_next)
-                            print("After change of type I am {}\n\n".format(players[i].s))
+
+                            # randomly substitute with jolly strategy
+                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            print("new = {}\n\n".format(players[i].s))
 							
                     #TODO CHOOSE WHICH ONE
-                    k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-                    #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
+                    k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
+                    #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
 
         elif alternative == 2:
             for i in range(len(players)):
                 #TODO CHOOSE
-                if players[i].s.id > IND: # I am BAD
-                    players[i].c = (players[i].c + (i/len(players))**2)/2 # If I am high in the chart I go more bad (0.1+0)/2 = 0.05, if I am low in the chart I go towards good  (0.1+1)/2 = 0.55
+                if players[i].s.id > IND: # BAD player
+                    # if high in the chart go less coop (0.1+0)/2 = 0.05
+                    #     low in the chart go more coop (0.1+1)/2 = 0.55
+                    players[i].c = (players[i].c + (i/len(players))**2)/2
                 else:
-                    players[i].c = (players[i].c + (1-i/len(players))**2)/2 # If I am high in the chart I go more good (0.1+(1-0))/2 = 0.55, if I am low in the chart I go towards bad  (0.5+(1-1))/2 = 0.25
+                    # if high in the chart go more coop (0.1+(1-0))/2 = 0.55
+                    #     low in the chart go less coop (0.5+(1-1))/2 = 0.25
+                    players[i].c = (players[i].c + (1-i/len(players))**2)/2
 					
                 #if i <= len(players)/2:
-                    ##TODO TUNE THIS, maybe refer to the position
+                #    #TODO TUNE THIS, maybe refer to the position
                 #    if players[i].s.id > IND: #I am bad
                 #        players[i].c = (players[i].c + players[i].c**2)/2 # goes toward 0 so more bad
                 #    else:
@@ -198,76 +212,80 @@ class MultiPlayer(Player):
                 #    else:
                 #        players[i].c = (players[i].c + players[i].c**2)/2
 						
-                #MUTATION PROBABILITY RELATED TO RESULTS
                 if np.random.uniform(0,1) < i/len(players):
-                    #If c is low I am more probably going to a less cooperative behaviour
+                    # low c: more prob going to a less cooperative behaviour
                     if np.random.uniform(0,1) > players[i].c:
-                        print("I am {} going to a less cooperative behaviour".format(players[i].s))
-                        if players[i].s.id < lessCoop:
-                            c_b += 1
+                        print("{} to less coop".format(players[i].s))
+                        if players[i].s.id < less_coop:
+                            count_bad += 1
+
                             s_next = players[i].random_strategy(k_strategies)
                             while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
                                 s_next = players[i].random_strategy(k_strategies)
-                            players[i].s = players[i].random_trig_strategy(s_next)
-                            print("After change of type I am {}\n\n".format(players[i].s))
+                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            print("New type: {}\n\n".format(players[i].s))
 						
                             #TODO CHOOSE WHICH ONE
-                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
+                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
+                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
                     else:
-                        print("I am {} going to a more cooperative behaviour".format(players[i].s))
-                        if players[i].s.id > moreCoop:
-                            c_g += 1
+                        print("{} to more coop".format(players[i].s))
+                        if players[i].s.id > more_coop:
+                            count_good += 1
+
                             s_next = players[i].random_strategy(k_strategies)
                             while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
                                 s_next = players[i].random_strategy(k_strategies)
-                            players[i].s = players[i].random_trig_strategy(s_next)
-                            print("After change of type I am {}\n\n".format(players[i].s))
+                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            print("New type: {}\n\n".format(players[i].s))
 							
                             #TODO CHOOSE WHICH ONE
-                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed = fixed)
-                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
+                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
+                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
 							
-        return players, c_b, c_g
+        return players, count_bad, count_good
 
-    def random_trig_strategy(self, s, p = 1/3):
-        """Generate random jolly strategy based on parameter strategy."""
-        if np.random.uniform(0,1) < p:
-            if s.id in range(IND, 60):
-                return self.get_strategy(GRT)
-            if s.id in range(NICE, BAD):
-                return self.get_strategy(np.random.choice([TFT, TF2T]))
+    def closest_strategy(self, k_list, more_coop=False):
+        """Returns the closest strategy to current one from the list; direction set by more_coop."""
+        # [34, 43, 100] given s.id=40, more_coop=False returns 43, more_coop=True returns 34
+        
+        # TODO bugs: grt,tf2t,tft to more/less coop = nice !!!
+        # two lists with [TfT tf2t mainlyG nice] / [TfT tf2t GrT mainlyBad bad] and choose from them
+        # or two lists with MainlyG/nice - MainlyB/bad, random choice
 
-        return self.get_strategy(s.id)
-
-    def closest_strategy(self, k_list, coop = False):
-        """Generate cloeset deterministic strategy object more or less cooperative based on flag than the actual strategy."""
-        # i.e. [34, 43, 100] given s.id=40, coop=False returns 43
-        # i.e. [34, 43, 100] given s.id=40, coop=True returns 34
-        # remove strategies equal to the actual one
+        # remove current and jolly strategies
         k_list = k_list[k_list != self.s.id]
-        # remove jolly strategies
         k_list = k_list[k_list != GRT]
         k_list = k_list[k_list != TFT]
         k_list = k_list[k_list != TF2T]
 
+        # split list using current strategy as delimiter
         maskP = k_list > self.s.id
         maskN = k_list < self.s.id
-
         positive_k = k_list[maskP]
         negative_k = k_list[maskN]
         
-        # lowest positive
-        if positive_k.size != 0 and not coop:
+        # more bad: lowest positive
+        if positive_k.size != 0 and not more_coop:
             return self.get_strategy(positive_k[positive_k.argmin()])
-        # largest negative
-        elif negative_k.size != 0 and coop:
+        # more nice: largest negative
+        elif negative_k.size != 0 and more_coop and self.s.id != GRT: # only "more bad" GRT check should not be needed
             return self.get_strategy(negative_k[negative_k.argmax()])
         return self.s
 
     def random_strategy(self, k_list):
-        """Generate random strategy object."""
+        """Returns a random strategy object from the list."""
         return self.get_strategy(np.random.choice(k_list))
+
+    def random_jolly_strategy(self, strategy, jolly_prob=1/3):
+        """Randomly substitutes a strategy with a jolly one."""
+        if np.random.uniform(0,1) < jolly_prob:
+            print("  RND-JOLLY  ",end='')
+            if strategy.id in range(IND, 60): # TODO maybe tune 60
+                return self.get_strategy(GRT)
+            if strategy.id in range(NICE, BAD):
+                return self.get_strategy(np.random.choice([TFT, TF2T]))
+        return self.get_strategy(strategy.id)
 
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""

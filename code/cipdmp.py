@@ -31,8 +31,8 @@ def main():
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
         
-        #plot population per strategy
-        #total payoff evolution
+        # plot population per strategy
+        # total payoff evolution
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) 
         repeated_players.append(players)
 
@@ -42,19 +42,19 @@ def main():
         strategies_df = strategies_df.append(df)
     
         k_strategies = []
-        for i in range(0,len(players)):
+        for i in range(len(players)):
             draw = np.random.uniform(0,1)
-            if(draw > i/len(players)):
+            if draw > i/len(players):
                 k_strategies.append(players[i].s.id)
         k_strategies = np.array(k_strategies)
         playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
         
-        players, c_b, c_g = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
-        print("Changed {} players to a more cooperative behaviour.".format(c_g))
-        print("Changed {} players to a less cooperative behaviour.".format(c_b))
+        players, count_bad, count_good = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
+        print("{} players changed to more cooperative.".format(count_good))
+        print("{} players changed to less cooperative.".format(count_bad))
         players = np.append(players, playersToAdd)
         
-    if(np.unique(k_strategies, return_counts=True)[1].max() > k_strategies.size*3/4 ):
+    if np.unique(k_strategies, return_counts=True)[1].max() >= k_strategies.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")
@@ -80,12 +80,13 @@ def main():
         print(strategies_df)
 
     strategies_df.plot(figsize=(12,5))    
-    plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
+    #plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
+    plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
     if SAVE_IMG:
-        plt.savefig('../img/cipdmp-incr/cipdmp-evolution-increasing-pop-{}.eps'.format(NUM_PLAYERS),format='eps')
+        plt.savefig('../img/cipdmp-incr/cipdmp-evolution-increasing-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()
@@ -98,10 +99,12 @@ def main():
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             plt.xlabel('Match number')
             plt.ylabel('Points')
-        plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1)) # TODO maybe use col=5 loc=2 even here
+        
+        # plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
+        plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
 
         if SAVE_IMG:
-            plt.savefig('../img/cipdmp-incr/cipdmp-scores-increasing-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps')
+            plt.savefig('../img/cipdmp-incr/cipdmp-scores-increasing-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()
