@@ -431,7 +431,7 @@ With increasing population note also that the simulation times grows exponential
 \section{rMPIPD with changing strategies} \label{s:crIPDMP}
 A step further is made by allowing players to change their strategies in the rIPDMP setup, from which the main structure is unaltered.
 Each player has a gene $c$, representing his attitude to cooperate. This value mutates randomly with a uniform distribution between $0$ and $1$.
-We observe that in this section \textit{GrT} is a \textit{jolly strategy} triggered only if a strategy is between \textit{Indifferent} and a \textit{Mainly bad (k = 60)}. In addition the strategies from the most cooperative to the least coperative are set in this order: \textit{TF2T}, textit{TFT}, \textit{Nice}, \textit{Maninly nice}, \textit{Mainly bad}, \textit{Bad}.
+We observe that in this section \textit{GrT}, \textit{TfT} and \textit{Tf2T} are \textit{jolly strategies}. \textit{GrT} is triggered randomly only if a strategy is between \textit{Indifferent} and a \textit{Mainly bad (k = 60)}, while the remaining two are triggered randomly. It is known that probability strategies from the most cooperative to the least coperative are in this order: \textit{Nice}, \textit{Maninly nice}, \textit{Mainly bad}, \textit{Bad}.
 Two alternatives are proposed to change the strategy after each round.
 \begin{enumerate}
     \item If the absolute value of the difference between the old $c$ and the new $c$ is greater than a threshold (set to $0.1$) then I proceed. If the old $c$ is greater than the new $c$ I am going towards a less cooperative behaviour. Otherwise, I am going to a more cooperative behaviour. 
