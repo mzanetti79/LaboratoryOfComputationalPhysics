@@ -65,6 +65,7 @@ def main():
             )
             matches_df = matches_df.append(df)
 
+
             # boxplots for 100 matches -> A vs B
             plt.boxplot([cum_results[k1], cum_results[k2]])
             plt.xticks([1, 2], [p1.s, p2.s])
@@ -107,6 +108,13 @@ def main():
                 plt.close()
             else:
                 plt.show()
+
+#    p1s = matches_df.groupby(['p1'])['p1-yield','p1-achieve'].sum()
+#    p2s = matches_df.groupby(['p2'])['p2-yield','p2-achieve'].sum()
+#   p2s.rename(index=str, columns={"p2": "p1","p2-yield": "p1-yield","p2-achieve": "p1-achieve"})
+#    p = pd.merge(p1s, p2s, on=['p1']).set_index(['p1']).sum(axis=1)
+#    p.loc[:'p1-yield'] /= NUM_PLAYERS
+#    p.loc[:'p1-achieve'] /= NUM_PLAYERS
 
     pd.set_option('precision', 2)
     if LATEX:

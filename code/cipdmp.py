@@ -33,7 +33,7 @@ def main():
         
         #plot population per strategy
         #total payoff evolution
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) 
         repeated_players.append(players)
 
         # create strategies history
