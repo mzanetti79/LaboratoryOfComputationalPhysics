@@ -51,8 +51,9 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
         cooperate_count, defect_count = p.get_coop_def_count()
 
         df = pd.DataFrame(
-            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id, 100*np.mean(yields[p])]],
-            columns=['Player','points', 'coop_count', 'defect_count', 'rrp', 'labels', 'yield']
+		#todo add me
+            [[p.s, int(points[-1]), cooperate_count, defect_count, p, p.s.id, 100*np.mean(yields[p])]],#, 100*np.mean(achieve[p])
+            columns=['Player','points', 'coop_count', 'defect_count', 'rrp', 'labels', 'yield']#,'achieve']
         )
         ranking_df = ranking_df.append(df)
         # ranking_df = ranking_df.sort_values(['points'], ascending=False)
@@ -110,7 +111,8 @@ def main():
     group_df['coop_perc'] = group_df['coop_count_mean']*100/(group_df['coop_count_mean']+group_df['defect_count_mean'])
     group_df['str'] = repeated_ranking_df['Player'][:NUM_PLAYERS]
     group_df['yield'] = repeated_ranking_df['yield'][:NUM_PLAYERS]
-    group_df = group_df[['str','points_mean','points_std','yield',
+#    group_df['achieve'] = repeated_ranking_df['achieve'][:NUM_PLAYERS]
+    group_df = group_df[['str','points_mean','points_std','yield',#'achieve',
         'coop_count_mean','coop_count_std','defect_count_mean','defect_count_std','coop_perc']] # column reordering
     group_df = group_df.sort_values(by=['points_mean'], ascending=False)
     if LATEX:
