@@ -109,12 +109,12 @@ def main():
             else:
                 plt.show()
 
-#    p1s = matches_df.groupby(['p1'])['yield','achieve'].sum()
-#    p2s = matches_df.groupby(['p2'])['yield','achieve'].sum()
-#   p2s.rename(index=str, columns={"p2": "p1"})
+#    p1s = matches_df.groupby(['p1'])['p1-yield','p1-achieve'].sum()
+#    p2s = matches_df.groupby(['p2'])['p2-yield','p2-achieve'].sum()
+#   p2s.rename(index=str, columns={"p2": "p1","p2-yield": "p1-yield","p2-achieve": "p1-achieve"})
 #    p = pd.merge(p1s, p2s, on=['p1']).set_index(['p1']).sum(axis=1)
-#    p.loc[:'yield'] /= NUM_PLAYERS
-#    p.loc[:'achieve'] /= NUM_PLAYERS
+#    p.loc[:'p1-yield'] /= NUM_PLAYERS
+#    p.loc[:'p1-achieve'] /= NUM_PLAYERS
 
     pd.set_option('precision', 2)
     if LATEX:
