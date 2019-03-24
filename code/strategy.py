@@ -42,14 +42,20 @@ class Strategy:
 
         return k
 
-    def generatePlayersWithID(num_players, ID, coop, replace=False, fixed=False):
+    def generatePlayersWithID(ID, coop):
         """Generates a set of players with random strategies based on current ID of a player."""
         str_choices = [TFT, TF2T, GRT]
+        max_k_generated = 6
+
         if not coop:
-            str_choices = np.append(str_choices, np.random.choice(ID, size=int(ID*1/3), replace=False))
-        else:=
-            str_choices = np.append(str_choices, np.random.choice(NICE-ID, size=int((NICE-ID)*1/3), replace=False)+ID+1)
-        return np.random.choice(str_choices)
+            # size = int((BAD-ID)*1/3)
+            # size = size if size < max_k_generated else max_k_generated
+            # return np.append(str_choices, np.random.choice(BAD-ID, size=size, replace=False)+ID+1)
+            return np.append(str_choices, np.random.choice(BAD-ID, size=max_k_generated)+ID+1)
+        # size = int(ID*1/3)
+        # size = size if size < max_k_generated else max_k_generated
+        # return np.append(str_choices, np.random.choice(ID, size=size, replace=False))
+        return np.append(str_choices, np.random.choice(ID, size=max_k_generated))
 
 class Player(object):
     """Class to describe a player with strategy and history."""
@@ -147,10 +153,6 @@ class MultiPlayer(Player):
         more_coop = NICE
         less_coop = BAD
 		
-		#TODO choose which one
-        k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
-        #k_strategies = Strategy.generatePlayers(14, replace=True, fixed = fixed)
-            
         if alternative == 1:
             for i in range(len(players)):
                 # c in [0,1] where 0 means not cooperative, 1 means coperative
@@ -166,15 +168,13 @@ class MultiPlayer(Player):
                             print("{} \tto less coop: ".format(players[i].s), end='')
                             count_bad += 1
 
+                            # get a strategy from the randomly generated ones
+                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=False)
+                            players[i].s = players[i].random_strategy(k_strategies)
+
                             # get closest strategy towards bad region
-                            s_next = players[i].closest_strategy(k_strategies)
-                            
-                            # s_next = players[i].random_strategy(k_strategies)
-                            # while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
-                            #     s_next = players[i].random_strategy(k_strategies)
-                            
-                            # randomly substitute with jolly strategy
-                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            # todo: check if random_strategy isn't "jolly", if it's not get closest instead of random?
+                            # players[i].s = players[i].closest_strategy(k_strategies)
                             print("new = {}\n\n".format(players[i].s))
                     else:
                         # if new c is greater than the old one go to a more coop behaviour
@@ -182,21 +182,14 @@ class MultiPlayer(Player):
                             print("{} \tto more coop: ".format(players[i].s), end='')
                             count_good += 1
 
-                            # get closest strategy towards good region
-                            s_next = players[i].closest_strategy(k_strategies, True)
+                            # get a strategy from the randomly generated ones
+                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=True)
+                            players[i].s = players[i].random_strategy(k_strategies)
 
-                            # s_next = players[i].random_strategy(k_strategies)
-                            # while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
-                            #     s_next = players[i].random_strategy(k_strategies)
-
-                            # randomly substitute with jolly strategy
-                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            # get closest strategy towards bad region -> not good if using WithID
+                            # players[i].s = players[i].closest_strategy(k_strategies)
                             print("new = {}\n\n".format(players[i].s))
-							
-                    #TODO CHOOSE WHICH ONE
-                    k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
-                    #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
-
+						
         elif alternative == 2:
             for i in range(len(players)):
                 #TODO CHOOSE
@@ -228,29 +221,22 @@ class MultiPlayer(Player):
                         if players[i].s.id < less_coop:
                             count_bad += 1
 
-                            s_next = players[i].random_strategy(k_strategies)
-                            while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
-                                s_next = players[i].random_strategy(k_strategies)
-                            players[i].s = players[i].random_jolly_strategy(s_next)
+                            # get a strategy from the randomly generated ones
+                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=False)
+                            players[i].s = players[i].random_strategy(k_strategies)
+
                             print("New type: {}\n\n".format(players[i].s))
 						
-                            #TODO CHOOSE WHICH ONE
-                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
-                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
                     else:
                         print("{} to more coop".format(players[i].s))
                         if players[i].s.id > more_coop:
                             count_good += 1
 
-                            s_next = players[i].random_strategy(k_strategies)
-                            while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
-                                s_next = players[i].random_strategy(k_strategies)
-                            players[i].s = players[i].random_jolly_strategy(s_next)
+
+                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=True)
+                            players[i].s = players[i].random_strategy(k_strategies)
+
                             print("New type: {}\n\n".format(players[i].s))
-							
-                            #TODO CHOOSE WHICH ONE
-                            k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
-                            #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
 							
         return players, count_bad, count_good
 
@@ -285,16 +271,6 @@ class MultiPlayer(Player):
     def random_strategy(self, k_list):
         """Returns a random strategy object from the list."""
         return self.get_strategy(np.random.choice(k_list))
-
-    # def random_jolly_strategy(self, strategy, jolly_prob=1/3):
-    #     """Randomly substitutes a strategy with a jolly one."""
-    #     if np.random.uniform(0,1) < jolly_prob:
-    #         print("  RND-JOLLY  ",end='')
-    #         if strategy.id in range(IND, 60): # TODO maybe tune 60
-    #             return self.get_strategy(GRT)
-    #         if strategy.id in range(NICE, BAD):
-    #             return self.get_strategy(np.random.choice([TFT, TF2T]))
-    #     return self.get_strategy(strategy.id)
 
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
