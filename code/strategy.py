@@ -47,7 +47,7 @@ class Strategy:
         str_choices = [TFT, TF2T, GRT]
         if not coop:
             str_choices = np.append(str_choices, np.random.choice(ID, size=int(ID*1/3), replace=False))
-        else:=
+        else:
             str_choices = np.append(str_choices, np.random.choice(NICE-ID, size=int((NICE-ID)*1/3), replace=False)+ID+1)
         return np.random.choice(str_choices)
 
@@ -224,7 +224,7 @@ class MultiPlayer(Player):
                 if np.random.uniform(0,1) < i/len(players):
                     # low c: more prob going to a less cooperative behaviour
                     if np.random.uniform(0,1) > players[i].c:
-                        print("{} to less coop".format(players[i].s))
+                        print("{} \tto less coop: ".format(players[i].s), end='')
                         if players[i].s.id < less_coop:
                             count_bad += 1
 
@@ -232,13 +232,13 @@ class MultiPlayer(Player):
                             while str(s_next) == str(players[i].s) or (s_next.id < players[i].s.id or s_next.id < IND):
                                 s_next = players[i].random_strategy(k_strategies)
                             players[i].s = players[i].random_jolly_strategy(s_next)
-                            print("New type: {}\n\n".format(players[i].s))
+                            print("new = {}\n\n".format(players[i].s))
 						
                             #TODO CHOOSE WHICH ONE
                             k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
                             #k_strategies = Strategy.generatePlayers(14, replace=True, fixed=fixed)
                     else:
-                        print("{} to more coop".format(players[i].s))
+                        print("{} \tto more coop: ".format(players[i].s), end='')
                         if players[i].s.id > more_coop:
                             count_good += 1
 
@@ -246,7 +246,7 @@ class MultiPlayer(Player):
                             while str(s_next) == str(players[i].s) or (s_next.id > players[i].s.id or s_next.id > IND):
                                 s_next = players[i].random_strategy(k_strategies)
                             players[i].s = players[i].random_jolly_strategy(s_next)
-                            print("New type: {}\n\n".format(players[i].s))
+                            print("new = {}\n\n".format(players[i].s))
 							
                             #TODO CHOOSE WHICH ONE
                             k_strategies = Strategy.generatePlayers(len(players)*3, replace=(len(players)*3>Strategy.TOT_STRAT), fixed=fixed)
