@@ -42,6 +42,15 @@ class Strategy:
 
         return k
 
+    def generatePlayersWithID(num_players, ID, coop, replace=False, fixed=False):
+        """Generates a set of players with random strategies based on current ID of a player."""
+        str_choices = [TFT, TF2T, GRT]
+        if not coop:
+            str_choices = np.append(str_choices, np.random.choice(ID, size=int(ID*1/3), replace=False))
+        else:=
+            str_choices = np.append(str_choices, np.random.choice(NICE-ID, size=int((NICE-ID)*1/3), replace=False)+ID+1)
+        return np.random.choice(str_choices)
+
 class Player(object):
     """Class to describe a player with strategy and history."""
 
@@ -277,15 +286,15 @@ class MultiPlayer(Player):
         """Returns a random strategy object from the list."""
         return self.get_strategy(np.random.choice(k_list))
 
-    def random_jolly_strategy(self, strategy, jolly_prob=1/3):
-        """Randomly substitutes a strategy with a jolly one."""
-        if np.random.uniform(0,1) < jolly_prob:
-            print("  RND-JOLLY  ",end='')
-            if strategy.id in range(IND, 60): # TODO maybe tune 60
-                return self.get_strategy(GRT)
-            if strategy.id in range(NICE, BAD):
-                return self.get_strategy(np.random.choice([TFT, TF2T]))
-        return self.get_strategy(strategy.id)
+    # def random_jolly_strategy(self, strategy, jolly_prob=1/3):
+    #     """Randomly substitutes a strategy with a jolly one."""
+    #     if np.random.uniform(0,1) < jolly_prob:
+    #         print("  RND-JOLLY  ",end='')
+    #         if strategy.id in range(IND, 60): # TODO maybe tune 60
+    #             return self.get_strategy(GRT)
+    #         if strategy.id in range(NICE, BAD):
+    #             return self.get_strategy(np.random.choice([TFT, TF2T]))
+    #     return self.get_strategy(strategy.id)
 
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
