@@ -447,15 +447,16 @@ It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behavi
 \FR{still to be reviewed}
 A step further is made by allowing players to change their strategies in the rIPDMP setup, from which the main structure is unaltered.
 Each player has a gene $c$, representing his attitude to cooperate. This value mutates randomly with a uniform distribution between $0$ and $1$.
-We observe that in this section \textit{GrT}, \textit{TfT} and \textit{Tf2T} are \textit{jolly strategies}. \textit{GrT} is triggered randomly only if a strategy is between \textit{Indifferent} and a \textit{Mainly bad (k = 60)}, while the remaining two are triggered randomly. It is known that probability strategies from the most cooperative to the least coperative are in this order: \textit{Nice}, \textit{Maninly nice}, \textit{Mainly bad}, \textit{Bad}.
+%We observe that in this section \textit{GrT}, \textit{TfT} and \textit{Tf2T} are \textit{jolly strategies}. \textit{GrT} is triggered randomly only if a strategy is between \textit{Indifferent} and a \textit{Mainly bad (k = 60)}, while the remaining two are triggered randomly. It is known that probability strategies from the most cooperative to the least cooperative are in this order: \textit{Nice}, \textit{Mainly nice}, \textit{Mainly bad}, \textit{Bad}.
 Two alternatives are proposed to change the strategy after each round.
 \begin{enumerate}
-    \item If the absolute value of the difference between the old $c$ and the new $c$ is greater than a threshold (set to $0.1$) then I proceed. If the old $c$ is greater than the new $c$ I am going towards a less cooperative behaviour. Otherwise, I am going to a more cooperative behaviour. 
-    In case I am going towards a less cooperative behaviour I choose the closest less cooperative strategy next to the actual strategy drawn from a random set of strategies. Otherwise, I choose the closests more cooperative strategy next to the actual strategy.
+    \item For each player a new $c$ value is generated, then if the absolute value of the difference between the old $c$ and the new $c$ is greater than a threshold (set to $0.1$) the strategy will change. If the old $c$ is greater than the new $c$ the player is going to have a less cooperative behaviour; otherwise, a more cooperative one. 
+    Starting from a random set of different strategies, in the first case the closest less cooperative strategy is selected to be the new strategy of the player, in the second case the candidate is the closest more cooperative strategy.
 
-    \item The change of strategy is again based on players' ranking and probability. First of all the value of $c$ is updated: a strategy that gives good results is enhanced (sets a higher $c$) and a bad strategy leads to a change towards the ``opposite'' direction (sets a lower $c$). If I am more probably going towards a less cooperative behaviour then a random strategy, that satisfies the less cooperative behaviour, is picked up from a random list. Otherwise, a more cooperative strategy is picked.
+	\item The change of strategy is again based on players' ranking and probability. The value of $c$ is updated: a strategy that gives good results is enhanced by setting a higher $c$ value and a bad strategy leads to a change towards the ``opposite'' direction (sets a lower $c$).
+	Based on the direction of evolution, a random list of valid strategies is generated, and one of them is picked up as the new strategy for the player.
 \end{enumerate}
-\textbf{Left loose on purpose because of the todo in change_strategy calling for review. Will be more detailed}
+\textbf{CHECK AND EXPAND}
 
 \section{Machine Learning approaches} \label{s:ml}
 Since the birth of this subject studies have been developed to find some pattern that can be exploited by learning algorithms.
@@ -471,7 +472,7 @@ Finally, evolutionary and particle swarm algorithms are used by Harper \textit{e
 
 What is noted from the literature is that it is an easy task for a player to learn to compete against a deterministic player, while it is indeed difficult to generalize to an opponent with unspecified behaviour.
 
-We believe this is a very particular problem that, given the unknown and the restrictions of the game, cannot be fully solved by machine learning procedures. In fact, the rules of the game restrict it in a very simple but powerful area where this kind of methods gain their strengths: information. In particuar, we can't allow the algorithm to know the opponents moves in advance, or their type, or how much the game will going on or any other information that would be viable and helpful to solve the game. Adding to this the intrinsic ``incoherence'' between rational behaviour and optimal outcome (the Nash Equilibrium vs Pareto efficiency choices) make the task extremely difficult if not even impossible to be fully exhamined by machine learning approaches.
+We believe this is a very particular problem that, given the unknown and the restrictions of the game, cannot be fully solved by machine learning procedures. In fact, the rules of the game restrict it in a very simple but powerful area where this kind of methods gain their strengths: information. In particular, we can't allow the algorithm to know the opponents moves in advance, or their type, or how much the game will going on or any other information that would be viable and helpful to solve the game. Adding to this the intrinsic ``incoherence'' between rational behaviour and optimal outcome (the Nash Equilibrium vs Pareto efficiency choices) make the task extremely difficult if not even impossible to be fully examined by machine learning approaches.
 
 \section{Conclusions and future work} \label{s:conc}
 \textbf{TODO some conclusion to blend with introduction}
@@ -644,7 +645,7 @@ Finally, it must again be pointed out that there is no ``best'' strategy for pri
     \begin{tabular}{l|ccccc} \toprule
     	$\downarrow$ Strategy -- Iter $\rightarrow$  & 0 & 1 & 2  & 3  & 4  \\ \midrule
     	GrimTrigger       & 5 & 5 & 4  & 3  & 1  \\
-    	TitForTwoTat      & 7 & 7 & 6  & 6  & 4  \\
+    	TitFor2Tat        & 7 & 7 & 6  & 6  & 4  \\
     	TitForTat         & 8 & 8 & 13 & 24 & 32 \\
     	Nice              & 6 & 6 & 3  & 0  & 0  \\
     	MainlyNice (k=3)  & 1 & 1 & 1  & 0  & 0  \\
@@ -670,7 +671,7 @@ Finally, it must again be pointed out that there is no ``best'' strategy for pri
 	\begin{tabular}{l|cccccc} \toprule
 		$\downarrow$ Strategy -- Iter $\rightarrow$ & 0 &  1 &  2 &  3 &  4 &   5 \\ \midrule
 		GrimTrigger       & 5 &  6 &  7 &  7 &  8 &   9 \\
-		TitForTwoTat      & 7 &  8 & 15 & 24 & 37 &  58 \\
+		TitFor2Tat        & 7 &  8 & 15 & 24 & 37 &  58 \\
 		TitForTat         & 8 & 14 & 28 & 52 & 94 & 164 \\
 		Nice              & 6 &  6 &  7 &  7 &  8 &  11 \\
 		MainlyNice (k=3)  & 1 &  1 &  1 &  1 &  1 &   1 \\

@@ -53,7 +53,7 @@ def main():
         
     # save plots
     strategies_df = strategies_df.rename(index=str,
-        columns={-3: "GrimTrigger", -2: "TitForTwoTat", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
+        columns={-3: "GrimTrigger", -2: "TitFor2Tat", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
     for c in strategies_df.columns:
         if str.isdigit(str(c)):
             if c > 50:
