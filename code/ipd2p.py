@@ -2,16 +2,15 @@ from strategy import *
 from base_options import *
 
 def main():
-    np.random.seed(100)
     opt = BaseOptions().parse(BaseOptions.IPD2P)
 	
-    SAVE_IMG = opt.saveimg
-
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
     FIXED = opt.fixed
+    SAVE_IMG = opt.saveimg
     LATEX = opt.latex
+    np.random.seed(opt.seed) # None = clock, no-number = 100
 
     print("Testing {} iterations of 2-people IPD".format(NUM_ITER))
 

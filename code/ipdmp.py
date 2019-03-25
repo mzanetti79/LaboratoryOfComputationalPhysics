@@ -77,16 +77,16 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
     return players, ranking_df, matches_df
 
 def main():
-    np.random.seed(100)
     pd.set_option('display.max_columns', None)
 
     opt = BaseOptions().parse(BaseOptions.IPDMP)
-    SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
     FIXED = opt.fixed
+    SAVE_IMG = opt.saveimg
     LATEX = opt.latex
+    np.random.seed(opt.seed) # None = clock, no-number = 100
 
     print("Testing round-robin tournament with {}-people".format(NUM_PLAYERS))
 

@@ -3,19 +3,19 @@ from base_options import *
 from ipdmp import IPDRoundRobin
 
 def main():
-    np.random.seed(100)
     pd.set_option('display.max_columns', None)
     pd.set_option('precision', 2)
 
     opt = BaseOptions().parse(BaseOptions.RIPDMP_C)
-    SAVE_IMG = opt.saveimg
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = 0 # arg override
     MAX_ALLOWED = opt.maxrep
     PERCENTAGE = opt.percent
     FIXED = opt.fixed
+    SAVE_IMG = opt.saveimg
     LATEX = opt.latex
+    np.random.seed(opt.seed) # None = clock, no-number = 100
 	
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
