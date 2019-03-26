@@ -132,6 +132,8 @@ class Player(object):
         self.playedHist = []
         self.bestGivenOther = []
         self.bestAch = []
+        if self.s.id == GRT: # reset GrT trigger
+            self.s.triggered = False
 
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
