@@ -42,20 +42,25 @@ class Strategy:
 
         return k
 
-    def generatePlayersWithID(ID, coop):
+    def generatePlayersWithID(ID, coop, bound=-1):
         """Generates a set of players with random strategies based on current ID of a player."""
         str_choices = [TFT, TF2T, GRT]
         max_k_generated = 6
 
         if not coop:
-            # size = int((BAD-ID)*1/3)
-            # size = size if size < max_k_generated else max_k_generated
-            # return np.append(str_choices, np.random.choice(BAD-ID, size=size, replace=False)+ID+1)
-            return np.append(str_choices, np.random.choice(BAD-ID, size=max_k_generated)+ID+1)
-        # size = int(ID*1/3)
-        # size = size if size < max_k_generated else max_k_generated
-        # return np.append(str_choices, np.random.choice(ID, size=size, replace=False))
-        return np.append(str_choices, np.random.choice(ID, size=max_k_generated))
+            if bound == -1:
+                bound = BAD
+            if ID < NICE: #checks if strategy is not probabilistic
+                ID = NICE-1 # since adding
+            print(ID+1, bound+1)
+            return np.append(str_choices, np.random.randint(ID+1, bound+1, size=max_k_generated))
+    
+        if bound == -1:
+            bound = NICE
+        if ID < NICE: #checks if strategy is not probabilistic
+            ID = BAD+1
+        print(bound, ID)
+        return np.append(str_choices, np.random.randint(bound, ID, size=max_k_generated))
 
 class Player(object):
     """Class to describe a player with strategy and history."""
@@ -158,18 +163,28 @@ class MultiPlayer(Player):
                 # c in [0,1] where 0 means not cooperative, 1 means coperative
                 old_c = players[i].c
                 players[i].c = np.random.uniform(0,1)
+                print("old c {} \t new c {}: \n".format(old_c, players[i].c), end='')
 
+                c_diff = old_c - players[i].c
                 THRESHOLD = 0.1
-                if np.abs(old_c - players[i].c) > THRESHOLD:
+                MAX_ADDED = 50
+                if np.abs(c_diff) > THRESHOLD:
                     # TODO another idea is to get a strategy based on old_c - players[i].c
-                    if old_c > players[i].c:
+                    if c_diff > 0:
                         # if new c is lower than the old one go to a less coop behaviour
                         if players[i].s.id < less_coop:
                             print("{} \tto less coop: ".format(players[i].s), end='')
                             count_bad += 1
 
+                            # generate bound
+                            bound = players[i].s.id + c_diff*MAX_ADDED
+                            if bound < NICE:
+                                bound = NICE
+                            elif bound > BAD:
+                                bound = BAD
+
                             # get a strategy from the randomly generated ones
-                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=False)
+                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=False, bound=int(bound))
                             players[i].s = players[i].random_strategy(k_strategies)
 
                             # get closest strategy towards bad region
@@ -182,8 +197,15 @@ class MultiPlayer(Player):
                             print("{} \tto more coop: ".format(players[i].s), end='')
                             count_good += 1
 
+                            # generate bound
+                            bound = players[i].s.id + c_diff*MAX_ADDED
+                            if bound < NICE:
+                                bound = NICE
+                            elif bound > BAD:
+                                bound = BAD
+
                             # get a strategy from the randomly generated ones
-                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=True)
+                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=True, bound=int(bound))
                             players[i].s = players[i].random_strategy(k_strategies)
 
                             # get closest strategy towards bad region -> not good if using WithID
