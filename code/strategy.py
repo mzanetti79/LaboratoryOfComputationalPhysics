@@ -52,14 +52,14 @@ class Strategy:
                 bound = BAD
             if ID < NICE: #checks if strategy is not probabilistic
                 ID = NICE-1 # since adding
-            print(ID+1, bound+1)
+            # print(ID+1, bound+1)
             return np.append(str_choices, np.random.randint(ID+1, bound+1, size=max_k_generated))
     
         if bound == -1:
             bound = NICE
         if ID < NICE: #checks if strategy is not probabilistic
             ID = BAD+1
-        print(bound, ID)
+        # print(bound, ID)
         return np.append(str_choices, np.random.randint(bound, ID, size=max_k_generated))
 
 class Player(object):
