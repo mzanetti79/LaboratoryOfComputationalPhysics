@@ -38,13 +38,15 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
     if plot:
         for i in p:
             plt.plot(p[i], label=i.s)
-            plt.xlabel('Iteration')
-            plt.ylabel('Cum. reward')
+        plt.xlabel('Iteration')
+        plt.ylabel('Cum. reward')
         plt.title("Evolution of the game")
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
         if save_img: # we only save images for ipdmp script
             plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
             plt.close()
+        else:
+            plt.show()
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
@@ -92,6 +94,7 @@ def main():
 
     # define k for strategy probabilities
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
+    #k_strategies = np.array([GRT,GRT, TFT,TFT, TF2T,TF2T, BAD,BAD, NICE,NICE]) # paper test
 
     repeated_players = []
     for i in range(NUM_REPETITIONS):
@@ -129,7 +132,6 @@ def main():
     one_round = pd.DataFrame(one_round_results).T
     meds = one_round.median().sort_values(ascending=False)
     one_round = one_round[meds.index]
-    plt.figure(figsize=(12,5))
     one_round.boxplot(figsize=(12,5))
     plt.xticks(np.arange(NUM_PLAYERS)+1, [players[p].s for p in meds.index], rotation=90)
     plt.suptitle('Mean and variance for each type vs the other players \n One complete round')
@@ -142,7 +144,6 @@ def main():
         plt.show()
 
     # box plot of all points
-    plt.figure(figsize=(12,5))
     group_median = group.median().sort_values(by=['points'], ascending=False)
     temp_df = pd.DataFrame()
     for index in group_median.index:

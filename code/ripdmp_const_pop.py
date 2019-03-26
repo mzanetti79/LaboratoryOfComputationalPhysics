@@ -62,7 +62,7 @@ def main():
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyNice (k={})".format(c)})
 
     strategies_df.index = np.arange(strategies_df.index.size)
-    strategies_df = strategies_df.fillna(0)
+    strategies_df = strategies_df.fillna(0).astype(int)
     if LATEX:
         if NUM_PLAYERS > 8:
             print(strategies_df.T.to_latex()) # too large, transpose
