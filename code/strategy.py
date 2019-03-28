@@ -73,7 +73,7 @@ class Player(object):
         self.M1 = M
         self.M2 = M.T
         if changing:
-            self.c = np.random.uniform(0,1) # probability to change strategy at the end of the round
+            self.c = (1-k/100 if k>=0 else 0.5) # probability to change strategy at the end of the round
         else:
             self.c = 0
         self.s = self.get_strategy(k)
@@ -159,61 +159,64 @@ class MultiPlayer(Player):
         count_bad = count_good = 0
         more_coop = NICE
         less_coop = BAD
-		
+    
+        # TODO GrT should only go to more coop
         if alternative == 1:
             for i in range(len(players)):
                 # c in [0,1] where 0 means not cooperative, 1 means coperative
                 old_c = players[i].c
-                players[i].c = np.random.uniform(0,1)
-                print("old c {} \t new c {}: \n".format(old_c, players[i].c), end='')
+                new_c = np.random.uniform(0,1)
+                players[i].c = new_c
+                print("old c {} \t new c {}".format(old_c, new_c))
 
-                c_diff = old_c - players[i].c
+                c_diff = old_c - new_c
                 THRESHOLD = 0.1
-                MAX_ADDED = 50
+                print("ID {} abs {}".format(players[i].s.id, np.abs(c_diff)))
                 if np.abs(c_diff) > THRESHOLD:
-                    # TODO another idea is to get a strategy based on old_c - players[i].c
-                    if c_diff > 0:
-                        # if new c is lower than the old one go to a less coop behaviour
+                    if new_c < 0.5:
+                        # new c is lower go to a less coop
                         if players[i].s.id < less_coop:
                             print("{} \tto less coop: ".format(players[i].s), end='')
                             count_bad += 1
 
-                            # generate bound
-                            bound = players[i].s.id + c_diff*MAX_ADDED
-                            if bound < NICE:
-                                bound = NICE
-                            elif bound > BAD:
-                                bound = BAD
+                            # compute bounds
+                            if players[i].s.id >= 0:
+                                boundL = max(50, players[i].s.id)
+                            else:
+                                boundL = 50
+                            boundH = (1-new_c)*100
 
-                            # get a strategy from the randomly generated ones
-                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=False, bound=int(bound))
+                            if boundL > boundH: # swap if needed
+                                boundL, boundH = boundH, boundL
+                            print("L {} H {}".format(boundL,boundH))
+
+                            # generate some random strategies and select one
+                            k_strategies = np.append([GRT,TF2T,TFT], np.random.randint(boundL, boundH+1, size=6))
                             players[i].s = players[i].random_strategy(k_strategies)
-
-                            # get closest strategy towards bad region
-                            # todo: check if random_strategy isn't "jolly", if it's not get closest instead of random?
-                            # players[i].s = players[i].closest_strategy(k_strategies)
-                            print("new = {}\n\n".format(players[i].s))
+                            print("new = {}\n".format(players[i].s))
                     else:
                         # if new c is greater than the old one go to a more coop behaviour
-                        if players[i].s.id > more_coop:
+                        if players[i].s.id != more_coop:
                             print("{} \tto more coop: ".format(players[i].s), end='')
                             count_good += 1
 
-                            # generate bound
-                            bound = players[i].s.id + c_diff*MAX_ADDED
-                            if bound < NICE:
-                                bound = NICE
-                            elif bound > BAD:
-                                bound = BAD
+                            # compute bounds
+                            boundL = (1-new_c)*100
+                            if players[i].s.id >= 0:   
+                                boundH = min(players[i].s.id, 50)
+                            else:
+                                boundH = 50
+                            
+                            if boundL > boundH: # swap if needed
+                                boundL, boundH = boundH, boundL
 
-                            # get a strategy from the randomly generated ones
-                            k_strategies = Strategy.generatePlayersWithID(players[i].s.id, coop=True, bound=int(bound))
+                            # generate some random strategies and select one
+                            k_strategies = np.append([GRT,TF2T,TFT], np.random.randint(boundL, boundH+1, size=6))
                             players[i].s = players[i].random_strategy(k_strategies)
-
-                            # get closest strategy towards bad region -> not good if using WithID
-                            # players[i].s = players[i].closest_strategy(k_strategies)
-                            print("new = {}\n\n".format(players[i].s))
-						
+                            print("new = {}\n".format(players[i].s))
+                else:
+                    print("Unchanged")
+					
         elif alternative == 2:
             for i in range(len(players)):
                 #TODO CHOOSE
