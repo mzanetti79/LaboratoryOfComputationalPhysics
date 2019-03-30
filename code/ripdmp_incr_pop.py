@@ -20,11 +20,12 @@ def main():
 	
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=FIXED) 
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED) 
 
     repeated_players = [] # strategies evolution
     unique, counts = np.unique(k_strategies, return_counts=True)
     strategies_df = pd.DataFrame([counts],columns=unique)
+    strategies_df['count'] = counts.sum()
 
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
@@ -68,6 +69,7 @@ def main():
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
         df = pd.DataFrame([counts], columns=unique)
+        df['count'] = counts.sum()
         strategies_df = strategies_df.append(df)
 
     if np.unique(k_strategies, return_counts=True)[1].max() >= k_strategies.size*3/4:
@@ -86,7 +88,7 @@ def main():
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyNice (k={})".format(c)})
 
     strategies_df.index = np.arange(strategies_df.index.size)
-    strategies_df = strategies_df.fillna(0)
+    strategies_df = strategies_df.fillna(0).astype(int)
     if LATEX:
         if NUM_PLAYERS > 8:
             print(strategies_df.T.to_latex()) # too large, transpose

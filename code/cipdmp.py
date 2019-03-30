@@ -30,6 +30,7 @@ def main():
     players = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
+        print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, k_strategies.size))
         
         # plot population per strategy
         # total payoff evolution
@@ -39,7 +40,7 @@ def main():
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
         df = pd.DataFrame([counts],columns=unique)
-        strategies_df = strategies_df.append(df)
+        df['count'] = counts.sum()
     
         k_strategies = []
         for i in range(len(players)):
@@ -50,6 +51,9 @@ def main():
         playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
         
         players, count_bad, count_good = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
+        df['more_coop'] = count_good
+        df['less_coop'] = count_bad
+        strategies_df = strategies_df.append(df)
         print("{} players changed to more cooperative.".format(count_good))
         print("{} players changed to less cooperative.".format(count_bad))
         players = np.append(players, playersToAdd)
@@ -70,7 +74,7 @@ def main():
                 strategies_df = strategies_df.rename(index=str, columns={c: "MainlyNice (k={})".format(c)})
 
     strategies_df.index = np.arange(strategies_df.index.size)
-    strategies_df = strategies_df.fillna(0)
+    strategies_df = strategies_df.fillna(0).astype(int)
     if LATEX:
         if NUM_PLAYERS > 8:
             print(strategies_df.T.to_latex()) # too large, transpose
