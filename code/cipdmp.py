@@ -28,9 +28,9 @@ def main():
 
     # initialize players with given strategies
     players = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
-    while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
+    while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED: # TODO USE PLAYERS
         NUM_REPETITIONS += 1
-        print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, k_strategies.size))
+        print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, players.size))
         
         # plot population per strategy
         # total payoff evolution
@@ -40,7 +40,7 @@ def main():
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
         df = pd.DataFrame([counts],columns=unique)
-        df['count'] = counts.sum()
+        df['count'] = players.size
     
         k_strategies = []
         for i in range(len(players)):
@@ -53,7 +53,7 @@ def main():
         players, count_bad, count_good = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
         df['more_coop'] = count_good
         df['less_coop'] = count_bad
-        strategies_df = strategies_df.append(df)
+        strategies_df = strategies_df.append(df,sort=True) # sort fixes FutureWarning
         print("{} players changed to more cooperative.".format(count_good))
         print("{} players changed to less cooperative.".format(count_bad))
         players = np.append(players, playersToAdd)
