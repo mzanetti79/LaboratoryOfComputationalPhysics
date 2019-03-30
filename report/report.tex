@@ -449,13 +449,22 @@ A step further is made by allowing players to change their strategies in the rIP
 Each player has a gene $c$, representing his attitude to cooperate. This value mutates randomly with a uniform distribution between $0$ and $1$.
 %We observe that in this section \textit{GrT}, \textit{TfT} and \textit{Tf2T} are \textit{jolly strategies}. \textit{GrT} is triggered randomly only if a strategy is between \textit{Indifferent} and a \textit{Mainly bad (k = 60)}, while the remaining two are triggered randomly. It is known that probability strategies from the most cooperative to the least cooperative are in this order: \textit{Nice}, \textit{Mainly nice}, \textit{Mainly bad}, \textit{Bad}.
 Two alternatives are proposed to change the strategy after each round.
-\begin{enumerate}
-    \item For each player a new $c$ value is generated, then if the absolute value of the difference between the old $c$ and the new $c$ is greater than a threshold (set to $0.1$) the strategy will change. If the old $c$ is greater than the new $c$ the player is going to have a less cooperative behaviour; otherwise, a more cooperative one. 
-    Starting from a random set of different strategies, in the first case the closest less cooperative strategy is selected to be the new strategy of the player, in the second case the candidate is the closest more cooperative strategy.
+The new strategy is picked from a set made of $6$ different random strategies plus \textit{GrT, TfT, Tf2T}, the only difference is how the random strategies are generated.
 
-	\item The change of strategy is again based on players' ranking and probability. The value of $c$ is updated: a strategy that gives good results is enhanced by setting a higher $c$ value and a bad strategy leads to a change towards the ``opposite'' direction (sets a lower $c$).
-	Based on the direction of evolution, a random list of valid strategies is generated, and one of them is picked up as the new strategy for the player.
+\begin{enumerate}
+    \item For each player a new $c$ value is generated, then if the absolute value of the difference between the old $c$ and the new $c$ is greater than a threshold (set to $0.1$) the strategy will change. If the new $c$ is greater than $0.5$ the player is going to have a more cooperative behaviour; otherwise, a less cooperative one.
+	Random strategies in this case are bounded in 
+	$[(1-c)\times 100, \min(id,50)]$ if going towards the more cooperative side, $[\max(id,50), (1-c)\times 100]$ otherwise. $id$ is the identifier of the strategy type: $k$ for a probabilistic strategy, and a placeholder negative number for \textit{GrT, TfT, Tf2T}.
+
+	\item The change of strategy is again based on players' ranking and probability. Bad players (those with $k>50$) have their $c$ updated as
+	$c_N = (c+(i/num\_players)^2)/2$, that is, players high in the chart will go to a \textit{less} cooperative behaviour and vice-versa.
+	Good players are updated according to $c_N = (c+((1-i)/num\_players)^2)/2$, that is, players high in the chart will go to a \textit{more} cooperative behaviour and vice-versa.
+	Only some players will randomly be touched by these strategy changes.
+	Random strategies are unbounded, i.e. they span the entire range $[0,100]$ which corresponds respectively to \textit{Nice} and \textit{Bad} values.
 \end{enumerate}
+
+Since there is no intrinsic cooperation attitude in deterministic strategies like \textit{GrT, TfT, Tf2T}, which only respond to opponent moves, $c=0.5$ is set as default whenever a player changes its strategy into one of these types.
+
 \textbf{CHECK AND EXPAND}
 
 \section{Machine Learning approaches} \label{s:ml}
@@ -713,6 +722,11 @@ Finally, it must again be pointed out that there is no ``best'' strategy for pri
 	\end{tabular}
 \end{table}
 
-\textbf{cipdmp to be added}
+\begin{table}[ht]
+	\caption{rMPIPD, changing strategies, increasing pop., strategy evolution through repetitions}
+	\label{tab:ripdmp-incr}
+	\centering
+	\textbf{cipdmp to be added}
+\end{table}
 
 \end{document}
