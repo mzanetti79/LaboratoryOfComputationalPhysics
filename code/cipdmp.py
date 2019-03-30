@@ -28,7 +28,7 @@ def main():
 
     # initialize players with given strategies
     players = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
-    while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED: # TODO USE PLAYERS
+    while np.unique(players, return_counts=True)[1].max() < players.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
         print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, players.size))
 
@@ -38,7 +38,7 @@ def main():
         repeated_players.append(players)
 
         # create strategies history
-        unique, counts = np.unique(k_strategies, return_counts=True)
+        unique, counts = np.unique(k_strategies, return_counts=True) # TODO maybe use players here?
         df = pd.DataFrame([counts],columns=unique)
         df['count'] = players.size
 
@@ -57,8 +57,8 @@ def main():
         print("{} players changed to more cooperative.".format(count_good))
         print("{} players changed to less cooperative.".format(count_bad))
         players = np.append(players, playersToAdd)
-
-    if np.unique(k_strategies, return_counts=True)[1].max() >= k_strategies.size*3/4:
+        
+    if np.unique(players, return_counts=True)[1].max() >= players.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")

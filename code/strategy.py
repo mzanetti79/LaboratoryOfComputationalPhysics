@@ -70,6 +70,10 @@ class Player(object):
     def __str__(self):
         return "Player with strategy: {}".format(self.s)
 
+    def __lt__(self, other):
+        # compare by player's strategy
+        return self.s.id < other.s.id
+
     # optional: use M = generatePayoffMatrix()
     def __init__(self, k=0, M=np.array([[3,0],[5,1]]), changing=False):
         self.M1 = M
