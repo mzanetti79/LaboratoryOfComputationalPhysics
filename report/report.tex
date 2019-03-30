@@ -15,6 +15,7 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage[pdftex]{graphicx}
 \usepackage{subfig}
+\usepackage[justification=centering]{caption}
 \usepackage[section]{placeins} % floats never go into next section
 %\let\labelindent\relax % Compact lists
 \usepackage{array,booktabs,enumitem,balance} % nice rules in tables
@@ -409,7 +410,7 @@ In this case the number of players (population) is increased at each iteration. 
 
 In our software the first of the three proposed methods is used by default. Other methods can be set using the \texttt{ALTERNATIVE} variable.
 
-Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iterations. In this case convergence is not reached at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy.
+Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iterations. In this case convergence is not reached at the fifth iteration, since the population is increasing, but the simulation still exhibits the same behaviour. The \textit{TfT} strategy is getting stronger and stronger. It is concluded that, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behaviour and converge to the \textit{TfT} strategy. Details on the evolution of the population can be found in \autoref{tab:ripdmp-incr}.
 
 In this case it is noted that simulation times grow exponentially since for each player, as we have seen in \autoref{s:IPDMP}, $I\cdot(N'-1)$ rounds are added and $I\cdot(N'-1)\cdot{NUM\_ITER}$ iterations have to be played: this easily explodes. Despite this and the dependence with respect to the initial population, also pointed out in \autoref{s:IPDMP} and \autoref{s:rIPDMP}, what is suggested from the previous constant population case is preserved also when the population number constraint is relaxed.
 
@@ -444,7 +445,6 @@ In this case it is noted that simulation times grow exponentially since for each
 It is interesting to note how Wu and Axelrod~\cite{IPDnoise} exploit this behaviour to react to noise in the game: just by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's defections go unpunished) or contrition (avoid responding to a defect move when a player's previous defection was unintended) the ``error'' can be quickly recovered and cooperation can be successfully restored. Note, however, that in this work these two variations of the \textit{TfT} strategy are not implemented.
 
 \section{rMPIPD with changing strategies} \label{s:crIPDMP}
-\FR{still to be reviewed}
 A step further is made by allowing players to change their strategies in the rIPDMP setup, from which the main structure is unaltered.
 Each player has a gene $c$, representing his attitude to cooperate. This value mutates randomly with a uniform distribution between $0$ and $1$.
 %We observe that in this section \textit{GrT}, \textit{TfT} and \textit{Tf2T} are \textit{jolly strategies}. \textit{GrT} is triggered randomly only if a strategy is between \textit{Indifferent} and a \textit{Mainly bad (k = 60)}, while the remaining two are triggered randomly. It is known that probability strategies from the most cooperative to the least cooperative are in this order: \textit{Nice}, \textit{Mainly nice}, \textit{Mainly bad}, \textit{Bad}.
@@ -465,7 +465,7 @@ The new strategy is picked from a set made of $6$ different random strategies pl
 
 Since there is no intrinsic cooperation attitude in deterministic strategies like \textit{GrT, TfT, Tf2T}, which only respond to opponent moves, $c=0.5$ is set as default whenever a player changes its strategy into one of these types.
 
-\textbf{CHECK AND EXPAND}
+\textbf{CHECK AND EXPAND with figures and table}
 
 \section{Machine Learning approaches} \label{s:ml}
 Since the birth of this subject studies have been developed to find some pattern that can be exploited by learning algorithms.
@@ -697,7 +697,7 @@ Finally, it must again be pointed out that there is no ``best'' strategy for pri
 \end{table}
 
 \begin{table}[ht]
-	\caption{rMPIPD, increasing pop., strategy evolution through repetitions}
+	\caption{rMPIPD, increasing pop. (alternative 1), strategy evolution through repetitions}
 	\label{tab:ripdmp-incr}
 	\centering
 	\begin{tabular}{l|cccccc} \toprule
@@ -718,15 +718,71 @@ Finally, it must again be pointed out that there is no ``best'' strategy for pri
 		MainlyBad (k=97)  &  1 &   1 &   1 &   1 &   1 &    1 \\
 		MainlyBad (k=98)  &  1 &   1 &   1 &   1 &   1 &    1 \\
 		MainlyBad (k=99)  &  1 &   2 &   2 &   2 &   2 &    2 \\
-		Bad               &  5 &   8 &   9 &  10 &  10 &   10 \\ \bottomrule
+		Bad               &  5 &   8 &   9 &  10 &  10 &   10 \\ \midrule
+		Population size   & 50 &  72 & 110 & 166 & 252 &  384 \\ \bottomrule
 	\end{tabular}
 \end{table}
 
 \begin{table}[ht]
-	\caption{rMPIPD, changing strategies, increasing pop., strategy evolution through repetitions}
-	\label{tab:ripdmp-incr}
+	\caption{rMPIPD, changing strategies (alternative 1), strategy evolution through repetitions.\\
+	Horizontal dividers denote players (new strategies) that entered during subsequent runs.\\
+	At the end, strategy changes count for each iteration.}
+	\label{tab:cripdmp}
 	\centering
-	\textbf{cipdmp to be added}
+	\begin{tabular}{l|ccccc} \toprule
+		$\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 \\ \midrule
+		GrimTrigger       &   5 &   4 &   8 &  14 &  21 \\
+		TitFor2Tat        &   7 &   5 &   8 &   6 &  10 \\
+		TitForTat         &   8 &   6 &   9 &   5 &  14 \\
+		Nice              &   6 &   0 &   2 &   1 &   2 \\
+		MainlyNice (k=3)  &   1 &   0 &   0 &   0 &   0 \\
+		MainlyNice (k=8)  &   1 &   0 &   0 &   0 &   0 \\
+		MainlyNice (k=17) &   1 &   0 &   0 &   0 &   0 \\
+		MainlyNice (k=42) &   1 &   1 &   0 &   0 &   0 \\
+		Indifferent       &   7 &   0 &   0 &   1 &   1 \\
+		MainlyBad (k=70)  &   1 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=78)  &   1 &   1 &   0 &   0 &   2 \\
+		MainlyBad (k=81)  &   2 &   1 &   1 &   0 &   0 \\
+		MainlyBad (k=85)  &   1 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=97)  &   1 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=98)  &   1 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=99)  &   1 &   1 &   0 &   0 &   0 \\
+		Bad               &   5 &   3 &   0 &   3 &   1 \\ \midrule
+		MainlyNice (k=21) &   0 &   0 &   1 &   0 &   0 \\
+		MainlyNice (k=22) &   0 &   0 &   1 &   0 &   0 \\
+		MainlyNice (k=24) &   0 &   0 &   2 &   0 &   1 \\
+		MainlyNice (k=46) &   0 &   0 &   1 &   1 &   0 \\
+		MainlyNice (k=49) &   0 &   0 &   1 &   3 &   0 \\
+		MainlyBad (k=51)  &   0 &   0 &   2 &   0 &   0 \\
+		MainlyBad (k=53)  &   0 &   0 &   1 &   0 &   0 \\
+		MainlyBad (k=74)  &   0 &   0 &   1 &   1 &   0 \\
+		MainlyBad (k=79)  &   0 &   0 &   1 &   0 &   0 \\ \midrule
+		MainlyNice (k=18) &   0 &   0 &   0 &   1 &   1 \\
+		MainlyNice (k=20) &   0 &   0 &   0 &   1 &   0 \\
+		MainlyNice (k=25) &   0 &   0 &   0 &   1 &   0 \\
+		MainlyNice (k=33) &   0 &   0 &   0 &   1 &   1 \\
+		MainlyNice (k=43) &   0 &   0 &   0 &   1 &   1 \\
+		MainlyNice (k=44) &   0 &   0 &   0 &   1 &   1 \\
+		MainlyNice (k=47) &   0 &   0 &   0 &   1 &   0 \\
+		MainlyBad (k=52)  &   0 &   0 &   0 &   2 &   3 \\
+		MainlyBad (k=82)  &   0 &   0 &   0 &   1 &   0 \\ \midrule
+		MainlyNice (k=26) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyNice (k=27) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyNice (k=29) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyNice (k=31) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyNice (k=32) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyNice (k=36) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyNice (k=38) &   0 &   0 &   0 &   0 &   2 \\
+		MainlyNice (k=45) &   0 &   0 &   0 &   0 &   1 \\
+		MainlyBad (k=54)  &   0 &   0 &   0 &   0 &   1 \\
+		MainlyBad (k=62)  &   0 &   0 &   0 &   0 &   1 \\
+		MainlyBad (k=63)  &   0 &   0 &   0 &   0 &   2 \\
+		MainlyBad (k=72)  &   0 &   0 &   0 &   0 &   1 \\
+		MainlyBad (k=77)  &   0 &   0 &   0 &   0 &   2 \\ \midrule
+		Population size     &  50 &  72 & 111 & 164 & 248 \\
+		To more cooperative &  16 &  23 &  32 &  40 &  84 \\
+		To less cooperative &  24 &  26 &  44 &  71 &  98 \\ \bottomrule
+	\end{tabular}
 \end{table}
 
 \end{document}
