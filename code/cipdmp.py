@@ -37,10 +37,14 @@ def main():
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER)
         repeated_players.append(players)
 
-        # create strategies history
-        unique, counts = np.unique(k_strategies, return_counts=True) # TODO maybe use players here?
-        df = pd.DataFrame([counts],columns=unique)
-        df['count'] = players.size
+        # get changes in strategies and accumulate in the dataframe
+        unique, counts = np.unique(k_strategies, return_counts=True)
+        df = pd.DataFrame([counts], columns=unique)
+        if strategies_df.size > 0:
+            # get stripped version of previous run, add this run (cumulative approach)
+            temp = strategies_df.tail(1).drop(columns=["count", "more_coop", "less_coop"])
+            df = temp.add(df, fill_value=0).astype(int)
+        df['count'] = players.size # complete with other data
 
         k_strategies = []
         for i in range(len(players)):
@@ -75,21 +79,6 @@ def main():
 
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0).astype(int)
-
-    ####
-    store = strategies_df[["count", "more_coop", "less_coop"]]
-    temp = strategies_df.drop(columns=["count", "more_coop", "less_coop"])
-    for i in range(1, temp.shape[0]):
-        temp.iloc[i,:] = temp.iloc[i,:] + temp.iloc[i-1,:]
-
-    #SUM check
-    for i in range(NUM_REPETITIONS):
-        print("\nCount players for round ", i)
-        print(np.sum(temp.iloc[i,:]))
-
-    strategies_df = temp
-    strategies_df[["count", "more_coop", "less_coop"]] = store
-    ####
 
     if LATEX:
         if NUM_PLAYERS > 8:

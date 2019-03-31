@@ -731,61 +731,61 @@ Finally, it must again be pointed out that there is no ``best'' strategy for pri
 	\centering
 	\begin{tabular}{l|ccccc} \toprule
 		$\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 \\ \midrule
-		GrimTrigger       &   5 &   4 &   8 &  14 &  21 \\
-		TitFor2Tat        &   7 &   5 &   8 &   6 &  10 \\
-		TitForTat         &   8 &   6 &   9 &   5 &  14 \\
-		Nice              &   6 &   0 &   2 &   1 &   2 \\
-		MainlyNice (k=3)  &   1 &   0 &   0 &   0 &   0 \\
-		MainlyNice (k=8)  &   1 &   0 &   0 &   0 &   0 \\
-		MainlyNice (k=17) &   1 &   0 &   0 &   0 &   0 \\
-		MainlyNice (k=42) &   1 &   1 &   0 &   0 &   0 \\
-		Indifferent       &   7 &   0 &   0 &   1 &   1 \\
-		MainlyBad (k=70)  &   1 &   0 &   0 &   0 &   0 \\
-		MainlyBad (k=78)  &   1 &   1 &   0 &   0 &   2 \\
-		MainlyBad (k=81)  &   2 &   1 &   1 &   0 &   0 \\
-		MainlyBad (k=85)  &   1 &   0 &   0 &   0 &   0 \\
-		MainlyBad (k=97)  &   1 &   0 &   0 &   0 &   0 \\
-		MainlyBad (k=98)  &   1 &   0 &   0 &   0 &   0 \\
-		MainlyBad (k=99)  &   1 &   1 &   0 &   0 &   0 \\
-		Bad               &   5 &   3 &   0 &   3 &   1 \\ \midrule
-		MainlyNice (k=21) &   0 &   0 &   1 &   0 &   0 \\
-		MainlyNice (k=22) &   0 &   0 &   1 &   0 &   0 \\
-		MainlyNice (k=24) &   0 &   0 &   2 &   0 &   1 \\
-		MainlyNice (k=46) &   0 &   0 &   1 &   1 &   0 \\
-		MainlyNice (k=49) &   0 &   0 &   1 &   3 &   0 \\
-		MainlyBad (k=51)  &   0 &   0 &   2 &   0 &   0 \\
-		MainlyBad (k=53)  &   0 &   0 &   1 &   0 &   0 \\
-		MainlyBad (k=74)  &   0 &   0 &   1 &   1 &   0 \\
-		MainlyBad (k=79)  &   0 &   0 &   1 &   0 &   0 \\ \midrule
-		MainlyNice (k=18) &   0 &   0 &   0 &   1 &   1 \\
-		MainlyNice (k=20) &   0 &   0 &   0 &   1 &   0 \\
-		MainlyNice (k=25) &   0 &   0 &   0 &   1 &   0 \\
-		MainlyNice (k=33) &   0 &   0 &   0 &   1 &   1 \\
-		MainlyNice (k=43) &   0 &   0 &   0 &   1 &   1 \\
-		MainlyNice (k=44) &   0 &   0 &   0 &   1 &   1 \\
-		MainlyNice (k=47) &   0 &   0 &   0 &   1 &   0 \\
-		MainlyBad (k=52)  &   0 &   0 &   0 &   2 &   3 \\
-		MainlyBad (k=58)  &   0 &   0 &   0 &   1 &   3 \\
-		MainlyBad (k=59)  &   0 &   0 &   0 &   1 &   0 \\
-		MainlyBad (k=61)  &   0 &   0 &   0 &   1 &   1 \\
-		MainlyBad (k=64)  &   0 &   0 &   0 &   1 &   2 \\
-		MainlyBad (k=65)  &   0 &   0 &   0 &   2 &   2 \\
-		MainlyBad (k=68)  &   0 &   0 &   0 &   1 &   0 \\
-		MainlyBad (k=80)  &   0 &   0 &   0 &   1 &   1 \\
-		MainlyBad (k=82)  &   0 &   0 &   0 &   1 &   0 \\ \midrule
-		MainlyNice (k=26) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyNice (k=27) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyNice (k=29) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyNice (k=31) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyNice (k=32) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyNice (k=36) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyNice (k=38) &   0 &   0 &   0 &   0 &   2 \\
-		MainlyNice (k=45) &   0 &   0 &   0 &   0 &   1 \\
-		MainlyBad (k=54)  &   0 &   0 &   0 &   0 &   1 \\
-		MainlyBad (k=62)  &   0 &   0 &   0 &   0 &   1 \\
-		MainlyBad (k=63)  &   0 &   0 &   0 &   0 &   2 \\
-		MainlyBad (k=72)  &   0 &   0 &   0 &   0 &   1 \\
-		MainlyBad (k=77)  &   0 &   0 &   0 &   0 &   2 \\ \midrule
+		GrimTrigger       &   5 &   9 &   17 &   31 &   52 \\
+		TitFor2Tat        &   7 &  12 &   20 &   26 &   36 \\
+		TitForTat         &   8 &  14 &   23 &   28 &   42 \\
+		Nice              &   6 &   6 &    8 &    9 &   11 \\
+		MainlyNice (k=3)  &   1 &   1 &    1 &    1 &    1 \\
+		MainlyNice (k=8)  &   1 &   1 &    1 &    1 &    1 \\
+		MainlyNice (k=17) &   1 &   1 &    1 &    1 &    1 \\
+		MainlyNice (k=42) &   1 &   2 &    2 &    2 &    2 \\
+		Indifferent       &   7 &   7 &    7 &    8 &    9 \\
+		MainlyBad (k=70)  &   1 &   1 &    1 &    1 &    1 \\
+		MainlyBad (k=78)  &   1 &   2 &    2 &    2 &    4 \\
+		MainlyBad (k=81)  &   2 &   3 &    4 &    4 &    4 \\
+		MainlyBad (k=85)  &   1 &   1 &    1 &    1 &    1 \\
+		MainlyBad (k=97)  &   1 &   1 &    1 &    1 &    1 \\
+		MainlyBad (k=98)  &   1 &   1 &    1 &    1 &    1 \\
+		MainlyBad (k=99)  &   1 &   2 &    2 &    2 &    2 \\
+		Bad               &   5 &   8 &    8 &   11 &   12 \\ \midrule
+		MainlyNice (k=21) &   0 &   0 &    1 &    1 &    1 \\
+		MainlyNice (k=22) &   0 &   0 &    1 &    1 &    1 \\
+		MainlyNice (k=24) &   0 &   0 &    2 &    2 &    3 \\
+		MainlyNice (k=46) &   0 &   0 &    1 &    2 &    2 \\
+		MainlyNice (k=49) &   0 &   0 &    1 &    4 &    4 \\
+		MainlyBad (k=51)  &   0 &   0 &    2 &    2 &    2 \\
+		MainlyBad (k=53)  &   0 &   0 &    1 &    1 &    1 \\
+		MainlyBad (k=74)  &   0 &   0 &    1 &    2 &    2 \\
+		MainlyBad (k=79)  &   0 &   0 &    1 &    1 &    1 \\ \midrule
+		MainlyNice (k=18) &   0 &   0 &    0 &    1 &    2 \\
+		MainlyNice (k=20) &   0 &   0 &    0 &    1 &    1 \\
+		MainlyNice (k=25) &   0 &   0 &    0 &    1 &    1 \\
+		MainlyNice (k=33) &   0 &   0 &    0 &    1 &    2 \\
+		MainlyNice (k=43) &   0 &   0 &    0 &    1 &    2 \\
+		MainlyNice (k=44) &   0 &   0 &    0 &    1 &    2 \\
+		MainlyNice (k=47) &   0 &   0 &    0 &    1 &    1 \\
+		MainlyBad (k=52)  &   0 &   0 &    0 &    2 &    5 \\
+		MainlyBad (k=58)  &   0 &   0 &    0 &    1 &    4 \\
+		MainlyBad (k=59)  &   0 &   0 &    0 &    1 &    1 \\
+		MainlyBad (k=61)  &   0 &   0 &    0 &    1 &    2 \\
+		MainlyBad (k=64)  &   0 &   0 &    0 &    1 &    3 \\
+		MainlyBad (k=65)  &   0 &   0 &    0 &    2 &    4 \\
+		MainlyBad (k=68)  &   0 &   0 &    0 &    1 &    1 \\
+		MainlyBad (k=80)  &   0 &   0 &    0 &    1 &    2 \\
+		MainlyBad (k=82)  &   0 &   0 &    0 &    1 &    1 \\ \midrule
+		MainlyNice (k=26) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyNice (k=27) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyNice (k=29) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyNice (k=31) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyNice (k=32) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyNice (k=36) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyNice (k=38) &   0 &   0 &    0 &    0 &    2 \\
+		MainlyNice (k=45) &   0 &   0 &    0 &    0 &    1 \\
+		MainlyBad (k=54)  &   0 &   0 &    0 &    0 &    1 \\
+		MainlyBad (k=62)  &   0 &   0 &    0 &    0 &    1 \\
+		MainlyBad (k=63)  &   0 &   0 &    0 &    0 &    2 \\
+		MainlyBad (k=72)  &   0 &   0 &    0 &    0 &    1 \\
+		MainlyBad (k=77)  &   0 &   0 &    0 &    0 &    2 \\ \midrule
 		Population size     &  50 &  72 & 111 & 164 & 248 \\
 		To more cooperative &  16 &  23 &  32 &  40 &  84 \\
 		To less cooperative &  24 &  26 &  44 &  71 &  98 \\ \bottomrule
