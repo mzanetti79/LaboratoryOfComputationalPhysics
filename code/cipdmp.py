@@ -15,7 +15,7 @@ def main():
     SAVE_IMG = opt.saveimg
     LATEX = opt.latex
     np.random.seed(opt.seed) # None = clock, no-number = 100
-	
+
     # PERCENTAGE = opt.percent
 
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
@@ -31,17 +31,17 @@ def main():
     while np.unique(k_strategies, return_counts=True)[1].max() < k_strategies.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED: # TODO USE PLAYERS
         NUM_REPETITIONS += 1
         print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, players.size))
-        
+
         # plot population per strategy
         # total payoff evolution
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) 
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER)
         repeated_players.append(players)
 
         # create strategies history
         unique, counts = np.unique(k_strategies, return_counts=True)
         df = pd.DataFrame([counts],columns=unique)
         df['count'] = players.size
-    
+
         k_strategies = []
         for i in range(len(players)):
             draw = np.random.uniform(0,1)
@@ -49,7 +49,7 @@ def main():
                 k_strategies.append(players[i].s.id)
         k_strategies = np.array(k_strategies)
         playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
-        
+
         players, count_bad, count_good = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
         df['more_coop'] = count_good
         df['less_coop'] = count_bad
@@ -57,12 +57,12 @@ def main():
         print("{} players changed to more cooperative.".format(count_good))
         print("{} players changed to less cooperative.".format(count_bad))
         players = np.append(players, playersToAdd)
-        
+
     if np.unique(k_strategies, return_counts=True)[1].max() >= k_strategies.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")
-        
+
     # save plots
     strategies_df = strategies_df.rename(index=str,
         columns={-3: "GrimTrigger", -2: "TitFor2Tat", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
@@ -75,6 +75,22 @@ def main():
 
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0).astype(int)
+
+    ####
+    store = strategies_df[["count", "more_coop", "less_coop"]]
+    temp = strategies_df.drop(columns=["count", "more_coop", "less_coop"])
+    for i in range(1, temp.shape[0]):
+        temp.iloc[i,:] = temp.iloc[i,:] + temp.iloc[i-1,:]
+
+    #SUM check
+    for i in range(NUM_REPETITIONS):
+        print("\nCount players for round ", i)
+        print(np.sum(temp.iloc[i,:]))
+
+    strategies_df = temp
+    strategies_df[["count", "more_coop", "less_coop"]] = store
+    ####
+
     if LATEX:
         if NUM_PLAYERS > 8:
             print(strategies_df.T.to_latex()) # too large, transpose
@@ -83,7 +99,8 @@ def main():
     else:
         print(strategies_df)
 
-    strategies_df.plot(figsize=(12,5))    
+
+    strategies_df.plot(figsize=(12,5))
     #plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
@@ -103,7 +120,7 @@ def main():
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             plt.xlabel('Match number')
             plt.ylabel('Points')
-        
+
         # plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
 
@@ -112,6 +129,6 @@ def main():
             plt.close()
         else:
             plt.show()
-        
+
 if __name__ == "__main__":
     main()
