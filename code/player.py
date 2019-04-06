@@ -54,13 +54,13 @@ class Player(object):
             self.payoffHist.append(self.M2[action1,action2])
             self.playedHist.append(action2)
             #COOP = 0 DEFECT = 1
-            self.bestGivenOther.append(1 if action1 else 5) #TODO put independent values
-            self.bestAch.append(5 if action2 else 3)
+            self.bestGivenOther.append(self.M2[action1,:].max())
+            self.bestAch.append(self.M2[:,action2].max())
         else:
             self.payoffHist.append(self.M1[action1,action2])
             self.playedHist.append(action1)
-            self.bestGivenOther.append(1 if action2 else 5)
-            self.bestAch.append(5 if action1 else 3)
+            self.bestGivenOther.append(self.M1[:,action2].max())
+            self.bestAch.append(self.M1[action1,:].max())
 
     def get_strategy(self, k):
         """Gets the strategy object given the id."""
