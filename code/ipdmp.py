@@ -1,5 +1,6 @@
 from strategy import *
 from base_options import *
+from player import MultiPlayer
 
 def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=False):
     """Round Robin tournament."""

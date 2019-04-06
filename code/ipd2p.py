@@ -1,4 +1,5 @@
 from strategy import *
+from player import Player
 from base_options import *
 
 def main():

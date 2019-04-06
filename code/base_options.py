@@ -1,6 +1,7 @@
 import argparse
 
 class BaseOptions():
+    #Constant values for each version of the Prisoner Dilemma game
     IPD2P = 0
     IPDMP = 1
     RIPDMP_C = 2
