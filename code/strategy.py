@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 #from mgen import generatePayoffMatrix
 
-# Define global variables to have groundtruth about strategies
+# global variables for ground truth about strategies
 COOPERATE = 0
 DEFECT = 1
 
