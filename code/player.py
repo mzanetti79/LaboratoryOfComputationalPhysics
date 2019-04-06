@@ -82,6 +82,13 @@ class Player(object):
         if self.s.id == GRT: # reset GrT trigger
             self.s.triggered = False
 
+    def metrics(self):
+        """Gives the metrics of the player."""
+        rew_p = np.cumsum(self.payoffHist)
+        yield_p = np.cumsum(self.bestGivenOther)
+        best_p = np.cumsum(self.bestAch)
+        return rew_p, yield_p, best_p
+
 class MultiPlayer(Player):
     """Class to describe multiple players with strategy and history."""
 

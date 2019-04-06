@@ -20,12 +20,8 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
             p2.clear_history()
             p1.play_iter(p2, num_iter)
 
-            rew1 = np.cumsum(p1.payoffHist)
-            rew2 = np.cumsum(p2.payoffHist)
-            yield1 = np.cumsum(p1.bestGivenOther)
-            yield2 = np.cumsum(p2.bestGivenOther)
-            best1 = np.cumsum(p1.bestAch)
-            best2 = np.cumsum(p2.bestAch)
+            rew1, yield1, best1 = p1.metrics()
+            rew2, yield2, best2 = p2.metrics()
 
             yields[p1].append(rew1[-1]/yield1[-1])
             yields[p2].append(rew2[-1]/yield2[-1])
