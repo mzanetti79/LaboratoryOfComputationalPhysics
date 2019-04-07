@@ -80,7 +80,7 @@ def main():
 
     opt = BaseOptions().parse(BaseOptions.IPDMP)
     NUM_ITER = opt.niter
-    NUM_PLAYERS = opt.nplay
+    NUM_PLAYERS = 10
     NUM_REPETITIONS = opt.nrep
     FIXED = opt.fixed
     SAVE_IMG = opt.saveimg
@@ -91,7 +91,7 @@ def main():
 
     # define k for strategy probabilities
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
-    #k_strategies = np.array([GRT,GRT, TFT,TFT, TF2T,TF2T, BAD,BAD, NICE,NICE]) # paper test
+    k_strategies = np.array([TFT,TFT, TFT, TFT, BAD, BAD, BAD, BAD, NICE,NICE])
 
     repeated_players = []
     for i in range(NUM_REPETITIONS):

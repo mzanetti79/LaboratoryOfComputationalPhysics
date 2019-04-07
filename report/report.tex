@@ -140,7 +140,7 @@ Thus we have just seen that the \textit{Nash Equilibrium} is not \textit{Pareto 
 If repeated games are considered this reasoning could loose some meaning. In particular this is the case of the multiplayer Iterated Prisoner Dilemma (IPD), since time and memory (history) must be considered and the combination of the players may have some unexpected outcomes.
 Colman supported this indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups.~\cite{yao1994experimental}
 In addition, strategies like random, Grim Triggers or Tit For (Two) Tat can be introduced.
-Moreover, in this game, or more generally in iterated games, the notions of Nash Equilibrium, Pareto optimal or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionary stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies. \cite{mathieu2017}
+Moreover, in this game, or more generally in iterated games, the notions of Nash Equilibrium, Pareto optimal or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionary stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. In fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long term, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies. ~\cite{mathieu2017}
 Winning a game in this setup simply means achieving a better payoff in the long run.
 %In Section~\ref{s:IPD2P} we will see a simple one-vs-one game, iterated through time, while in the subsequent cases population and other dynamics will be involved.
 
@@ -304,16 +304,16 @@ Doing a special simulation with only deterministic strategies leads indeed to th
 
 \begin{figure}[!ht]
     \centering
-	\includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-evolution-of-game-8}
-	\caption{8 players, evolution of the game}
-	\label{fig:ipdmp8evo}
+	\includegraphics[width=1\columnwidth]{../img/ipdmp/ipdmp-evolution-of-game-10}
+	\caption{10 players, evolution of the game}
+	\label{fig:ipdmp10evo}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-	\includegraphics[width=.8\columnwidth]{../img/ipdmp/ipdmp8-plot-det}
-	\caption{8 players, evolution -- software results \cite{demosw}}
-	\label{fig:ipdmp8evosw}
+	\includegraphics[width=.8\columnwidth]{../img/ipdmp/ipdmp10-plot-det}
+	\caption{10 players, evolution -- software results \cite{demosw}}
+	\label{fig:ipdmp10evosw}
 \end{figure}
 
 \begin{figure}[!ht]
@@ -353,10 +353,9 @@ A similar outcome may also be found in~\cite{mathieu2017} where more advanced st
 
 Previously the winner over all the strategies analyzed by Axelrod in his extensive tests thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution} and taken up as starting point in~\cite{mathieu2017} was the simple \textit{TfT}, proposed to him by Anatol Rapoport.
 
+It is noticed that in a 10 players game depicted in(Figure \ref{fig:ipdmp10evo}) the best overall strategy is \textit{TfT}. As pointed out previously, \textit{TfT} is a reactive strategy that leads in most of the cases to almost the same reward as the opponent. In the end, after various tries, it is found that a "good" setup to get this outcome includes more ``good'' strategies with respect to the ``bad'' ones in order to have a \textit{TfT} winner or, in other words, to defect the ``bad'' players there should be enough people with strategies that limits their power against ``good'' ones(so spiteful or reactive ones). This consideration is not really common in literature but in our opinion it is important and worth noticing, although it can be explained by the game's insights. This statement helps to interpret results and assign them the right meaning. 
 
-\textbf{REDO THIS WITH A SIGNIFICANT - MANUAL - POPULATION. THEN REWRITE}
-It is noticed that in an 8 players game depicted in(Figure \ref{fig:ipdmp8evo}) the best overall strategy is \textit{TfT}. As pointed out previously, \textit{TfT} is a reactive strategy that leads in most of the cases to almost the same reward as the opponent: to win a tournament and it should be coupled with enough (mainly) good players, otherwise the bad or spiteful players will easily overcome and win the tournament. \textbf{Are we sure?: -> }In the end, after various tries, it is found that a "good" setup to get this outcome includes more ``good'' strategies with respect to the ``bad'' ones in order to have a \textit{TfT} winner. This consideration is not really common in literature but in our opinion it is important and worth noticing, although it can be explained by the game's insights. This statement helps to interpret results and assign them the right meaning. On one side \textit{TfT} is considered one of the best strategies to win the tournament since it surely is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases depending on the initial population. On the other hand spiteful strategies like \textbf{GrT} seems to get the maximum in heterogeneous and more mixed populations. In any case both of them seems extremized on their behavior even if effective in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies.\citep{mathieu2017} 
-
+On one side \textit{TfT} is considered one of the best strategies to win the tournament since it surely is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases depending on the initial population. On the other hand spiteful strategies like \textbf{GrT} seems to get the maximum in heterogeneous and more mixed populations. In any case both of them seems extremized on their behavior even if effective in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies.\cite{mathieu2017} 
 
 
 In each tournament, variations of the results can be obtained by running the simulations multiple times and generating boxplots and since random strategies have been introduced, the result of a one-shot complete game may differ with respect to the average results; these are rare cases that ought to be considered as outliers.
@@ -662,25 +661,10 @@ Moreover, research may be directed to find and implement different features or n
 	\end{tabular}
 \end{table}
 
-\begin{table}[ht]
-   	\caption{8-players IPD, sorted by points, statistics}
-   	\label{tab:ipdmp8}
-   	\centering
-    \begin{tabular}{l|rrrr|rrrrr} \toprule
-    	                  &    \multicolumn{4}{c}{Points}    & \multicolumn{2}{c}{Coop. count} & \multicolumn{2}{c}{Defect count} &          \\
-    	Strategy          &   avg &   std &  yield & achieve &   avg &                     std &   avg &                      std & Coop. \% \\ \midrule
-    	GrimTrigger       & 928.8 & 27.18 &  81.99 &   72.07 & 158.6 &                    4.30 & 191.4 &                     4.30 &    45.31 \\
-    	Bad               & 874.0 & 29.51 & 100.00 &   50.40 &   0.0 &                    0.00 & 350.0 &                     0.00 &     0.00 \\
-    	TitForTat         & 828.8 & 11.55 &  72.18 &   69.35 & 226.9 &                    5.59 & 123.1 &                     5.59 &    64.83 \\
-    	MainlyBad (k=72)  & 819.6 & 30.82 &  80.80 &   53.18 &  95.0 &                    6.46 & 255.0 &                     6.46 &    27.14 \\
-    	TitFor2Tat        & 780.5 & 16.99 &  66.50 &   69.75 & 260.5 &                    9.11 &  89.5 &                     9.11 &    74.43 \\
-    	Indifferent       & 743.7 & 15.20 &  68.23 &   53.94 & 175.9 &                    5.43 & 174.1 &                     5.43 &    50.26 \\
-    	MainlyNice (k=27) & 682.2 & 21.11 &  55.75 &   55.05 & 256.8 &                    8.98 &  93.2 &                     8.98 &    73.37 \\
-    	Nice              & 675.3 & 19.67 &  47.47 &   66.86 & 350.0 &                    0.00 &   0.0 &                     0.00 &   100.00 \\ \bottomrule
-    \end{tabular}
-\end{table}
 
 \begin{table}[ht]
+
+%TODO adapt with latest 10
 	\caption{10-players IPD, static strategies, sorted by points, statistics}
 	\label{tab:ipdmp10stat}
 	\centering
