@@ -289,9 +289,10 @@ On the long run, by seeing these numbers, the conclusion is that these are the s
 More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in \autoref{tab:ipd2p}, where collected statistics are presented.
 
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
-The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a fixed \texttt{NUM\_ITER} of times. This value is set by default to \texttt{50} in simulations, but can be changed with a parameter when launching the programs).
+The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a fixed \texttt{NUM\_ITER} of times. This value is set by default to \texttt{50} in simulations, but can be changed with a parameter when launching the program.
 
-Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole tournament. Nobody knows the strategies of the other players.
+
+Each player chooses its fixed strategy at the beginning of the tournament and holds it throughout the course of the whole match without knowing the strategies of the other players.
 
 In short, it is a variation of the previous case, in which multiple players, with possibly different strategies, play in a RR way. The variation consists in the fact that a single player will win the tournament if at the end of it, he has the highest cumulative payoff.
 Since there are $C=N\cdot (N-1)/2$ possible couples of players and $I$ iterations of the game, at the end the total number of matches will be $C\cdot I$. From the perspective of each single player, the total number of match to attend is simply $I\cdot(N-1)$.
@@ -343,22 +344,26 @@ Doing a special simulation with only deterministic strategies leads indeed to th
     \label{fig:ipdmp50boxfinal}
 \end{figure}
 
-\textbf{TODO REWRITE, do not touch these outcomes may...}
-The results of the tournament (and of the following study-cases) depend on the initial population and the balance between the amount of \textit{Bad} and \textit{TfT} players. The best strategy overall seems to be the \textit{TfT} one.
-These outcomes may also be found in~\cite{mathieu2017}, and \textit{TfT} was also reported to be the winner over all the strategies analyzed by Axelrod in his extensive tests based on tournaments and evolutionary competition on the IPD, thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution} and taken up in~\cite{mathieu2017}.
-The strategy was proposed to him by Anatol Rapoport.
-A player might choose this move if he/she wants almost the same reward as the opponent. This strategy is even more interesting in the following sections.
+Throughout our tests we have noticed how the results of the tournament(and of the following study-cases) depend on the initial population and the balance between the amount of ``good'' and ``bad'' players. Changing the population could lead to different results: an insight that is rarely pointed out.
 
-It is noticed that in an 8 players game (Figure \ref{fig:ipdmp8evo}) the best overall strategy is \textit{Bad guy}. This behaviour is linked to a subtle balance between ``good'' and ``bad'' strategies. As pointed out previously, \textit{TfT} is a reactive strategy to win a tournament and it should be coupled with enough (mainly) good players, otherwise the bad players will easily overcome and win the tournament. In the end, after various tries, it is found that a good setup includes more ``good'' strategies with respect to the ``bad'' strategies in order to have a \textit{TfT} winner. This consideration is not available in literature but it is important and worth noticing it, although it can be explained by the game's intrinsic. This statement helps to interpret results and assign them the right meaning. \textit{TfT} is considered one of the best strategies to win the tournament since it surely is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases depending on the initial population.
 
-In each tournament, variations of the results can be obtained by running the simulations multiple times and generating boxplots.
-Since random strategies have been introduced, the result of a one-shot complete game may differ with respect to the average results; a simple example of this is the 8 players game where on average the \textit{Bad} guy wins but there may be runs where the \textit{GrT} strategy wins (as evidenced in \autoref{fig:ipdmp8evo}).
+If we pick the 50 players game as in \autoref{fig:ipdmp50boxfinal}, in which players are assigned to a random strategy the winning strategy is always \textit{GrT}. Just behind it we can find the \textit{TfT} followed by a tight set of \textit{Tf2T}, \textit{(Mainly) Bad}, \textit{Bad} and \textit{Indifferent} strategies. At last, \textit{(Mainly) Nice} strategies achieve the lowest scores.
 
-Another example is the 50 players game as depicted in \autoref{fig:ipdmp50boxfinal}, in which players are assigned to a random strategy. In this repeated tournament, the winning strategy is always \textit{TfT}. Multiple \textit{(Mainly) Bad} strategies achieve a high score similarly to other \textit{TfT} strategies. Just below them, in this simulation the results of \textit{GrT} can be compared to an \textit{indifferent}. At last, \textit{(Mainly) Nice} strategies achieve the lowest scores.
+A similar outcome may also be found in~\cite{mathieu2017} where more advanced strategies are implemented(and \textit{GrT} is again called \textit{spiteful}). 
+
+Previously the winner over all the strategies analyzed by Axelrod in his extensive tests thoroughly described in~\cite{axelrod1981evolution,axelrod1984evolution} and taken up as starting point in~\cite{mathieu2017} was the simple \textit{TfT}, proposed to him by Anatol Rapoport.
+
+
+\textbf{REDO THIS WITH A SIGNIFICANT - MANUAL - POPULATION. THEN REWRITE}
+It is noticed that in an 8 players game depicted in(Figure \ref{fig:ipdmp8evo}) the best overall strategy is \textit{TfT}. As pointed out previously, \textit{TfT} is a reactive strategy that leads in most of the cases to almost the same reward as the opponent: to win a tournament and it should be coupled with enough (mainly) good players, otherwise the bad or spiteful players will easily overcome and win the tournament. \textbf{Are we sure?: -> }In the end, after various tries, it is found that a "good" setup to get this outcome includes more ``good'' strategies with respect to the ``bad'' ones in order to have a \textit{TfT} winner. This consideration is not really common in literature but in our opinion it is important and worth noticing, although it can be explained by the game's insights. This statement helps to interpret results and assign them the right meaning. On one side \textit{TfT} is considered one of the best strategies to win the tournament since it surely is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases depending on the initial population. On the other hand spiteful strategies like \textbf{GrT} seems to get the maximum in heterogeneous and more mixed populations. In any case both of them seems extremized on their behavior even if effective in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies.\citep{mathieu2017} 
+
+
+
+In each tournament, variations of the results can be obtained by running the simulations multiple times and generating boxplots and since random strategies have been introduced, the result of a one-shot complete game may differ with respect to the average results; these are rare cases that ought to be considered as outliers.
 
 Running simulations with different strategies and a different initial population (i.e. 20 or 30 players), obtained results are different, especially since the balance between the number of \textit{(Mainly) Bad} and \textit{(Mainly) Nice} guys differs from the previously analyzed scenarios. In these cases \textit{TfT} does not win, but performs almost as good as \textit{(Mainly) Bad} guys.
 
-\textbf{TODO ADD YIELD ACHIEVE}
+The results are backed also by the \textit{achieve} and \textit{yield} metrics that do not change much with respect to the ``A vs B'' games. On can notice easily how these does not change much if compared to the previous case and how it is the combination of the two that "matters" and not one of them in particular even if obviously the players which have an higher \textit{achieve} are usually in the "winner" part of the chart. 
 
 \section{Repeated multiple players IPD} \label{s:rIPDMP}
 The previously defined MPIPD tournament is then iterated many times.
