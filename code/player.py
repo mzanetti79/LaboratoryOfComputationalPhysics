@@ -140,9 +140,8 @@ class MultiPlayer(Player):
                 else:
                     print("Unchanged, too small diff")
 
-            elif alternative == 2:  ## CHECK IF CORRECT 
+            elif alternative == 2:  ## CHECK IF CORRECT
                 old_c = players[i].c
-                new_c = np.random.uniform(0,1) ##
                 if players[i].s.id > IND: # BAD player
                     # if high in the chart go less coop (0.1+0)/2 = 0.05
                     #     low in the chart go more coop (0.1+1)/2 = 0.55
@@ -152,8 +151,10 @@ class MultiPlayer(Player):
                     #     low in the chart go less coop (0.5+(1-1))/2 = 0.25
                     players[i].c = (players[i].c + (1-i/len(players))**2)/2
                 print("old c {} \t new c {}".format(old_c, players[i].c))
-
-                if np.random.uniform(0,1) < i/len(players):
+                new_c = players[i].c
+                c_diff = old_c - new_c
+                THRESHOLD = 0.1
+                if np.abs(c_diff) > THRESHOLD:
                     # low c: more prob going to a less cooperative behaviour
                     # generate some random strategies based on the case
                     #if np.random.uniform(0,1) > players[i].c:
