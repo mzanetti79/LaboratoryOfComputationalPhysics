@@ -110,7 +110,7 @@ class MultiPlayer(Player):
         count_bad = count_good = 0
         more_coop = NICE # TODO can we substitute and get rid of these?
         less_coop = BAD
-    
+
         for i in range(len(players)):
             k_strategies = None
             if alternative == 1:
@@ -139,9 +139,10 @@ class MultiPlayer(Player):
                             k_strategies = MultiPlayer.get_random_strategies_list(players[i].s.id, to_more_coop=True, c=new_c, use_bounds=True)
                 else:
                     print("Unchanged, too small diff")
-					
-            elif alternative == 2:
+
+            elif alternative == 2:  ## CHECK IF CORRECT 
                 old_c = players[i].c
+                new_c = np.random.uniform(0,1) ##
                 if players[i].s.id > IND: # BAD player
                     # if high in the chart go less coop (0.1+0)/2 = 0.05
                     #     low in the chart go more coop (0.1+1)/2 = 0.55
@@ -151,11 +152,12 @@ class MultiPlayer(Player):
                     #     low in the chart go less coop (0.5+(1-1))/2 = 0.25
                     players[i].c = (players[i].c + (1-i/len(players))**2)/2
                 print("old c {} \t new c {}".format(old_c, players[i].c))
-					
+
                 if np.random.uniform(0,1) < i/len(players):
                     # low c: more prob going to a less cooperative behaviour
                     # generate some random strategies based on the case
-                    if np.random.uniform(0,1) > players[i].c:
+                    #if np.random.uniform(0,1) > players[i].c:
+                    if new_c < 0.5:
                         #TODO shouldn't we go to the new_c split as in the alt 1?
                         if players[i].s.id < less_coop:
                             print("{} \tto less coop: ".format(players[i].s), end='')
@@ -168,7 +170,7 @@ class MultiPlayer(Player):
                             count_good += 1
 
                             k_strategies = MultiPlayer.get_random_strategies_list(players[i].s.id, to_more_coop=True)
-							
+
             # select one strategy from the set
             if k_strategies is not None:
                 players[i].s = players[i].random_strategy(k_strategies)
@@ -195,7 +197,7 @@ class MultiPlayer(Player):
             else:
                 boundL = max(50, id) if id >= 0 else 50
                 boundH = (1-c)*100
-                             
+
         if boundL > boundH: # swap if needed
             boundL, boundH = boundH, boundL
 
