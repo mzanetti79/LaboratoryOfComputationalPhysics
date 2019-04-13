@@ -108,78 +108,71 @@ class MultiPlayer(Player):
         # c in [0,1] where 0 means not cooperative, 1 means cooperative
 
         count_bad = count_good = 0
-        more_coop = NICE # TODO can we substitute and get rid of these?
-        less_coop = BAD
 
         for i in range(len(players)):
-            k_strategies = None
+            # save old c, generate new c, replace c
+            old_c = players[i].c
+
             if alternative == 1:
-                old_c = players[i].c
                 new_c = np.random.uniform(0,1)
-                players[i].c = new_c
-                print("old c {} \t new c {}".format(old_c, new_c))
+                # bounded, more coop if new_c > 0.5
 
-                c_diff = old_c - new_c
-                THRESHOLD = 0.1
-                print("ID {} abs {}".format(players[i].s.id, np.abs(c_diff)))
-                if np.abs(c_diff) > THRESHOLD:
-                    if new_c < 0.5:
-                        # new c is lower go to a less coop
-                        if players[i].s.id < less_coop:
-                            print("{} \tto less coop: ".format(players[i].s), end='')
-                            count_bad += 1
-
-                            k_strategies = MultiPlayer.get_random_strategies_list(players[i].s.id, to_more_coop=False, c=new_c, use_bounds=True)
-                    else:
-                        # if new c is greater than the old one go to a more coop behaviour
-                        if players[i].s.id != more_coop and players[i].s.id != GRT:
-                            print("{} \tto more coop: ".format(players[i].s), end='')
-                            count_good += 1
-
-                            k_strategies = MultiPlayer.get_random_strategies_list(players[i].s.id, to_more_coop=True, c=new_c, use_bounds=True)
-                else:
-                    print("Unchanged, too small diff")
-
-            elif alternative == 2:  ## CHECK IF CORRECT
-                old_c = players[i].c
+            elif alternative == 2:
                 if players[i].s.id > IND: # BAD player
                     # if high in the chart go less coop (0.1+0)/2 = 0.05
                     #     low in the chart go more coop (0.1+1)/2 = 0.55
-                    players[i].c = (players[i].c + (i/len(players))**2)/2
+                    new_c = (players[i].c + (i/len(players))**2)/2
                 else:
                     # if high in the chart go more coop (0.1+(1-0))/2 = 0.55
                     #     low in the chart go less coop (0.5+(1-1))/2 = 0.25
-                    players[i].c = (players[i].c + (1-i/len(players))**2)/2
-                print("old c {} \t new c {}".format(old_c, players[i].c))
-                new_c = players[i].c
-                c_diff = old_c - new_c
-                THRESHOLD = 0.1
-                if np.abs(c_diff) > THRESHOLD:
-                    # low c: more prob going to a less cooperative behaviour
-                    # generate some random strategies based on the case
-                    #if np.random.uniform(0,1) > players[i].c:
-                    if new_c < 0.5:
-                        #TODO shouldn't we go to the new_c split as in the alt 1?
-                        if players[i].s.id < less_coop:
-                            print("{} \tto less coop: ".format(players[i].s), end='')
-                            count_bad += 1
+                    new_c = (players[i].c + (1-i/len(players))**2)/2
+                # unbounded, more coop if new_c > 0.5
 
-                            k_strategies = MultiPlayer.get_random_strategies_list(players[i].s.id, to_more_coop=False)
-                    else:
-                        if players[i].s.id != more_coop and players[i].s.id != GRT:
-                            print("{} \tto more coop: ".format(players[i].s), end='')
-                            count_good += 1
+            players[i].c = new_c
+            print("old c {} \t new c {}".format(old_c, players[i].c))
+            
+            # get a set of new strategy candidates, bounds only for alt 1
+            k_strategies, gone_bad, gone_good = MultiPlayer.change_strategy_check(players[i].s, old_c, new_c, (alternative == 1))
+            count_bad += gone_bad
+            count_good += gone_good
 
-                            k_strategies = MultiPlayer.get_random_strategies_list(players[i].s.id, to_more_coop=True)
-
-            # select one strategy from the set
+            # select randomly one strategy from the set
             if k_strategies is not None:
-                players[i].s = players[i].random_strategy(k_strategies)
+                players[i].s = players[i].get_strategy(np.random.choice(k_strategies))
                 if players[i].s.id < 0:
                     players[i].c = 0.5 # reset c for TfT,Tf2T,GrT
                 print("new = {}\n".format(players[i].s))
 
         return players, count_bad, count_good
+
+    @staticmethod
+    def change_strategy_check(strategy, old_c, new_c, bounds=False):
+        """Generates a set of random strategies for a player based on its strategy its c and optionally using bounds."""
+        THRESHOLD = 0.1
+        k_strategies = None
+        count_bad = count_good = 0
+
+        c_diff = old_c - new_c
+        print("ID {} abs {}".format(strategy.id, np.abs(c_diff)))
+
+        if np.abs(c_diff) > THRESHOLD:
+            if new_c < 0.5:
+                # new c is lower go to a less coop
+                if strategy.id < BAD:
+                    print("{} \tto less coop: ".format(strategy), end='')
+                    count_bad = 1
+                    
+                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, to_more_coop=False, c=new_c, use_bounds=bounds)
+            else:
+                # if new c is greater than the old one go to a more coop behaviour
+                if strategy.id != NICE and strategy.id != GRT:
+                    print("{} \tto more coop: ".format(strategy), end='')
+                    count_good = 1
+
+                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, to_more_coop=True, c=new_c, use_bounds=bounds)
+        else:
+            print("Unchanged, too small diff")
+        return k_strategies, count_bad, count_good
 
     @staticmethod
     def get_random_strategies_list(id, to_more_coop, c=None, use_bounds=False):
@@ -203,10 +196,6 @@ class MultiPlayer(Player):
             boundL, boundH = boundH, boundL
 
         return np.append(stat_choices, np.random.randint(boundL, boundH+1, size=max_gen))
-
-    def random_strategy(self, k_list):
-        """Returns a random strategy object from the list."""
-        return self.get_strategy(np.random.choice(k_list))
 
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
