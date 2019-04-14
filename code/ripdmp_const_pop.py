@@ -2,7 +2,6 @@ from strategy import *
 from base_options import *
 from ipdmp import IPDRoundRobin
 from player import MultiPlayer
-from matplotlib.ticker import MaxNLocator
 
 def main():
     pd.set_option('display.max_columns', None)

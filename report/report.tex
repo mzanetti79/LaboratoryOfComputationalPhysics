@@ -374,7 +374,7 @@ This method also resembles how Axelrod made his tests~\cite[\S 2.6]{mathieu2017}
 
 Figures~[\ref{fig:constR},\ref{fig:constFI},\ref{fig:constLI}] show the evolution of a population of 50 players over some iterations.
 Details on the evolution of the population, grouped by strategy type, are presented in \autoref{tab:ripdmp-const}.
-It can be easily seen how the \textit{GrT} and \textit{TfT} strategies very quickly outpaces the others: in just two iterations they represent almost half of the population, with a predominance of \textit{TfT} players. At the fifth iteration we can see that \textit{GrT} takes the lead but, as also stated before, results depend on the initial population: for example, by fixing the seed to $24$ as in \autoref{fig:constRseed24} it can be seen how \textit{TfT} players dominate, while using $1209$ as seed (\autoref{fig:constRseed1209}) leads to a final population formed by mostly \textit{Bad} players.
+It can be easily seen how the \textit{GrT} and \textit{TfT} strategies very quickly outpaces the others: in just two iterations they represent almost half of the population, with a predominance of \textit{TfT} players. At the fifth iteration we can see that \textit{GrT} takes the lead but, as also stated before, results depend on the initial population: for example, by fixing the seed to $24$ as in \autoref{fig:constRseed24} and \autoref{tab:ripdmp-const-24} it can be seen how \textit{TfT} players dominate, while using $1209$ as seed (\autoref{fig:constRseed1209} and \autoref{tab:ripdmp-const-1209}) leads to a final population formed by mostly \textit{Bad} players.
 
 These results add something to the previous results obtained by the simulation of the iterated Prisoner's Dilemma: the \textit{TfT} overwhelm its brother \textit{Tf2T}. Looking at the scores instead we can see how \textit{GrT} and \textit{TfT} are pretty similar since they do not trigger each other.
 
@@ -481,7 +481,7 @@ The new strategy is picked from a set made of $6$ different random strategies pl
 	$c_N = (c+(i/num\_players)^2)/2$, that is, players high in the chart will go to a \textit{less} cooperative behaviour and vice-versa.
 	Good players are updated according to $c_N = (c+((1-i)/num\_players)^2)/2$, that is, players high in the chart will go to a \textit{more} cooperative behaviour and vice-versa.
 	Only some players will randomly be touched by these strategy changes.
-	Random strategies are unbounded, i.e. they span the entire range $[0,100]$ which corresponds respectively to \textit{Nice} and \textit{Bad} values.
+	Random strategies are bounded in the portion of the range which corresponds to the direction dictated by $c_N$, respectively towards \textit{Nice} or \textit{Bad} limit values.
 \end{enumerate}
 
 Since there is no intrinsic cooperation attitude in deterministic strategies like \textit{GrT, TfT, Tf2T}, which only respond to opponent moves, $c=0.5$ is set as default whenever a player changes its strategy into one of these types.
@@ -708,7 +708,7 @@ Moreover, research may be directed to find and implement different features or n
 	\centering
     \begin{tabular}{l|ccccc} \toprule
     	$\downarrow$ Strategy -- Iter $\rightarrow$  & 0 & 1 & 2 & 3 & 4 \\ \midrule
-    	GrimTrigger       &  5 &  5 &   9 &  17 &  30 \\
+    	\textbf{GrimTrigger} &  5 &  5 &   9 &  17 &  30 \\
     	TitFor2Tat        &  7 &  7 &   8 &   6 &   2 \\
     	TitForTat         &  8 &  8 &  15 &  19 &  14 \\
     	Nice              &  6 &  6 &   3 &   0 &   0 \\
@@ -729,14 +729,69 @@ Moreover, research may be directed to find and implement different features or n
 \end{table}
 
 \begin{table}[ht]
+	\caption{rMPIPD, constant pop. of 50, $seed = 24$, strategy evolution}
+	\label{tab:ripdmp-const-24}
+	\centering
+	\begin{tabular}{l|rrrrrrrr} \toprule
+    	$\downarrow$ Strategy -- Iter $\rightarrow$  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \midrule
+		GrimTrigger       &   1 &   1 &   2 &   3 &   6 &  11 &  15 &  13 \\
+		TitFor2Tat        &   5 &   5 &   3 &   2 &   0 &   0 &   0 &   0 \\
+		\textbf{TitForTat}&   9 &   9 &  14 &  23 &  35 &  35 &  35 &  37 \\
+		Nice              &   3 &   3 &   2 &   1 &   1 &   0 &   0 &   0 \\
+		MainlyNice (k=4)  &   1 &   1 &   1 &   1 &   0 &   0 &   0 &   0 \\
+		MainlyNice (k=5)  &   1 &   1 &   1 &   1 &   0 &   0 &   0 &   0 \\
+		MainlyNice (k=28) &   1 &   1 &   1 &   1 &   0 &   0 &   0 &   0 \\
+		MainlyNice (k=34) &   2 &   2 &   2 &   2 &   0 &   0 &   0 &   0 \\
+		Indifferent       &   5 &   5 &   3 &   2 &   2 &   0 &   0 &   0 \\
+		MainlyBad (k=51)  &   1 &   1 &   1 &   1 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=52)  &   1 &   1 &   0 &   0 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=56)  &   1 &   1 &   1 &   0 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=58)  &   1 &   1 &   1 &   0 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=61)  &   1 &   1 &   0 &   0 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=70)  &   1 &   1 &   1 &   0 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=92)  &   2 &   2 &   1 &   1 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=93)  &   1 &   1 &   2 &   1 &   1 &   0 &   0 &   0 \\
+		MainlyBad (k=96)  &   1 &   1 &   1 &   0 &   0 &   0 &   0 &   0 \\
+		MainlyBad (k=97)  &   1 &   1 &   2 &   2 &   1 &   1 &   0 &   0 \\
+		Bad               &  11 &  11 &  11 &   9 &   4 &   3 &   0 &   0 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\caption{rMPIPD, constant pop. of 50, $seed = 1209$, strategy evolution}
+	\label{tab:ripdmp-const-1209}
+	\centering
+	\begin{tabular}{l|rrrrr} \toprule
+    	$\downarrow$ Strategy -- Iter $\rightarrow$  & 0 & 1 & 2 & 3 & 4 \\ \midrule
+		GrimTrigger       &   1 &   1 &   1 &   2 &   3 \\
+		TitFor2Tat        &   5 &   5 &   4 &   1 &   0 \\
+		TitForTat         &   8 &   8 &   6 &   2 &   1 \\
+		Nice              &   6 &   6 &   2 &   2 &   1 \\
+		MainlyNice (k=4)  &   2 &   2 &   2 &   2 &   0 \\
+		MainlyNice (k=12) &   1 &   1 &   1 &   1 &   0 \\
+		MainlyNice (k=24) &   1 &   1 &   0 &   0 &   0 \\
+		MainlyNice (k=31) &   1 &   1 &   1 &   0 &   0 \\
+		MainlyNice (k=34) &   1 &   1 &   1 &   0 &   0 \\
+		Indifferent       &  11 &  11 &   9 &   6 &   3 \\
+		MainlyBad (k=58)  &   1 &   1 &   1 &   1 &   0 \\
+		MainlyBad (k=63)  &   1 &   1 &   2 &   2 &   1 \\
+		MainlyBad (k=74)  &   1 &   1 &   2 &   1 &   1 \\
+		MainlyBad (k=76)  &   1 &   1 &   1 &   1 &   1 \\
+		MainlyBad (k=82)  &   1 &   1 &   2 &   3 &   2 \\
+		MainlyBad (k=99)  &   1 &   1 &   2 &   3 &   4 \\
+		\textbf{Bad}      &   7 &   7 &  13 &  23 &  33 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
 	\caption{rMPIPD, increasing pop. (alternative 1), strategy evolution through repetitions}
 	\label{tab:ripdmp-incr}
 	\centering
 	\begin{tabular}{l|cccccc} \toprule
 		$\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
-		GrimTrigger       &  5 &   9 &  18 &  35 &  66 &  125 \\
+		\textbf{GrimTrigger} &  5 &   9 &  18 &  35 &  66 &  125 \\
 		TitFor2Tat        &  7 &  12 &  20 &  31 &  44 &   58 \\
-		TitForTat         &  8 &  14 &  26 &  42 &  72 &  119 \\
+		\textbf{TitForTat}   &  8 &  14 &  26 &  42 &  72 &  119 \\
 		Nice              &  6 &   6 &   8 &  12 &  18 &   23 \\
 		MainlyNice (k=3)  &  1 &   1 &   1 &   1 &   1 &    2 \\
 		MainlyNice (k=8)  &  1 &   1 &   1 &   2 &   4 &    5 \\
@@ -763,9 +818,9 @@ Moreover, research may be directed to find and implement different features or n
 	\centering
 	\begin{tabular}{l|ccccc} \toprule
 		$\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 \\ \midrule
-		GrimTrigger       &   5 &   9 &   17 &   31 &   52 \\
-		TitFor2Tat        &   7 &  12 &   20 &   26 &   36 \\
-		TitForTat         &   8 &  14 &   23 &   28 &   42 \\
+		\textbf{GrimTrigger} &   5 &   9 &   17 &   31 &   52 \\
+		\textbf{TitFor2Tat}  &   7 &  12 &   20 &   26 &   36 \\
+		\textbf{TitForTat}   &   8 &  14 &   23 &   28 &   42 \\
 		Nice              &   6 &   6 &    8 &    9 &   11 \\
 		MainlyNice (k=3)  &   1 &   1 &    1 &    1 &    1 \\
 		MainlyNice (k=8)  &   1 &   1 &    1 &    1 &    1 \\

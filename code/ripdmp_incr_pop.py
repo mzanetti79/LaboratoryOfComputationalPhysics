@@ -98,12 +98,12 @@ def main():
     else:
         print(strategies_df)
     
-    strategies_df.plot(figsize=(12,5))
-    # plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1,1))
+    fig = strategies_df.plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
+    fig.xaxis.set_major_locator(MaxNLocator(integer=True))
     if SAVE_IMG:
         plt.savefig('../img/ripdmp-incr/ripdmp-evolution-increasing-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
