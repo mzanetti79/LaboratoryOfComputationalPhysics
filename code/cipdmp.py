@@ -2,6 +2,7 @@ from strategy import *
 from base_options import *
 from ipdmp import IPDRoundRobin
 from player import MultiPlayer
+from matplotlib.ticker import MaxNLocator
 
 def main():
     pd.set_option('display.max_columns', None)
@@ -62,7 +63,7 @@ def main():
         print("{} players changed to more cooperative.".format(count_good))
         print("{} players changed to less cooperative.".format(count_bad))
         players = np.append(players, playersToAdd)
-        
+
     if np.unique(players, return_counts=True)[1].max() >= players.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
@@ -90,12 +91,13 @@ def main():
         print(strategies_df)
 
 
-    strategies_df.drop(columns=["count", "more_coop", "less_coop"]).plot(figsize=(12,5))
+    fig = strategies_df.drop(columns=["count", "more_coop", "less_coop"]).plot(figsize=(12,5))
     #plt.legend(ncol=int(len(strategies_df.columns)/10), bbox_to_anchor=(1, 1))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
     plt.xlabel('Time')
+    fig.xaxis.set_major_locator(MaxNLocator(integer=True))
     if SAVE_IMG:
         plt.savefig('../img/cipdmp-incr/cipdmp-evolution-increasing-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()

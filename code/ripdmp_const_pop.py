@@ -77,8 +77,8 @@ def main():
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
-    fig.xaxis.set_major_locator(MaxNLocator(integer=True)) ##
     plt.xlabel('Time')
+    fig.xaxis.set_major_locator(MaxNLocator(integer=True))
     if SAVE_IMG:
         plt.savefig('../img/ripdmp-const/ripdmp-evolution-const-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
