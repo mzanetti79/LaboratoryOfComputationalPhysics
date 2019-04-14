@@ -178,12 +178,15 @@ class MultiPlayer(Player):
     def get_random_strategies_list(id, to_more_coop, c=None, use_bounds=False):
         """Generates a set of random strategies for a player based on its ID and optionally its c and bounds."""
         stat_choices = [TFT, TF2T, GRT]
-        max_gen = 6
+        MAX_GEN = 6
 
         if not use_bounds:
-            # TODO choose if to use to_more_coop here
-            boundL = NICE
-            boundH = BAD
+            if to_more_coop:
+                boundL = NICE
+                boundH = max(id, IND)-1 # TODO check these
+            else:
+                boundL = max(id, IND)
+                boundH = BAD
         else:
             if to_more_coop:
                 boundL = (1-c)*100
@@ -195,7 +198,7 @@ class MultiPlayer(Player):
         if boundL > boundH: # swap if needed
             boundL, boundH = boundH, boundL
 
-        return np.append(stat_choices, np.random.randint(boundL, boundH+1, size=max_gen))
+        return np.append(stat_choices, np.random.randint(boundL, boundH+1, size=MAX_GEN))
 
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
