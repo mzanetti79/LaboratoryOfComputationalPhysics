@@ -2,6 +2,7 @@ from strategy import *
 from base_options import *
 from ipdmp import IPDRoundRobin
 from player import MultiPlayer
+from matplotlib.ticker import MaxNLocator
 
 def main():
     pd.set_option('display.max_columns', None)
@@ -17,7 +18,7 @@ def main():
     SAVE_IMG = opt.saveimg
     LATEX = opt.latex
     np.random.seed(opt.seed) # None = clock, no-number = 100
-	
+
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=FIXED)
@@ -32,7 +33,7 @@ def main():
 
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
-        
+
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
@@ -51,7 +52,7 @@ def main():
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
     else:
         print("Convergence not reached")
-        
+
     # save plots
     strategies_df = strategies_df.rename(index=str,
         columns={-3: "GrimTrigger", -2: "TitFor2Tat", -1: "TitForTat", 0: "Nice", 100: "Bad", 50: "Indifferent"})
@@ -72,10 +73,11 @@ def main():
     else:
         print(strategies_df)
 
-    strategies_df.plot(figsize=(12,5))    
+    fig = strategies_df.plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
+    fig.xaxis.set_major_locator(MaxNLocator(integer=True)) ##
     plt.xlabel('Time')
     if SAVE_IMG:
         plt.savefig('../img/ripdmp-const/ripdmp-evolution-const-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
@@ -92,12 +94,12 @@ def main():
             plt.xlabel('Match number')
             plt.ylabel('Points')
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
-        
+
         if SAVE_IMG:
             plt.savefig('../img/ripdmp-const/ripdmp-scores-const-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()
-            
+
 if __name__ == "__main__":
     main()
