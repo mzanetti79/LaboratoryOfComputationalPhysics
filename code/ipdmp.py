@@ -2,17 +2,14 @@ from strategy import *
 from base_options import *
 from player import MultiPlayer
 
-def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=False, DEBUG=False):
+def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False, save_plot=False, save_img=False, DEBUG=False):
     """Round Robin tournament."""
     n = len(players)
-
-    # each player plays against another in a round robin scheme
-    if plot:
-        plt.figure(figsize=(12,5))
 
     p = {obj:[0] * num_iter for obj in players}
     yields = {obj:[] for obj in players}
     achieves = {obj:[] for obj in players}
+
     for (i, p1) in zip(np.arange(n), players):
         if DEBUG:
             print("Match progress = {}/{}".format((i+1), players.size))
@@ -31,11 +28,12 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
             achieves[p1].append(rew1[-1]/best1[-1])
             achieves[p2].append(rew2[-1]/best2[-1])
 
-            if plot:
+            if save_plot:
                 p[p1] += rew1
                 p[p2] += rew2
 
-    if plot:
+    if save_plot:
+        plt.figure(figsize=(12,5))
         for i in p:
             plt.plot(p[i], label=i.s)
         plt.xlabel('Iteration')
@@ -47,6 +45,11 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
             plt.close()
         else:
             plt.show()
+
+    # early exit if work is done
+    # rank calculation is expensive when players are a lot
+    if not return_ranking:
+        return players
 
     # calculate ranking and matches dataframes
     # has to be done after the tournament
@@ -105,7 +108,8 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, plot=(i==(NUM_REPETITIONS-1)), save_img=SAVE_IMG) # not against itself, plot last rep.
+        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True,
+            save_plot=(i==(NUM_REPETITIONS-1)), save_img=SAVE_IMG) # not against itself, plot last rep.
 
         repeated_players.append(players)
         repeated_ranking_df = repeated_ranking_df.append(ranking_df) if i!=0 else ranking_df

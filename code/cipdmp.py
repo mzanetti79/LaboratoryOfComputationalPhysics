@@ -31,7 +31,7 @@ def main():
         NUM_REPETITIONS += 1
         print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, players.size))
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER)
+        players = IPDRoundRobin(players, NUM_ITER)
         repeated_players.append(players)
 
         # get changes in strategies and accumulate in the dataframe

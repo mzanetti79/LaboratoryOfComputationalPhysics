@@ -36,15 +36,18 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
-        repeated_players.append(players)
-
+        players = None
         if ALTERNATIVE == 3:
+            players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True) # no strategy change, not against itself
+
             score = ranking_df.groupby(['labels'], as_index=False).sum()
             score = score.sort_values(by=['points'], ascending=False)
             score['points'] = score.max().points-score['points']
             score['percentage'] = score['points']/score.max().points
             print(score) # TODO delete after tests
+        else:
+            players = IPDRoundRobin(players, NUM_ITER)
+        repeated_players.append(players)
 
         for i in range(len(players)):
             draw = np.random.uniform(0,1)

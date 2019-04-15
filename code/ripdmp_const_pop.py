@@ -34,7 +34,7 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
+        players = IPDRoundRobin(players, NUM_ITER) # no strategy change, not against itself
         repeated_players.append(players)
 
         # create strategies history
