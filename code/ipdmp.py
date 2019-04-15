@@ -2,7 +2,7 @@ from strategy import *
 from base_options import *
 from player import MultiPlayer
 
-def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=False):
+def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=False, DEBUG=False):
     """Round Robin tournament."""
     n = len(players)
 
@@ -14,6 +14,9 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
     yields = {obj:[] for obj in players}
     achieves = {obj:[] for obj in players}
     for (i, p1) in zip(np.arange(n), players):
+        if DEBUG:
+            print("Match progress = {}/{}".format((i+1), players.size))
+
         start = i if against_itself else i+1
         for (j, p2) in zip(np.arange(start, n), players[start:]):
             p1.clear_history()
@@ -51,6 +54,9 @@ def IPDRoundRobin(players, num_iter, against_itself=False, plot=False, save_img=
     matches_df = pd.DataFrame() # all matches played sorted by time
 
     for (i, p) in zip(np.arange(n), players):
+        if DEBUG:
+            print("Point progress = {}/{}".format((i+1), players.size))
+
         points = p.get_points()
         cooperate_count, defect_count = p.get_coop_def_count()
 
