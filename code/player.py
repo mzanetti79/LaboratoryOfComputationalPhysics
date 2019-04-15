@@ -115,7 +115,6 @@ class MultiPlayer(Player):
 
             if alternative == 1:
                 new_c = np.random.uniform(0,1)
-                # bounded, more coop if new_c > 0.5
 
             elif alternative == 2:
                 if players[i].s.id > IND: # BAD player
@@ -126,74 +125,58 @@ class MultiPlayer(Player):
                     # if high in the chart go more coop (0.1+(1-0))/2 = 0.55
                     #     low in the chart go less coop (0.5+(1-1))/2 = 0.25
                     new_c = (players[i].c + (1-i/len(players))**2)/2
-                # unbounded, more coop if new_c > 0.5
 
             players[i].c = new_c
-            print("old c {} \t new c {}".format(old_c, players[i].c))
             
-            # get a set of new strategy candidates, bounds only for alt 1
-            k_strategies, gone_bad, gone_good = MultiPlayer.change_strategy_check(players[i].s, old_c, new_c, (alternative == 1))
-            count_bad += gone_bad
-            count_good += gone_good
+            # get a set of new strategy candidates
+            k_strategies = MultiPlayer.change_strategy_check(players[i].s, old_c, new_c)
 
-            # select randomly one strategy from the set
             if k_strategies is not None:
+                # change is possible, there are candidates
+
+                # update counters
+                if new_c > old_c:
+                    count_good += 1
+                else:
+                    count_bad += 1
+
+                # select randomly one strategy from the set
                 players[i].s = players[i].get_strategy(np.random.choice(k_strategies))
                 if players[i].s.id < 0:
                     players[i].c = 0.5 # reset c for TfT,Tf2T,GrT
-                print("new = {}\n".format(players[i].s))
 
         return players, count_bad, count_good
 
     @staticmethod
-    def change_strategy_check(strategy, old_c, new_c, bounds=False):
+    def change_strategy_check(strategy, old_c, new_c):
         """Generates a set of random strategies for a player based on its strategy its c and optionally using bounds."""
         THRESHOLD = 0.1
+
         k_strategies = None
-        count_bad = count_good = 0
-
         c_diff = old_c - new_c
-        print("ID {} abs {}".format(strategy.id, np.abs(c_diff)))
-
         if np.abs(c_diff) > THRESHOLD:
             if new_c < 0.5:
-                # new c is lower go to a less coop
+                # new c is lower go to less coop
                 if strategy.id < BAD:
-                    print("{} \tto less coop: ".format(strategy), end='')
-                    count_bad = 1
-                    
-                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, to_more_coop=False, c=new_c, use_bounds=bounds)
+                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, new_c, to_more_coop=False)
             else:
-                # if new c is greater than the old one go to a more coop behaviour
+                # new c is greater go to more coop
                 if strategy.id != NICE and strategy.id != GRT:
-                    print("{} \tto more coop: ".format(strategy), end='')
-                    count_good = 1
-
-                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, to_more_coop=True, c=new_c, use_bounds=bounds)
-        else:
-            print("Unchanged, too small diff")
-        return k_strategies, count_bad, count_good
+                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, new_c, to_more_coop=True)
+        return k_strategies
 
     @staticmethod
-    def get_random_strategies_list(id, to_more_coop, c=None, use_bounds=False):
+    def get_random_strategies_list(id, c, to_more_coop):
         """Generates a set of random strategies for a player based on its ID and optionally its c and bounds."""
         stat_choices = [TFT, TF2T, GRT]
         MAX_GEN = 6
 
-        if not use_bounds:
-            if to_more_coop:
-                boundL = NICE
-                boundH = max(id, IND)-1 # TODO check these
-            else:
-                boundL = max(id, IND)
-                boundH = BAD
+        if to_more_coop:
+            boundL = (1-c)*100
+            boundH = min(id, 50) if id >= 0 else 50
         else:
-            if to_more_coop:
-                boundL = (1-c)*100
-                boundH = min(id, 50) if id >= 0 else 50
-            else:
-                boundL = max(50, id) if id >= 0 else 50
-                boundH = (1-c)*100
+            boundL = max(50, id) if id >= 0 else 50
+            boundH = (1-c)*100
 
         if boundL > boundH: # swap if needed
             boundL, boundH = boundH, boundL
