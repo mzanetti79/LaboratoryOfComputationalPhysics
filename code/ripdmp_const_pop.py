@@ -20,6 +20,7 @@ def main():
 
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
+    # define population
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS>Strategy.TOT_STRAT), fixed=FIXED)
 
     repeated_players = [] # strategies evolution
@@ -41,11 +42,9 @@ def main():
         df = pd.DataFrame([counts],columns=unique)
         strategies_df = strategies_df.append(df)
 
-        # easy fix (depending on task)
-        # add one winner strategy or multiple previous winners?
         for i in range(0,int(NUM_PLAYERS * PERCENTAGE)):
             k_strategies = np.append(k_strategies, players[i].s.id)
-            k_strategies = np.delete(k_strategies,np.argmax(players[NUM_PLAYERS-i-1].s.id))
+            k_strategies = np.delete(k_strategies, np.argmax(players[NUM_PLAYERS-i-1].s.id))
 
     if np.unique(k_strategies, return_counts=True)[1].max() >= k_strategies.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
@@ -64,6 +63,7 @@ def main():
 
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0).astype(int)
+
     if LATEX:
         if NUM_PLAYERS > 8:
             print(strategies_df.T.to_latex()) # too large, transpose

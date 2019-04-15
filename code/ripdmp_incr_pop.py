@@ -21,6 +21,7 @@ def main():
 	
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
+    # define initial population
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED) 
 
     repeated_players = [] # strategies evolution
@@ -39,12 +40,11 @@ def main():
         repeated_players.append(players)
 
         if ALTERNATIVE == 3:
-            score = ranking_df.groupby(['labels'], as_index = False).sum()
+            score = ranking_df.groupby(['labels'], as_index=False).sum()
             score = score.sort_values(by=['points'], ascending=False)
-            # to keep the same stucture as incr_pop
             score['points'] = score.max().points-score['points']
             score['percentage'] = score['points']/score.max().points
-            print(score)
+            print(score) # TODO delete after tests
 
         for i in range(len(players)):
             draw = np.random.uniform(0,1)
@@ -118,8 +118,6 @@ def main():
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             plt.xlabel('Match number')
             plt.ylabel('Points')
-
-        # plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
 
         if SAVE_IMG:

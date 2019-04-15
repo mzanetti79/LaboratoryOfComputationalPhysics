@@ -5,11 +5,12 @@ from player import MultiPlayer
 
 def main():
     pd.set_option('display.max_columns', None)
+    pd.set_option('precision', 2)
 
     opt = BaseOptions().parse(BaseOptions.CIPDMP)
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
-    NUM_REPETITIONS = 0 # arg override
+    NUM_REPETITIONS = -1 # arg override
     MAX_ALLOWED = opt.maxrep
     ALTERNATIVE = opt.altern
     FIXED = opt.fixed
@@ -17,24 +18,19 @@ def main():
     LATEX = opt.latex
     np.random.seed(opt.seed) # None = clock, no-number = 100
 
-    # PERCENTAGE = opt.percent
-
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
-    repeated_players = []
-    strategies_df = pd.DataFrame() # strategies evolution
-
-    # define k for strategy probabilities
+    # define initial population
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS,replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
-
-    # initialize players with given strategies
     players = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
+
+    repeated_players = [] # strategies evolution
+    strategies_df = pd.DataFrame()
+
     while np.unique(players, return_counts=True)[1].max() < players.size*3/4 and NUM_REPETITIONS < MAX_ALLOWED:
         NUM_REPETITIONS += 1
         print("Reached rep {} of max {} - pop = {}".format(NUM_REPETITIONS, MAX_ALLOWED, players.size))
 
-        # plot population per strategy
-        # total payoff evolution
         players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER)
         repeated_players.append(players)
 
@@ -53,15 +49,16 @@ def main():
             if draw > i/len(players):
                 k_strategies.append(players[i].s.id)
         k_strategies = np.array(k_strategies)
-        playersToAdd = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
+        players_to_add = np.array([MultiPlayer(k, changing=True) for k in k_strategies])
 
         players, count_bad, count_good = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
+        players = np.append(players, players_to_add)
+
+        # TODO should df['count'] go here or stay above?
         df['more_coop'] = count_good
         df['less_coop'] = count_bad
         strategies_df = strategies_df.append(df,sort=True) # sort fixes FutureWarning
-        print("{} players changed to more cooperative.".format(count_good))
-        print("{} players changed to less cooperative.".format(count_bad))
-        players = np.append(players, playersToAdd)
+        print("{} players changed to more cooperative, {} to less cooperative.".format(count_good, count_bad))
 
     if np.unique(players, return_counts=True)[1].max() >= players.size*3/4:
         print("Convergence speed of round-robin tournament is {} with {}-people".format(NUM_REPETITIONS, NUM_PLAYERS))
@@ -89,7 +86,6 @@ def main():
     else:
         print(strategies_df)
 
-
     fig = strategies_df.drop(columns=["count", "more_coop", "less_coop"]).plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
@@ -102,7 +98,7 @@ def main():
     else:
         plt.show()
 
-    for (r, players) in zip(np.arange(NUM_REPETITIONS), repeated_players):
+    for (r, players) in zip(np.arange(NUM_REPETITIONS)+1, repeated_players):
         plt.figure(figsize=(12,5))
         for p in players:
             points = p.get_points()
@@ -110,8 +106,6 @@ def main():
             plt.title("Multi pl. game: {}".format(NUM_PLAYERS))
             plt.xlabel('Match number')
             plt.ylabel('Points')
-
-        # plt.legend(ncol=int(NUM_PLAYERS/10), bbox_to_anchor=(1, 1))
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
 
         if SAVE_IMG:
