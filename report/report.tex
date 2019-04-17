@@ -100,7 +100,6 @@ Another possible formulation is by means of a trade-off game, the \textit{closed
 \end{quote}
 
 Mathematically, the PD can be expressed with linear algebra. The key component is the \textit{Payoff matrix} $M$, which quantifies the reward of each player depending on whether it cooperated or defected:
-
 $$
 M = 
 \begin{pmatrix} 
@@ -108,9 +107,7 @@ R & S \\
 T & P 
 \end{pmatrix}
 $$
-
 where $T$ (Temptation), $R$ (Reward), $S$ (``Sucker's''), $P$ (Punishment) are integer numbers that satisfy the following conditions, as proven by Rapoport~\cite{rapoport}:
-
 $$
 T>R>P>S; \quad 2R > T+S 
 $$
@@ -119,7 +116,6 @@ For example, $T=3$, $R=2$, $P=1$ and $S=0$, or  $T=5$, $R=3$, $P=1$, $S=0$, the 
 $R$ is returned for both players if they both cooperate, $P$ if they both defect; if the two players' actions differ, $S$ is for the player who cooperated and $T$ is for the one who defected.
 
 Similarly, each player's choice (move or action) for a single round can be represented by one of the two axis in $\mathbb{R}^2$, i.e. $u_C=\begin{pmatrix} 1 \\ 0 \end{pmatrix}$ or $u_D=\begin{pmatrix} 0 \\ 1 \end{pmatrix}$, where the first axis stands for \textit{Cooperate} and the second for \textit{Defect}. Being $u_1$ and $u_2$ the moves of the first and second player respectively, their rewards $r_1$ and $r_2$ can then be computed as:
-
 $$
 r_1 = u_1^T M u_2
 \quad
@@ -264,7 +260,7 @@ In addition to these considerations, simulations were performed multiple times t
 
 Moreover, it can be seen that the only strategies that reach $0$ as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 
-It is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy, it is necessary to defect at the first round, and, as already discussed, to play optimally against \textit{GrT}(or equivalently \textit{TfT}), it is necessary to cooperate until the last round where you should defect.~\cite{mathieu2017}
+It is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy, it is necessary to defect at the first round, and, as already discussed, to play optimally against \textit{GrT} (or equivalently \textit{TfT}), it is necessary to cooperate until the last round where you should defect.~\cite{mathieu2017}
 But the number of rounds is unknown to the players and they should know in advance the type of opponent: this would enable them to adapt their strategy, but is not allowed by the rules of the game. 
 
 Finally, two additional metrics have been introduced: \textit{yield} and \textit{achieve}. 
