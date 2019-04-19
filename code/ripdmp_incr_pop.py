@@ -100,7 +100,7 @@ def main():
     else:
         print(strategies_df)
     
-    fig = strategies_df.plot(figsize=(12,5))
+    fig = strategies_df.drop(columns=["count"]).plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
     plt.ylabel('Number of strategies')
