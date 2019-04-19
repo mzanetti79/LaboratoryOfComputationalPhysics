@@ -36,9 +36,8 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players = None
         if ALTERNATIVE == 3:
-            players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True) # no strategy change, not against itself
+            players, ranking_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True) # no strategy change, not against itself
 
             score = ranking_df.groupby(['labels'], as_index=False).sum()
             score = score.sort_values(by=['points'], ascending=False)

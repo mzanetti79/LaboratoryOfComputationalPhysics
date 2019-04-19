@@ -46,15 +46,9 @@ def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False,
         else:
             plt.show()
 
-    # early exit if work is done
-    # rank calculation is expensive when players are a lot
-    if not return_ranking:
-        return players
-
     # calculate ranking and matches dataframes
     # has to be done after the tournament
     ranking_df = pd.DataFrame() # all points gained by players
-    matches_df = pd.DataFrame() # all matches played sorted by time
 
     for (i, p) in zip(np.arange(n), players):
         if DEBUG:
@@ -70,19 +64,14 @@ def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False,
         ranking_df = ranking_df.append(df)
         # ranking_df = ranking_df.sort_values(['points'], ascending=False)
 
-        for j in range(i, len(p.results)):
-            # can now access any property from p1 or p2 for plots
-            # each match can be explored
-            df = pd.DataFrame(
-                [[p.s, p.prevOpponent[j].s, p.results[j], p.prevOpponent[j].results[i]]],
-                columns=['p1','p2','p1-score','p2-score']
-            )
-            matches_df = matches_df.append(df)
-
     players = np.array(ranking_df.sort_values(['points'], ascending=False)['rrp'])
     ranking_df = ranking_df.drop(columns=['rrp']).reset_index(drop=True)
 
-    return players, ranking_df, matches_df
+    # rank calculation is expensive when players are a lot, but necessary to have rank
+    if not return_ranking:
+        return players
+
+    return players, ranking_df
 
 def main():
     pd.set_option('display.max_columns', None)
@@ -108,7 +97,7 @@ def main():
         # initialize players with given strategies
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
-        players, ranking_df, matches_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True,
+        players, ranking_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True,
             save_plot=(i==(NUM_REPETITIONS-1)), save_img=SAVE_IMG) # not against itself, plot last rep.
 
         repeated_players.append(players)
