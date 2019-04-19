@@ -43,6 +43,7 @@ def main():
             df = temp.add(df, fill_value=0).astype(int)
         df['count'] = players.size # complete with other data
 
+        # add new players as per ripdmp (incr. population) alternative 1
         k_strategies = []
         for i in range(len(players)):
             draw = np.random.uniform(0,1)
