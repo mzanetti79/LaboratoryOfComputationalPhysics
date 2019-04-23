@@ -18,11 +18,11 @@ def main():
     SAVE_IMG = opt.saveimg
     LATEX = opt.latex
     np.random.seed(opt.seed) # None = clock, no-number = 100
-	
+
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
     # define initial population
-    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED) 
+    k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
 
     repeated_players = [] # strategies evolution
     unique, counts = np.unique(k_strategies, return_counts=True)
@@ -41,7 +41,7 @@ def main():
 
             score = ranking_df.groupby(['labels'], as_index=False).sum()
             score = score.sort_values(by=['points'], ascending=False)
-            score['points'] = score.max().points-score['points']
+            score['points'] = score.max().points-score['points']  # For this reason we go from 0
             score['percentage'] = score['points']/score.max().points
             print(score) # TODO delete after tests
         else:
@@ -99,7 +99,7 @@ def main():
             print(strategies_df.to_latex(index=False))
     else:
         print(strategies_df)
-    
+
     fig = strategies_df.drop(columns=["count"]).plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
     plt.title('Strategies evolution')
