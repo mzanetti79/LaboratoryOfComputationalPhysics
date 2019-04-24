@@ -156,32 +156,37 @@ class MultiPlayer(Player):
         c_diff = old_c - new_c
         if np.abs(c_diff) > THRESHOLD:
             if new_c < 0.5:
-                # new c is lower go to less coop
+                # new c is lower go to bad side
                 if strategy.id < BAD:
-                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, new_c, to_more_coop=False)
+                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, new_c, to_good_side=False)
             else:
-                # new c is greater go to more coop
-                if strategy.id != NICE and strategy.id != GRT:
-                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, new_c, to_more_coop=True)
+                # new c is greater go to good side
+                if strategy.id != NICE:
+                    k_strategies = MultiPlayer.get_random_strategies_list(strategy.id, new_c, to_good_side=True)
         return k_strategies
 
     @staticmethod
-    def get_random_strategies_list(id, c, to_more_coop):
+    def get_random_strategies_list(id, c, to_good_side):
         """Generates a set of random strategies for a player based on its ID and optionally its c and bounds."""
-        stat_choices = [TFT, TF2T, GRT]
         MAX_GEN = 6
 
-        if to_more_coop:
+        if to_good_side:
             boundL = (1-c)*100
             boundH = min(id, 50) if id >= 0 else 50
+            strat_choices = [TFT, TF2T]
         else:
             boundL = max(50, id) if id >= 0 else 50
             boundH = (1-c)*100
+            strat_choices = [TFT, TF2T, GRT]
 
         if boundL > boundH: # swap if needed
             boundL, boundH = boundH, boundL
+            if to_good_side:
+                strat_choices = [TFT, TF2T, GRT]
+            else:
+                strat_choices = [TFT, TF2T]
 
-        return np.append(stat_choices, np.random.randint(boundL, boundH+1, size=MAX_GEN))
+        return np.append(strat_choices, np.random.randint(boundL, boundH+1, size=MAX_GEN))
 
     def play_iter(self, opponent, num_iter):
         """Plays the game against an opponent num_iter times."""
