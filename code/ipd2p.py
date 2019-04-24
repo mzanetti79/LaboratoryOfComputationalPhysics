@@ -1,13 +1,12 @@
+import os
 from strategy import *
 from player import Player
 from base_options import *
-import os
 
 def main():
+    root = os.path.dirname(os.path.abspath(__file__))[:-5] # removes /code
+
     opt = BaseOptions().parse(BaseOptions.IPD2P)
-    
-    root = os.path.dirname(os.path.abspath(__file__))[:-5]
-    
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep

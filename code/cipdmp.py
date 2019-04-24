@@ -1,8 +1,9 @@
+import os
 from strategy import *
 from base_options import *
 from ipdmp import IPDRoundRobin
 from player import MultiPlayer
-import os
+
 def main():
     pd.set_option('display.max_columns', None)
     pd.set_option('precision', 2)
