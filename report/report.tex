@@ -280,7 +280,7 @@ The \textit{achieve} column is a coupled metric that takes into account both pla
 On the contrary, taking the averages of these two metrics with respect to all the subsequent matches, it can be seen how the only strategies that achieve high performance on both are the \textit{Tf(2)T} and \textit{GrT}, meaning that even if they do not win every time, they achieve pretty high payoffs.
 On the long run, on the basis of these numbers, the conclusion is that these the strategies would emerge since yielding the maximum possible payoff does not imply achieving high overall results.
 
-More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in both \autoref{tab:ipd2p} and \autoref{tab:ipd2pavg}, where collected statistics are presented. \textbf{should we ref another time the tables? they are both ref'ed above}
+More insights about this part, including the complete collection of the generated pictures, can be found in the repository and in both \autoref{tab:ipd2p} and \autoref{tab:ipd2pavg}, where collected statistics are presented.
 
 \section{Multiple players IPD - Round-robin scheme} \label{s:IPDMP}
 The IPD with \textit{round-robin} (RR) scheme, used to match-up the opponents, consists in a number of players, with multiple strategies, not necessarily different, with each player playing once against each other for a fixed \texttt{NUM\_ITER} of times. This value is set by default to $50$ in simulations but can be changed with a parameter when launching the program.
@@ -327,9 +327,6 @@ Analyzing the 50 players game as in Figures~[\ref{fig:ipdmp50evo},\ref{fig:ipdmp
     \label{fig:ipdmp50boxfinal}
 \end{figure}
 
-A similar outcome may also be found in \cite{mathieu2017} where more advanced strategies are implemented (in that paper \textit{GrT} is again called \textit{spiteful}).
-\textbf{Mi sembra un po' slegata ->, FR: togliendo that was prima di proposed va meglio?} The winner over all the strategies analyzed by Axelrod in his extensive tests, thoroughly described in \cite{axelrod1981evolution,axelrod1984evolution} and taken up as a starting point in \cite{mathieu2017}, was the simple \textit{TfT} proposed by Anatol Rapoport.
-
 In a 10 players game, as presented in \autoref{fig:ipdmp10evo}, the best overall strategy is \textit{TfT}. As pointed out previously, \textit{TfT} is a reactive strategy that leads in most of the cases to almost the same reward as the opponent. After several tries, it is found that a ``good'' setup to get this outcome includes more ``nice'' strategies than ``bad'' ones in order to have a \textit{TfT} winner or to defect the ``bad'' players, there should be enough people with strategies having limited power against ``good'' players (so spiteful or reactive ones). This consideration is not common in the literature but in our opinion it is important and worth noticing, although it can be explained by the game's insights. This statement helps to interpret results and assign them the right meaning.
 
 \begin{figure}[!ht]
@@ -346,7 +343,9 @@ In a 10 players game, as presented in \autoref{fig:ipdmp10evo}, the best overall
     \label{fig:ipdmp10evosw}
 \end{figure}
 
-Historically \textit{TfT} was considered one of the best strategies to win the tournament since it is one of the best strategies to maximize the score. However, \textit{TfT} wins only in specific tournaments cases depending on the initial population. Moreover, spiteful strategies like \textit{GrT} seem to get the maximum in heterogeneous and more mixed populations. In any case, both have an extreme behavior even if effective in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies.~\cite{mathieu2017}
+Historically \textit{TfT} was considered one of the best strategies to win the tournament since it is one of the best strategies to maximize the score.
+This fact was demonstrated in the extensive tests done by Axelrod, thoroughly described in \cite{axelrod1981evolution,axelrod1984evolution} and taken up as a starting point in \cite{mathieu2017}: \textit{TfT}, proposed by Anatol Rapoport, was the winner over all strategies.
+However, here it is proven that \textit{TfT} wins only in specific tournaments cases depending on the initial population. Moreover, spiteful strategies like \textit{GrT} seem to get the maximum in heterogeneous and more mixed populations. In any case, both have an extreme behavior even if effective in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies.~\cite{mathieu2017}
 
 In each tournament, some variations of the results can be seen by repeating the simulation multiple times with the same initial population and generating boxplots; since random strategies have been introduced, the result of a one-shot complete game may differ with respect to the average results. These are rare cases that ought to be considered as outliers. Moreover, running simulations with different strategies or with a different initial population (i.e. 20 or 30 players, or by changing the seed), obtained results can be different, especially since the balance between the number of \textit{(Mainly) Bad} and \textit{(Mainly) Nice} guys changes from the previously analyzed scenarios. The results of the tournaments are not predictable without knowing the initial population but this is an information available only to external observers and \textit{not} to the actual players. 
 
@@ -423,7 +422,7 @@ In this case, the number of players (population) is increased at each iteration.
 In our software, the first of the three proposed methods is used by default. Other methods can be set using the \texttt{ALTERNATIVE} variable.
 
 \textbf{STILL TO ADAPT TO THE NEW TABLES}
-Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iterations using alternative $1$. In this case, convergence is not reached at the fifth iteration, since the population is increasing but the simulation still shows the same behavior. The \textit{GrT} and \textit{TfT} strategies are getting stronger and stronger. In conclusion, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behavior and converge to the \textit{TfT} strategy. Details on the evolution of the population can be found in \autoref{tab:ripdmp-incr}.
+Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrMI},\ref{fig:incrLI}] show the evolution of a population of 50 players over four iterations using alternative $1$. In this case, convergence is not reached at the fifth iteration, since the population is increasing, but the simulation still shows the same behavior. The \textit{GrT} and \textit{TfT} strategies are getting stronger and stronger. In conclusion, in the future, i.e. evaluating the problem with more iterations, the population will increase with similar behavior and converge to these strategies as in the constant population scenario. Details on the evolution of the population can be found in \autoref{tab:ripdmp-incr}.
 
 It is noted that simulation times grow at each iteration since for each player, as we have seen in \autoref{s:IPDMP}, $I\cdot(N'-1)$ rounds are added and $I\cdot(N'-1)\cdot{NUM\_ITER}$ iterations have to be played and the results sorted: this easily explodes. Taking into account the dependence with respect to the initial population, what is suggested from the previous constant population case is preserved also when the population number constraint is relaxed.
 
@@ -474,7 +473,7 @@ Two alternatives are proposed to change $c$ after each round.
 
 At this point, if the absolute value of the difference between the old $c$ and the new $c_N$ is greater than a threshold (set to $0.1$) the strategy will change. 
 The new strategy is picked from a set made of $6$ different random strategies plus \textit{GrT, TfT, Tf2T}.
-Note that \textit{GrT} is not available if the strategy is going to change towards the good side, a choice dictated by the behavior of the trigger strategy.
+Note that \textit{GrT} is not available if the player's strategy is going to change towards the good side: in our vision, \textit{GrT} is a revengeful strategy, and the fact that others call it \textit{spiteful} also support that. We cannot propose this strategy if someone wants to be a ``good'' player.
 The random strategy generation is bounded based on the strategy's $id$ ($k$ for probability strategies) and $c_N$.\footnote{As a consequence, 4 different cases have to be handled, depending on $id$ or $50$ being considered inside the $\min$ and $\max$ functions in the bounds.}
 \begin{itemize}
     \item if $c_N \ge 0.5$ the strategies stay on the ``good'' side, between $(1-c)\times 100$ and $\min(id,50)$.
@@ -524,7 +523,7 @@ Details on the evolution of the population can be found in \autoref{tab:cripdmp}
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r1}
-    \caption{First iteration scores ($it=0$) (alternative 2)}
+    \caption{First iteration scores ($it=1$) (alternative 2) \textbf{no 0??}}
     \label{fig:incrCFI2}
 \end{figure}
 
