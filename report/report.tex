@@ -162,7 +162,7 @@ The deterministic strategies are:
 \end{description}
 
 The strategies are considered static in case they apply the same move at each iteration as in \textit{Nice guy}, \textit{Bad guy} and dynamic elsewhere.
-These players' strategies are generally fixed in time, i.e. a player cannot change its strategy between rounds, unless specifically requested by the study case rules.% (for an example, see Section~\ref{s:crIPDMP}).
+These players' strategies are generally fixed in time, i.e. a player cannot change its strategy between rounds, unless specifically requested by the study case rules. % (for an example, see Section~\ref{s:crIPDMP}).
 Many more and much complicated strategies could be analyzed and our implementation is open and structured so that it can be easy to add one strategy just by changing a couple of lines in the code.
 
 \section{Two players IPD} \label{s:IPD2P}
@@ -461,7 +461,7 @@ It is noted that simulation times grow at each iteration since for each player, 
 
 It is interesting to note how Wu and Axelrod \cite{IPDnoise} exploit this behavior to react to noise in the game: by slightly altering the \textit{TfT} strategy in both directions, adding generosity (some percentage of opponent's defections go unpunished) or contrition (avoid responding to a defect move when a player's previous defection was unintended), the ``error'' can be quickly recovered and cooperation can be successfully restored. Note, however, that in this work these two variations of the \textit{TfT} strategy are not implemented.
 
-The other alternatives gives us similar results that do not change our considerations. Full details can be found in the \hyperref[s:appendix]{Appendix}. The only exception is alternative $3$ \textbf{todo complete}.
+The other alternatives gives us similar results that do not change our considerations. Full details can be found in the \hyperref[s:appendix]{Appendix}. The only exception is alternative $3$ because the score obtained by each player is not equally distributed as in the other two cases. This benefit the strategies that obtain the best overall score and disadvantage all the other strategies.
 \section{rMPIPD with changing strategies} \label{s:crIPDMP}
 A step further is made by allowing players to change their strategies in the rIPDMP setup, from which the main structure is unaltered.
 Each player has a gene $c$, representing his attitude to cooperate. This value is initially assigned a value of $c=k/100$, where $k$ is the probability of cooperating for random, \textit{Bad} and \textit{Nice} strategies. For \textit{GrT}, \textit{TfT} and \textit{Tf2T} $c$ is set to $0.5$ since these strategies do not have an intrinsic specific attitude for cooperating.
