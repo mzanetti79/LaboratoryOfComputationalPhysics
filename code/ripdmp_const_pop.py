@@ -2,10 +2,12 @@ from strategy import *
 from base_options import *
 from ipdmp import IPDRoundRobin
 from player import MultiPlayer
-
+import os
 def main():
     pd.set_option('display.max_columns', None)
     pd.set_option('precision', 2)
+
+    root = os.path.dirname(os.path.abspath(__file__))[:-5]
 
     opt = BaseOptions().parse(BaseOptions.RIPDMP_C)
     NUM_ITER = opt.niter
@@ -79,7 +81,7 @@ def main():
     plt.xlabel('Time')
     fig.xaxis.set_major_locator(MaxNLocator(integer=True))
     if SAVE_IMG:
-        plt.savefig('../img/ripdmp-const/ripdmp-evolution-const-pop-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
+        plt.savefig('{}/img/ripdmp-const/ripdmp-evolution-const-pop-{}.eps'.format(root, NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()
@@ -95,7 +97,7 @@ def main():
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
 
         if SAVE_IMG:
-            plt.savefig('../img/ripdmp-const/ripdmp-scores-const-pop-{}-r{}.eps'.format(NUM_PLAYERS, r),format='eps',bbox_inches='tight')
+            plt.savefig('{}/img/ripdmp-const/ripdmp-scores-const-pop-{}-r{}.eps'.format(root, NUM_PLAYERS, r),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()

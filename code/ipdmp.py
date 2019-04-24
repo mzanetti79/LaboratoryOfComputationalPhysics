@@ -1,8 +1,9 @@
 from strategy import *
 from base_options import *
 from player import MultiPlayer
+import os
 
-def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False, save_plot=False, save_img=False, DEBUG=False):
+def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False, save_plot=False, save_img=False, DEBUG=False, root=''):
     """Round Robin tournament."""
     n = len(players)
 
@@ -41,7 +42,7 @@ def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False,
         plt.title("Evolution of the game")
         plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
         if save_img: # we only save images for ipdmp script
-            plt.savefig('../img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(len(p)),format='eps',bbox_inches='tight')
+            plt.savefig('{}/img/ipdmp/ipdmp-evolution-of-game-{}.eps'.format(root,len(p)),format='eps',bbox_inches='tight')
             plt.close()
         else:
             plt.show()
@@ -76,6 +77,8 @@ def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False,
 def main():
     pd.set_option('display.max_columns', None)
 
+    root = os.path.dirname(os.path.abspath(__file__))[:-5]
+
     opt = BaseOptions().parse(BaseOptions.IPDMP)
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
@@ -98,7 +101,7 @@ def main():
         players = np.array([MultiPlayer(k) for k in k_strategies])
 
         players, ranking_df = IPDRoundRobin(players, NUM_ITER, return_ranking=True,
-            save_plot=(i==(NUM_REPETITIONS-1)), save_img=SAVE_IMG) # not against itself, plot last rep.
+            save_plot=(i==(NUM_REPETITIONS-1)), save_img=SAVE_IMG, root=root) # not against itself, plot last rep.
 
         repeated_players.append(players)
         repeated_ranking_df = repeated_ranking_df.append(ranking_df) if i!=0 else ranking_df
@@ -135,7 +138,7 @@ def main():
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
-        plt.savefig('../img/ipdmp/ipdmp-boxplot-single-match-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
+        plt.savefig('{}/img/ipdmp/ipdmp-boxplot-single-match-{}.eps'.format(root, NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()
@@ -152,7 +155,7 @@ def main():
     plt.ylabel('Points')
     plt.xlabel('Player')
     if SAVE_IMG:
-        plt.savefig('../img/ipdmp/ipdmp-boxplot-final-points-{}.eps'.format(NUM_PLAYERS),format='eps',bbox_inches='tight')
+        plt.savefig('{}/img/ipdmp/ipdmp-boxplot-final-points-{}.eps'.format(root,NUM_PLAYERS),format='eps',bbox_inches='tight')
         plt.close()
     else:
         plt.show()

@@ -1,10 +1,13 @@
 from strategy import *
 from player import Player
 from base_options import *
+import os
 
 def main():
     opt = BaseOptions().parse(BaseOptions.IPD2P)
-	
+    
+    root = os.path.dirname(os.path.abspath(__file__))[:-5]
+    
     NUM_ITER = opt.niter
     NUM_PLAYERS = opt.nplay
     NUM_REPETITIONS = opt.nrep
@@ -67,7 +70,7 @@ def main():
             plt.ylabel('Reward')
             plt.title("Means and std for {} iterations".format(NUM_REPETITIONS))
             if SAVE_IMG:
-                plt.savefig('../img/ipd2p/ipd2p-boxplot-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
+                plt.savefig('{}/img/ipd2p/ipd2p-boxplot-{}-{}.eps'.format(root,str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
                 plt.close()
             else:
                 plt.show()
@@ -99,7 +102,7 @@ def main():
             ])
 
             if SAVE_IMG:
-                plt.savefig('../img/ipd2p/ipd2p-rewards-{}-{}.eps'.format(str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
+                plt.savefig('{}/img/ipd2p/ipd2p-rewards-{}-{}.eps'.format(root,str(p1.s).replace(" ",""),str(p2.s).replace(" ","")),format='eps',bbox_inches='tight')
                 plt.close()
             else:
                 plt.show()
