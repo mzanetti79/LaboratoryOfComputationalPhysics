@@ -59,14 +59,14 @@ def main():
 
             elif ALTERNATIVE == 2:
                 if i < int(NUM_PLAYERS * PERCENTAGE):
-                   if draw > 0.2:
-                       k_strategies = np.append(k_strategies, players[i].s.id)
+                    if draw > 0.2:
+                        k_strategies = np.append(k_strategies, players[i].s.id)
                 elif i < 2*int(NUM_PLAYERS * PERCENTAGE):
-                   if draw > 0.5:
-                       k_strategies = np.append(k_strategies, players[i].s.id)
+                    if draw > 0.5:
+                        k_strategies = np.append(k_strategies, players[i].s.id)
                 else:
-                   if draw > 0.8:
-                       k_strategies = np.append(k_strategies, players[i].s.id)
+                    if draw > 0.8:
+                        k_strategies = np.append(k_strategies, players[i].s.id)
 
             elif ALTERNATIVE == 3:
                 if draw > score[score['labels']==players[i].s.id].percentage.item():
