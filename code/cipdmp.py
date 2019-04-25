@@ -102,7 +102,7 @@ def main():
     else:
         plt.show()
 
-    for (r, players) in zip(np.arange(NUM_REPETITIONS)+1, repeated_players):
+    for (r, players) in zip(np.arange(NUM_REPETITIONS), repeated_players):
         plt.figure(figsize=(12,5))
         for p in players:
             points = p.get_points()
