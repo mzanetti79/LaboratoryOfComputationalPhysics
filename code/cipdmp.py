@@ -23,6 +23,10 @@ def main():
 
     print("Testing changing round-robin tournament with {}-people".format(NUM_PLAYERS))
 
+    if ALTERNATIVE < 1 or ALTERNATIVE > 2:
+        print("Wrong alternative. Possible values: 1 or 2. Exiting")
+        return
+
     # define initial population
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS,replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
     players = np.array([MultiPlayer(k, changing=True) for k in k_strategies])

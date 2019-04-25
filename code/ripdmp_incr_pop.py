@@ -24,6 +24,10 @@ def main():
 
     print("Testing repeated round-robin tournament with {}-people".format(NUM_PLAYERS))
 
+    if ALTERNATIVE < 1 or ALTERNATIVE > 3:
+        print("Wrong alternative. Possible values: 1, 2 or 3. Exiting")
+        return
+
     # define initial population
     k_strategies = Strategy.generatePlayers(NUM_PLAYERS, replace=(NUM_PLAYERS > Strategy.TOT_STRAT), fixed=FIXED)
 
