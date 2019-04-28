@@ -99,7 +99,7 @@ Another possible formulation is by means of a trade-off game, the \textit{closed
 \textit{Two people meet and exchange closed bags, with the understanding that one of them contains money and the other contains a purchase. Either player can choose to honor the deal by putting into his or her bag what he or she has agreed, or he or she can defect by handing over an empty bag.}
 \end{quote}
 
-Mathematically, the PD can be expressed with linear algebra. The key component is the \textit{Payoff matrix} $M$, which quantifies the reward of each player depending on whether it cooperated or defected:
+Mathematically, the PD can be expressed with linear algebra. The key component is the \textit{Payoff matrix} $M$, which quantifies the reward of each player depending on whether he\footnote{For the rest of the paper, the player is considered a male, for the sake of simplicity in writing. Of course, nothing changes assuming a female player.} cooperated or defected:
 $$
 M = 
 \begin{pmatrix} 
@@ -125,7 +125,7 @@ $$
 
 For a single-shot game, namely a game which is played only once, the best strategy (choice of action) may seem for both players to cooperate. If both players cooperate, this leads to a good payoff which maximizes the global outcome, evaluated as the sum of the payoffs for each of them. This is indeed the \textit{Pareto dominating strategy}.
 
-Here lies the dilemma: when a player is facing the decision to cooperate or not, if he chooses to cooperate, it also realizes that the best choice of action would have been instead to betray the other player as this leads, \textit{irrespective of the opponent's move}, to a better payoff for itself.
+Here lies the dilemma: when a player is facing the decision to cooperate or not, if he chooses to cooperate, he also realizes that the best choice of action would have been instead to betray the other player as this leads, \textit{irrespective of the opponent's move}, to a better payoff for itself.
 
 Both players are rational, which also implies some degree of selfishness, and that they are fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms). In addition, they move simultaneously (so no one knows the opponent's move beforehand). Provided these statements and by doing the simple reasoning explained above, the two players will conclude that the best way of acting is to defect: this would lead to a slightly lower payoff if the opponent defects (minor punishment), but to a higher one if the other player chooses to cooperate, allowing them both to gain something in any case, instead of risking to loose everything.
 
@@ -164,7 +164,7 @@ These players' strategies are generally fixed in time, i.e. a player cannot chan
 Many more and much complicated strategies could be analyzed and our implementation is open and structured so that it can be easy to add one strategy just by changing a couple of lines in the code.
 
 \section{Two players IPD} \label{s:IPD2P}
-In this section, the IPD intercourse between two players is evaluated: each player has an assigned strategy, it is unaware of the opponent's way of acting and it plays accordingly to its strategy definition without the possibility to change it. Both players know only their respective history of choices. Each game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is the winner, or in other words the one who achieves a higher payoff at the end of the round.
+In this section, the IPD intercourse between two players is evaluated: each player has an assigned strategy, he is unaware of the opponent's way of acting and he plays accordingly to its strategy definition without the possibility to change it. Both players know only their respective history of choices. Each game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is the winner, or in other words the one who achieves a higher payoff at the end of the round.
 
 The number of iterations was fixed to \texttt{NUM\_ITER = 50} and can be modified by means of a simple option when launching the program.
 This could also be seen as the number of moves during the match, and is a factor unknown to the players; if otherwise, a smart player could adopt a supposedly optimal strategy: for example, against a \textit{Nice} (or \textit{TfT}) strategy the best choice of action\footnote{As inferred from \textit{backward induction} reasoning.} would be to cooperate in all but the last round, gaining advantage from knowing the number of runs.
@@ -268,9 +268,9 @@ $$
 \mathrm{achieve}(p) = \frac{\mathrm{points}(p)}{\mathrm{hoped\_pts}(p,q)}
 $$
 where $\mathrm{points}(p)$ is the number of points at the end of the round,
-$\mathrm{optimal\_pts}(p)$ is the maximum that $p$ could achieve if it knew $q$'s moves in advance, and
+$\mathrm{optimal\_pts}(p)$ is the maximum that $p$ could achieve if he knew $q$'s moves in advance, and
 $\mathrm{hoped\_pts}(p,q)$ is the best result player $p$ can achieve in the optimal scenario or, in other words, supposing that the opponent $q$ would respond in a way such that $p$ could maximize his payoff.
-\textit{Yield} represents how well the player has performed against its opponent with respect to the maximum that it could get if it knew its opponent's moves in advance, while \textit{achieve} represents how far the player is with respect to its best expectation.
+\textit{Yield} represents how well the player has performed against its opponent with respect to the maximum that he could get if he knew its opponent's moves in advance, while \textit{achieve} represents how far the player is with respect to its best expectation.
 
 The following considerations arise on the grounds of \autoref{tab:ipd2p}.
 The \textit{yield} metric backs up our claim that \textit{Bad} is the only win-always strategy as it is the only one that gives a stunning $100\%$ for all the matches playing a perfect move against every opponent, a result that can also be seen in \autoref{tab:ipd2pavg}. In other words, a player using this strategy does not need to know in advance which strategy the opponent is adopting. Moreover, this metric points out how \textit{TfT, Tf2T, GrT} strategies are more resilient, namely, they respond well to strategies in that a player does not reach its maximum achievable points, but performs well irrespective of the opponents' strategy. In particular, \textit{GrT} reaches scores over $90\%$ even against \textit{(Mainly) Bad} players.
