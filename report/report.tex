@@ -512,35 +512,6 @@ Details on the evolution of the population can be found in \autoref{tab:cripdmp}
     \label{fig:incrCLI}
 \end{figure}
 
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-evolution-increasing-pop-50}
-    \caption{Evolution of rIPDMP, changing strategies, increasing pop. of 50 (alternative 2)}
-    \label{fig:incrC2}
-\end{figure}
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r1}
-    \caption{First iteration scores ($it=1$) (alternative 2) \textbf{no 0??}}
-    \label{fig:incrCFI2}
-\end{figure}
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r2}
-    \caption{Middle iteration scores ($it=2$) (alternative 2)}
-    \label{fig:incrCMI2}
-\end{figure}
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r4}
-    \caption{Last iteration scores ($it=4$) (alternative 2)}
-    \label{fig:incrCLI2}
-\end{figure}
-
 \section{Machine Learning approaches} \label{s:ml}
 Since the beginning of research on this subject, studies have been developed to find some pattern that can be exploited by learning algorithms.
 By the formulation of the IPD game, if such a pattern exists, it has to be learned using unsupervised techniques, since the final outcome of the players depends on their actions.
@@ -701,7 +672,6 @@ Furthermore, research may be directed to find and implement different features o
     \end{tabular}
 \end{table}
 
-
 \begin{table}[ht]
     \caption{10-players IPD, static strategies, sorted by points, statistics}
     \label{tab:ipdmp10stat}
@@ -724,7 +694,7 @@ Furthermore, research may be directed to find and implement different features o
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=.6\columnwidth]{../img/ipdmp/ipdmp10-table-det}
-    \caption{10 players IPD, static strategies, software results \cite{demosw}}
+    \caption{10-players IPD, static strategies, software results \cite{demosw}}
     \label{fig:ipdmp10statsw}
 \end{figure}
 
@@ -837,151 +807,319 @@ Furthermore, research may be directed to find and implement different features o
 \end{table}
 
 \begin{table}[ht]
-    \caption{rMPIPD, changing strategies (alternative 1), strategy evolution through repetitions.\\
-    %Horizontal dividers denote players (new strategies) that entered during subsequent runs.\\
-    Blank cell means player not present. At the end, strategy changes count for each iteration.}
-    \label{tab:cripdmp}
+    \caption{rMPIPD, increasing pop. (alternative 2), strategy evolution through repetitions}
+    \label{tab:ripdmp-incrA2}
     \centering
     \begin{tabular}{l|cccccc} \toprule
         $\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
-        \textbf{GrimTrigger} &   5 &   9 &   17 &   31 &   52 &   81 \\
-        \textbf{TitFor2Tat}  &   7 &  12 &   20 &   26 &   36 &   53 \\
-        \textbf{TitForTat}   &   8 &  14 &   23 &   28 &   42 &   57 \\
-        Nice                 &   6 &   6 &    8 &    9 &   11 &   14 \\
-        Indifferent          &   7 &   7 &    7 &    8 &    9 &   11 \\
-        Bad                  &   5 &   8 &    8 &   11 &   12 &   13 \\
-        MainlyNice (k=3)     &   1 &   1 &    1 &    1 &    1 &    1 \\
+        \textbf{GrimTrigger} &   5 &   7 &   14 &   26 &   44 &   65 \\
+        TitFor2Tat           &   7 &  12 &   17 &   22 &   27 &   34 \\
+        \textbf{TitForTat}   &   8 &  14 &   24 &   35 &   42 &   51 \\
+        Nice                 &   6 &   7 &    7 &    8 &    9 &   10 \\
+        MainlyNice (k=3)     &   1 &   1 &    1 &    1 &    2 &    3 \\
         MainlyNice (k=8)     &   1 &   1 &    1 &    1 &    1 &    1 \\
         MainlyNice (k=17)    &   1 &   1 &    1 &    1 &    1 &    1 \\
-        MainlyNice (k=42)    &   1 &   2 &    2 &    2 &    2 &    3 \\
+        MainlyNice (k=42)    &   1 &   2 &    2 &    2 &    3 &    4 \\
+        Indifferent          &   7 &   7 &    9 &   11 &   15 &   19 \\
         MainlyBad (k=70)     &   1 &   1 &    1 &    1 &    1 &    1 \\
-        MainlyBad (k=78)     &   1 &   2 &    2 &    2 &    4 &    4 \\
-        MainlyBad (k=81)     &   2 &   3 &    4 &    4 &    4 &    5 \\
-        MainlyBad (k=85)     &   1 &   1 &    1 &    1 &    1 &    2 \\
+        MainlyBad (k=78)     &   1 &   2 &    2 &    2 &    2 &    3 \\
+        MainlyBad (k=81)     &   2 &   3 &    4 &    5 &    5 &    5 \\
+        MainlyBad (k=85)     &   1 &   1 &    2 &    2 &    3 &    3 \\
         MainlyBad (k=97)     &   1 &   1 &    1 &    1 &    1 &    1 \\
-        MainlyBad (k=98)     &   1 &   1 &    1 &    1 &    1 &    1 \\
-        MainlyBad (k=99)     &   1 &   2 &    2 &    2 &    2 &    2 \\% \midrule
-        MainlyNice (k=21)    &     &     &    1 &    1 &    1 &    1 \\
-        MainlyNice (k=22)    &     &     &    1 &    1 &    1 &    1 \\
-        MainlyNice (k=24)    &     &     &    2 &    2 &    3 &    3 \\
-        MainlyNice (k=46)    &     &     &    1 &    2 &    2 &    3 \\
-        MainlyNice (k=49)    &     &     &    1 &    4 &    4 &    5 \\
-        MainlyBad (k=51)     &     &     &    2 &    2 &    2 &    3 \\
-        MainlyBad (k=53)     &     &     &    1 &    1 &    1 &    1 \\
-        MainlyBad (k=74)     &     &     &    1 &    2 &    2 &    3 \\
-        MainlyBad (k=79)     &     &     &    1 &    1 &    1 &    2 \\% \midrule
-        MainlyNice (k=18)    &     &     &      &    1 &    2 &    2 \\
-        MainlyNice (k=20)    &     &     &      &    1 &    1 &    2 \\
-        MainlyNice (k=25)    &     &     &      &    1 &    1 &    2 \\
-        MainlyNice (k=33)    &     &     &      &    1 &    2 &    4 \\
-        MainlyNice (k=43)    &     &     &      &    1 &    2 &    3 \\
-        MainlyNice (k=44)    &     &     &      &    1 &    2 &    2 \\
-        MainlyNice (k=47)    &     &     &      &    1 &    1 &    2 \\
-        MainlyBad (k=52)     &     &     &      &    2 &    5 &    6 \\
-        MainlyBad (k=58)     &     &     &      &    1 &    4 &    5 \\
-        MainlyBad (k=59)     &     &     &      &    1 &    1 &    1 \\
-        MainlyBad (k=61)     &     &     &      &    1 &    2 &    3 \\
-        MainlyBad (k=64)     &     &     &      &    1 &    3 &    5 \\
-        MainlyBad (k=65)     &     &     &      &    2 &    4 &    6 \\
-        MainlyBad (k=68)     &     &     &      &    1 &    1 &    1 \\
-        MainlyBad (k=80)     &     &     &      &    1 &    2 &    2 \\
-        MainlyBad (k=82)     &     &     &      &    1 &    1 &    1 \\% \midrule
-        MainlyNice (k=26)    &     &     &      &      &    1 &    1 \\
-        MainlyNice (k=27)    &     &     &      &      &    1 &    2 \\
-        MainlyNice (k=29)    &     &     &      &      &    1 &    1 \\
-        MainlyNice (k=31)    &     &     &      &      &    1 &    2 \\
-        MainlyNice (k=32)    &     &     &      &      &    1 &    1 \\
-        MainlyNice (k=36)    &     &     &      &      &    1 &    2 \\
-        MainlyNice (k=38)    &     &     &      &      &    2 &    5 \\
-        MainlyNice (k=45)    &     &     &      &      &    1 &    3 \\
-        MainlyBad (k=54)     &     &     &      &      &    1 &    1 \\
-        MainlyBad (k=62)     &     &     &      &      &    1 &    2 \\
-        MainlyBad (k=63)     &     &     &      &      &    2 &    3 \\
-        MainlyBad (k=72)     &     &     &      &      &    1 &    1 \\
-        MainlyBad (k=77)     &     &     &      &      &    2 &    4 \\% \midrule
-        MainlyNice (k=12)    &     &     &      &      &      &    1 \\
-        MainlyNice (k=23)    &     &     &      &      &      &    1 \\
-        MainlyNice (k=30)    &     &     &      &      &      &    1 \\
-        MainlyNice (k=35)    &     &     &      &      &      &    1 \\
-        MainlyNice (k=39)    &     &     &      &      &      &    1 \\
-        MainlyNice (k=41)    &     &     &      &      &      &    2 \\
-        MainlyBad (k=55)     &     &     &      &      &      &    2 \\
-        MainlyBad (k=60)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=66)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=69)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=71)     &     &     &      &      &      &    2 \\
-        MainlyBad (k=73)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=75)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=76)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=83)     &     &     &      &      &      &    1 \\
-        MainlyBad (k=90)     &     &     &      &      &      &    1 \\ \midrule
-        Population size      &  50 &  72 &  111 &  164 &  248 &  367 \\
-        To more cooperative  &  16 &  23 &   32 &   40 &   84 &  112 \\
-        To less cooperative  &  24 &  26 &   44 &   71 &   98 &  148 \\ \bottomrule
-
-        % alternative compact version for strategies entered last round
-        % saves space to allow back the use of midrules
-        % MainlyNice (k=12,23,30,35,39)         & & & & & & 1 \\
-        % MainlyNice (k=41,55)                  & & & & & & 2 \\
-        % MainlyBad (k=60,66,69,73,75,76,83,90) & & & & & & 1 \\
-        % MainlyBad (k=71)                      & & & & & & 2 \\ \midrule
+        MainlyBad (k=98)     &   1 &   1 &    2 &    3 &    4 &    4 \\
+        MainlyBad (k=99)     &   1 &   2 &    2 &    3 &    4 &    4 \\
+        Bad                  &   5 &   9 &   11 &   13 &   15 &   19 \\ \midrule
+        Population size      &  50 &  72 &  101 &  137 &  179 &  228 \\ \bottomrule
     \end{tabular}
 \end{table}
 
-\begin{figure}[!ht]
+\begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-evolution-increasing-pop-50}
+    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-evolution-increasing-pop-50}
     \caption{Evolution of rIPDMP, increasing population of 50 (alternative 2)}
     \label{fig:incrRa2}
 \end{figure}
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-scores-increasing-pop-50-r0}
-    \caption{First iteration scores ($it=0$) (alternative 2)}
-    \label{fig:incrFIa2}
-\end{figure}
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-scores-increasing-pop-50-r0}
+%    \caption{First iteration scores ($it=0$) (alternative 2)}
+%    \label{fig:incrFIa2}
+%\end{figure}
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-scores-increasing-pop-50-r2}
-    \caption{Middle iteration scores ($it=2$) (alternative 2)}
-    \label{fig:incrMIa2}
-\end{figure}
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-scores-increasing-pop-50-r2}
+%    \caption{Middle iteration scores ($it=2$) (alternative 2)}
+%    \label{fig:incrMIa2}
+%\end{figure}
 
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-scores-increasing-pop-50-r4}
+%    \caption{Last iteration scores ($it=4$) (alternative 2)}
+%    \label{fig:incrLIa2}
+%\end{figure}
 
-\begin{figure}[!ht]
+\begin{table}[ht]
+    \caption{rMPIPD, increasing pop. (alternative 3), strategy evolution through repetitions}
+    \label{tab:ripdmp-incrA3}
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt2/ripdmp-scores-increasing-pop-50-r4}
-    \caption{Last iteration scores ($it=4$) (alternative 2)}
-    \label{fig:incrLIa2}
-\end{figure}
+    \begin{tabular}{l|cccccc} \toprule
+        $\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
+        GrimTrigger         &   5 &   7 &   10 &   12 &   16 &   18 \\
+        \textbf{TitFor2Tat} &   7 &  14 &   26 &   42 &   70 &  113 \\
+        \textbf{TitForTat}  &   8 &  16 &   32 &   64 &  128 &  256 \\
+        Nice                &   6 &  11 &   20 &   31 &   42 &   56 \\
+        MainlyNice (k=3)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=8)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=17)   &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=42)   &   1 &   1 &    1 &    1 &    1 &    1 \\
+        Indifferent         &   7 &  11 &   17 &   26 &   31 &   36 \\
+        MainlyBad (k=70)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=78)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=81)    &   2 &   2 &    2 &    2 &    2 &    2 \\
+        MainlyBad (k=85)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=97)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=98)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=99)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        Bad                 &   5 &  10 &   16 &   21 &   26 &   32 \\ \midrule
+        Population size     &  50 &  81 &  133 &  208 &  325 &  523 \\ \bottomrule
+    \end{tabular}
+\end{table}
 
-\begin{figure}[!ht]
+\begin{figure}
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-evolution-increasing-pop-50}
+    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-evolution-increasing-pop-50}
     \caption{Evolution of rIPDMP, increasing population of 50 (alternative 3)}
     \label{fig:incrRa3}
 \end{figure}
 
-\begin{figure}[!ht]
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-scores-increasing-pop-50-r0}
+%    \caption{First iteration scores ($it=0$) (alternative 3)}
+%    \label{fig:incrFIa3}
+%\end{figure}
+
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-scores-increasing-pop-50-r2}
+%    \caption{Middle iteration scores ($it=2$) (alternative 3)}
+%    \label{fig:incrMIa3}
+%\end{figure}
+
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-scores-increasing-pop-50-r4}
+%    \caption{Last iteration scores ($it=4$) (alternative 3)}
+%    \label{fig:incrLIa3}
+%\end{figure}
+
+\begin{table}[ht]
+    \caption{rMPIPD, changing strategies (alternative 1), strategy evolution through repetitions.\\
+    Blank cell means player not present. At the end, strategy changes count for each iteration.}
+    \label{tab:cripdmp}
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-scores-increasing-pop-50-r0}
-    \caption{First iteration scores ($it=0$) (alternative 3)}
-    \label{fig:incrFIa3}
-\end{figure}
+    \begin{minipage}{.4\textwidth}
+    \begin{tabular}{l|cccccc} \toprule
+        $\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
+        \textbf{GrimTrigger} &   5 &   9 &   15 &   22 &   31 &   41 \\
+        \textbf{TitFor2Tat}  &   7 &  12 &   17 &   23 &   34 &   50 \\
+        \textbf{TitForTat}   &   8 &  14 &   16 &   20 &   32 &   56 \\
+        Nice                 &   6 &   6 &    8 &    9 &   12 &   13 \\
+        MainlyNice (k=3)     &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=8)     &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=17)    &   1 &   1 &    1 &    2 &    2 &    2 \\
+        MainlyNice (k=42)    &   1 &   2 &    3 &    6 &    9 &   12 \\
+        Indifferent          &   7 &   7 &    9 &   11 &   12 &   14 \\
+        MainlyBad (k=70)     &   1 &   1 &    1 &    1 &    3 &    4 \\
+        MainlyBad (k=78)     &   1 &   2 &    2 &    2 &    3 &    3 \\
+        MainlyBad (k=81)     &   2 &   3 &    4 &    5 &    5 &    5 \\
+        MainlyBad (k=85)     &   1 &   1 &    1 &    2 &    3 &    3 \\
+        MainlyBad (k=97)     &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=98)     &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=99)     &   1 &   2 &    2 &    2 &    2 &    2 \\
+        Bad                  &   5 &   8 &   10 &   11 &   12 &   13 \\
+        MainlyNice (k=11)    &     &     &    1 &    2 &    2 &    2 \\
+        MainlyNice (k=20)    &     &     &    1 &    2 &    3 &    4 \\
+        MainlyNice (k=24)    &     &     &    1 &    1 &    2 &    2 \\
+        MainlyNice (k=29)    &     &     &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=38)    &     &     &    1 &    2 &    2 &    3 \\
+        MainlyNice (k=40)    &     &     &    1 &    3 &    5 &    8 \\
+        MainlyNice (k=43)    &     &     &    1 &    1 &    1 &    3 \\
+        MainlyBad (k=51)     &     &     &    1 &    3 &    5 &    6 \\
+        MainlyBad (k=56)     &     &     &    1 &    2 &    3 &    4 \\
+        MainlyBad (k=62)     &     &     &    1 &    2 &    2 &    3 \\
+        MainlyBad (k=63)     &     &     &    1 &    2 &    4 &    4 \\
+        MainlyBad (k=68)     &     &     &    1 &    1 &    1 &    5 \\
+        MainlyBad (k=69)     &     &     &    1 &    3 &    4 &    5 \\
+        MainlyBad (k=76)     &     &     &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=87)     &     &     &    1 &    1 &    3 &    4 \\
+        MainlyNice (k=25)    &     &     &      &    1 &    1 &    1 \\
+        MainlyNice (k=27)    &     &     &      &    1 &    1 &    2 \\
+        MainlyNice (k=28)    &     &     &      &    1 &    1 &    1 \\
+        MainlyNice (k=30)    &     &     &      &    1 &    1 &    2 \\
+        MainlyNice (k=32)    &     &     &      &    1 &    1 &    4 \\
+        MainlyNice (k=35)    &     &     &      &    1 &    1 &    2 \\
+        MainlyNice (k=36)    &     &     &      &    1 &    2 &    2 \\
+        MainlyBad (k=52)     &     &     &      &    1 &    2 &    2 \\
+        MainlyBad (k=55)     &     &     &      &    1 &    2 &    2 \\
+        MainlyBad (k=59)     &     &     &      &    1 &    3 &    4 \\
+        MainlyBad (k=60)     &     &     &      &    1 &    2 &    5 \\
+        MainlyBad (k=61)     &     &     &      &    1 &    4 &    7 \\
+        MainlyBad (k=71)     &     &     &      &    1 &    1 &    1 \\
+        MainlyBad (k=72)     &     &     &      &    1 &    1 &    1 \\
+        MainlyBad (k=84)     &     &     &      &    1 &    1 &    2 \\
+        MainlyBad (k=86)     &     &     &      &    2 &    4 &    4 \\ \bottomrule
+    \end{tabular}
+    \end{minipage} \quad
+    \begin{minipage}{.4\textwidth}
+    \begin{tabular}{l|cccccc} \toprule
+        $\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
+        MainlyNice (k=7)     &     &     &      &      &    1 &    1 \\
+        MainlyNice (k=23)    &     &     &      &      &    1 &    3 \\
+        MainlyNice (k=34)    &     &     &      &      &    1 &    2 \\
+        MainlyNice (k=37)    &     &     &      &      &    2 &    3 \\
+        MainlyNice (k=39)    &     &     &      &      &    3 &    4 \\
+        MainlyNice (k=46)    &     &     &      &      &    1 &    2 \\
+        MainlyNice (k=47)    &     &     &      &      &    2 &    5 \\
+        MainlyNice (k=49)    &     &     &      &      &    3 &    8 \\
+        MainlyBad (k=54)     &     &     &      &      &    1 &    1 \\
+        MainlyBad (k=66)     &     &     &      &      &    1 &    2 \\
+        MainlyBad (k=67)     &     &     &      &      &    1 &    1 \\
+        MainlyBad (k=73)     &     &     &      &      &    2 &    2 \\
+        MainlyBad (k=74)     &     &     &      &      &    1 &    1 \\
+        MainlyBad (k=77)     &     &     &      &      &    1 &    3 \\
+        MainlyBad (k=80)     &     &     &      &      &    1 &    2 \\
+        MainlyBad (k=90)     &     &     &      &      &    1 &    2 \\
+        MainlyBad (k=94)     &     &     &      &      &    1 &    1 \\
+        MainlyBad (k=95)     &     &     &      &      &    2 &    4 \\
+        MainlyNice (k=22)    &     &     &      &      &      &    1 \\
+        MainlyNice (k=26)    &     &     &      &      &      &    1 \\
+        MainlyNice (k=31)    &     &     &      &      &      &    1 \\
+        MainlyNice (k=33)    &     &     &      &      &      &    1 \\
+        MainlyNice (k=41)    &     &     &      &      &      &    1 \\
+        MainlyNice (k=44)    &     &     &      &      &      &    2 \\
+        MainlyNice (k=45)    &     &     &      &      &      &    1 \\
+        MainlyNice (k=48)    &     &     &      &      &      &    1 \\
+        MainlyBad (k=57)     &     &     &      &      &      &    1 \\
+        MainlyBad (k=64)     &     &     &      &      &      &    1 \\
+        MainlyBad (k=65)     &     &     &      &      &      &    3 \\
+        MainlyBad (k=82)     &     &     &      &      &      &    1 \\
+        MainlyBad (k=88)     &     &     &      &      &      &    1 \\ \midrule
+        Population size      &  50 &  72 &  108 &  164 &  257 &  385 \\
+        To more cooperative  &  19 &  27 &   46 &   70 &  105 &  139 \\
+        To less cooperative  &  19 &  26 &   46 &   63 &  101 &  160 \\ \bottomrule
+    \end{tabular}
+    \end{minipage}
+\end{table}
+
+\begin{table}[ht]
+    \caption{rMPIPD, changing strategies (alternative 2), strategy evolution through repetitions.\\
+    Blank cell means player not present. At the end, strategy changes count for each iteration.}
+    \label{tab:cripdmpA2}
+    \centering
+    \begin{minipage}{.4\textwidth}
+    \begin{tabular}{l|cccccc} \toprule
+        $\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
+        GrimTrigger         &   5 &   9 &   12 &   18 &   21 &   27 \\
+        \textbf{TitFor2Tat} &   7 &  12 &   23 &   32 &   36 &   38 \\
+        \textbf{TitForTat}  &   8 &  14 &   22 &   26 &   34 &   44 \\
+        Nice                &   6 &   6 &    9 &    9 &   10 &   10 \\
+        MainlyNice (k=3)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=8)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=17)   &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyNice (k=42)   &   1 &   2 &    2 &    3 &    4 &    5 \\
+        Indifferent         &   7 &   7 &    7 &    9 &   12 &   18 \\
+        MainlyBad (k=70)    &   1 &   1 &    1 &    2 &    3 &    4 \\
+        MainlyBad (k=78)    &   1 &   2 &    2 &    2 &    3 &    4 \\
+        MainlyBad (k=81)    &   2 &   3 &    4 &    6 &    8 &   10 \\
+        MainlyBad (k=85)    &   1 &   1 &    1 &    2 &    4 &    5 \\
+        MainlyBad (k=97)    &   1 &   1 &    2 &    3 &    5 &    6 \\
+        MainlyBad (k=98)    &   1 &   1 &    1 &    1 &    1 &    1 \\
+        MainlyBad (k=99)    &   1 &   2 &    2 &    2 &    2 &    2 \\
+        \textbf{Bad}        &   5 &   8 &    9 &   14 &   25 &   41 \\
+        MainlyNice (k=34)   &     &     &    1 &    2 &    2 &    4 \\
+        MainlyNice (k=35)   &     &     &    1 &    1 &    4 &    6 \\
+        MainlyNice (k=36)   &     &     &    1 &    2 &    5 &    8 \\
+        MainlyNice (k=44)   &     &     &    1 &    2 &    3 &    4 \\
+        MainlyNice (k=48)   &     &     &    2 &    2 &    4 &    7 \\
+        MainlyBad (k=57)    &     &     &    1 &    2 &    4 &    8 \\
+        MainlyBad (k=60)    &     &     &    1 &    2 &    3 &    5 \\
+        MainlyBad (k=61)    &     &     &    1 &    1 &    2 &    4 \\
+        MainlyBad (k=71)    &     &     &    1 &    2 &    4 &    5 \\
+        MainlyNice (k=30)   &     &     &      &    1 &    2 &    2 \\
+        MainlyNice (k=39)   &     &     &      &    3 &    5 &    8 \\
+        MainlyNice (k=41)   &     &     &      &    1 &    2 &    3 \\
+        MainlyNice (k=43)   &     &     &      &    1 &    2 &    3 \\
+        MainlyNice (k=45)   &     &     &      &    1 &    3 &    5 \\
+        MainlyNice (k=47)   &     &     &      &    1 &    2 &    4 \\ \bottomrule
+    \end{tabular}
+    \end{minipage} \quad
+    \begin{minipage}{.4\textwidth}
+    \begin{tabular}{l|cccccc} \toprule
+        $\downarrow$ Strategy -- Iter $\rightarrow$ & 0 & 1 & 2 & 3 & 4 & 5 \\ \midrule
+        MainlyBad (k=55)    &     &     &      &    1 &    1 &    1 \\
+        MainlyBad (k=56)    &     &     &      &    1 &    2 &    8 \\
+        MainlyBad (k=62)    &     &     &      &    1 &    2 &    5 \\
+        MainlyBad (k=64)    &     &     &      &    1 &    3 &    6 \\
+        MainlyBad (k=72)    &     &     &      &    1 &    4 &    6 \\
+        MainlyNice (k=37)   &     &     &      &      &    1 &    2 \\
+        MainlyNice (k=38)   &     &     &      &      &    1 &    2 \\
+        MainlyNice (k=46)   &     &     &      &      &    1 &    3 \\
+        MainlyNice (k=49)   &     &     &      &      &    1 &    2 \\
+        MainlyBad (k=52)    &     &     &      &      &    1 &    6 \\
+        MainlyBad (k=53)    &     &     &      &      &    3 &    6 \\
+        MainlyBad (k=54)    &     &     &      &      &    1 &    2 \\
+        MainlyBad (k=58)    &     &     &      &      &    1 &    1 \\
+        MainlyBad (k=59)    &     &     &      &      &    1 &    3 \\
+        MainlyBad (k=67)    &     &     &      &      &    1 &    5 \\
+        MainlyBad (k=68)    &     &     &      &      &    1 &    4 \\
+        MainlyBad (k=69)    &     &     &      &      &    1 &    2 \\
+        MainlyBad (k=74)    &     &     &      &      &    1 &    2 \\
+        MainlyNice (k=20)   &     &     &      &      &      &    1 \\
+        MainlyNice (k=27)   &     &     &      &      &      &    1 \\
+        MainlyBad (k=51)    &     &     &      &      &      &    2 \\
+        MainlyBad (k=63)    &     &     &      &      &      &    1 \\
+        MainlyBad (k=65)    &     &     &      &      &      &    2 \\
+        MainlyBad (k=66)    &     &     &      &      &      &    3 \\
+        MainlyBad (k=75)    &     &     &      &      &      &    1 \\
+        MainlyBad (k=77)    &     &     &      &      &      &    1 \\
+        MainlyBad (k=80)    &     &     &      &      &      &    1 \\ \midrule
+        Population size     &  50 &  72 &  110 &  161 &  245 &  373 \\
+        To more cooperative &  11 &  16 &   19 &   19 &   39 &   72 \\
+        To less cooperative &  11 &  24 &   38 &   55 &   63 &   93 \\ \bottomrule
+    \end{tabular}
+    \end{minipage}
+\end{table}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-scores-increasing-pop-50-r2}
-    \caption{Middle iteration scores ($it=2$) (alternative 3)}
-    \label{fig:incrMIa3}
+    \includegraphics[width=.8\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-evolution-increasing-pop-50}
+    \caption{Evolution of rIPDMP, changing strategies, increasing pop. of 50 (alternative 2)}
+    \label{fig:incrC2}
 \end{figure}
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt3/ripdmp-scores-increasing-pop-50-r4}
-    \caption{Last iteration scores ($it=4$) (alternative 3)}
-    \label{fig:incrLIa3}
-\end{figure}
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r0}
+%    \caption{First iteration scores ($it=0$) (alternative 2)}
+%    \label{fig:incrCFI2}
+%\end{figure}
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r2}
+%    \caption{Middle iteration scores ($it=2$) (alternative 2)}
+%    \label{fig:incrCMI2}
+%\end{figure}
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=.7\columnwidth]{../img/cipdmp-incr/alt2/cipdmp-scores-increasing-pop-50-r4}
+%    \caption{Last iteration scores ($it=4$) (alternative 2)}
+%    \label{fig:incrCLI2}
+%\end{figure}
+
 \end{document}

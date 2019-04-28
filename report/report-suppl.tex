@@ -1,0 +1,150 @@
+% !TeX spellcheck = en_US
+% arara: pdflatex
+% arara: pdflatex
+\documentclass[journal,10pt,onecolumn,twoside]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage{times,textcomp,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfig}
+\usepackage[justification=centering]{caption}
+
+\usepackage{hyperref}
+\definecolor{dkpowder}{rgb}{0,0.2,0.7}
+\hypersetup{%
+    pdfpagemode  = {UseOutlines},
+	pdfstartview = {FitH},
+    colorlinks,
+    allcolors = {dkpowder}
+}
+\pdfminorversion=7 % fixes warnings of eps to pdf included images
+
+%%%%%%%%%%%%%%%%
+\begin{document}
+\title{A study on the Iterated Prisoner's Dilemma}
+\author{%
+    \IEEEauthorblockN{Elia Bonetto, Filippo Rigotto, Luca Attanasio and Francesco Savio}
+
+    \IEEEauthorblockA{Department of Information Engineering, University of Padova -- Via Gradenigo, 6/b, 35131 Padova, Italy}
+    % \\Email: {\tt\{bonettoe,rigottof,attanasiol,\}@dei.unipd.it}}
+}
+\IEEEspecialpapernotice{Supplementary material}
+\markboth{Laboratory of Computational Physics, Fall 2018}%
+    {Bonetto \MakeLowercase{\textit{et al.}}: A study on the Iterated Prisoner's Dilemma -- Supplementary}
+
+\maketitle
+
+We provide all the plots resulting from the IPD tournament between two players, covered in Section IV of the paper.
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[Bad vs Bad]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-rewards-Bad-Bad}}\quad
+	\subfloat[Bad vs Bad]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-boxplot-Bad-Bad}}\\
+	\subfloat[Bad vs GrimTrigger]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-rewards-Bad-GrimTrigger}}\quad
+	\subfloat[Bad vs GrimTrigger]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-boxplot-Bad-GrimTrigger}}\\
+	\subfloat[Bad vs Indifferent]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-rewards-Bad-Indifferent}}\quad
+	\subfloat[Bad vs Indifferent]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-boxplot-Bad-Indifferent}}\\
+	\subfloat[Bad vs MainlyBad ($k=72$)]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-rewards-Bad-MainlyBad(k=72)}}\quad
+	\subfloat[Bad vs MainlyBad ($k=72$)]{\includegraphics[height=11em]{../img/ipd2p/ipd2p-boxplot-Bad-MainlyBad(k=72)}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[Bad vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Bad-MainlyNice(k=27)}}\quad
+	\subfloat[Bad vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Bad-MainlyNice(k=27)}}\\
+	\subfloat[Bad vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Bad-Nice}}\quad
+	\subfloat[Bad vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Bad-Nice}}\\
+	\subfloat[Bad vs TitFor2Tat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Bad-TitFor2Tat}}\quad
+	\subfloat[Bad vs TitFor2Tat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Bad-TitFor2Tat}}\\
+	\subfloat[Bad vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Bad-TitForTat}}\quad
+	\subfloat[Bad vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Bad-TitForTat}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[GrimTrigger vs GrimTrigger]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-GrimTrigger-GrimTrigger}}\quad
+	\subfloat[GrimTrigger vs GrimTrigger]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-GrimTrigger-GrimTrigger}}\\
+	\subfloat[GrimTrigger vs Indifferent]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-GrimTrigger-Indifferent}}\quad
+	\subfloat[GrimTrigger vs Indifferent]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-GrimTrigger-Indifferent}}\\
+	\subfloat[GrimTrigger vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-GrimTrigger-MainlyBad(k=72)}}\quad
+	\subfloat[GrimTrigger vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-GrimTrigger-MainlyBad(k=72)}}\\
+	\subfloat[GrimTrigger vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-GrimTrigger-MainlyNice(k=27)}}\quad
+	\subfloat[GrimTrigger vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-GrimTrigger-MainlyNice(k=27)}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[GrimTrigger vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-GrimTrigger-Nice}}\quad
+	\subfloat[GrimTrigger vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-GrimTrigger-Nice}}\\
+	\subfloat[GrimTrigger vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-GrimTrigger-TitForTat}}\quad
+	\subfloat[GrimTrigger vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-GrimTrigger-TitForTat}}\\
+	\subfloat[MainlyNice ($k=27$ vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-MainlyNice(k=27)-TitForTat}}\quad
+	\subfloat[MainlyNice ($k=27$ vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-MainlyNice(k=27)-TitForTat}}\\
+	\subfloat[Indifferent vs Indifferent]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Indifferent-Indifferent}}\quad
+	\subfloat[Indifferent vs Indifferent]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Indifferent-Indifferent}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[Indifferent vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Indifferent-MainlyBad(k=72)}}\quad
+	\subfloat[Indifferent vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Indifferent-MainlyBad(k=72)}}\\
+	\subfloat[Indifferent vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Indifferent-MainlyNice(k=27)}}\quad
+	\subfloat[Indifferent vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Indifferent-MainlyNice(k=27)}}\\
+	\subfloat[Indifferent vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Indifferent-Nice}}\quad
+	\subfloat[Indifferent vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Indifferent-Nice}}\\
+	\subfloat[Indifferent vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Indifferent-TitForTat}}\quad
+	\subfloat[Indifferent vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Indifferent-TitForTat}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[MainlyBad ($k=72$) vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-MainlyBad(k=72)-MainlyBad(k=72)}}\quad
+	\subfloat[MainlyBad ($k=72$) vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-MainlyBad(k=72)-MainlyBad(k=72)}}\\
+	\subfloat[MainlyBad ($k=72$) vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-MainlyBad(k=72)-Nice}}\quad
+	\subfloat[MainlyBad ($k=72$) vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-MainlyBad(k=72)-Nice}}\\
+	\subfloat[MainlyNice ($k=27$) vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-MainlyNice(k=27)-MainlyBad(k=72)}}\quad
+	\subfloat[MainlyNice ($k=27$) vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-MainlyNice(k=27)-MainlyBad(k=72)}}\\
+	\subfloat[MainlyNice ($k=27$) vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-MainlyNice(k=27)-MainlyNice(k=27)}}\quad
+	\subfloat[MainlyNice ($k=27$) vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-MainlyNice(k=27)-MainlyNice(k=27)}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[MainlyNice ($k=27$ vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-MainlyNice(k=27)-Nice}}\quad
+	\subfloat[MainlyNice ($k=27$ vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-MainlyNice(k=27)-Nice}}\\
+	\subfloat[Nice vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-Nice-Nice}}\quad
+	\subfloat[Nice vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-Nice-Nice}}\\
+	\subfloat[TitFor2Tat vs GrimTrigger]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-GrimTrigger}}\quad
+	\subfloat[TitFor2Tat vs GrimTrigger]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-GrimTrigger}}\\
+	\subfloat[TitFor2Tat vs Indifferent]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-Indifferent}}\quad
+	\subfloat[TitFor2Tat vs Indifferent]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-Indifferent}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[TitFor2Tat vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-MainlyBad(k=72)}}\quad
+	\subfloat[TitFor2Tat vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-MainlyBad(k=72)}}\\
+	\subfloat[TitFor2Tat vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-MainlyNice(k=27)}}\quad
+	\subfloat[TitFor2Tat vs MainlyNice ($k=27$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-MainlyNice(k=27)}}\\
+	\subfloat[TitFor2Tat vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-Nice}}\quad
+	\subfloat[TitFor2Tat vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-Nice}}\\
+	\subfloat[TitFor2Tat vs TitFor2Tat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-TitFor2Tat}}\quad
+	\subfloat[TitFor2Tat vs TitFor2Tat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-TitFor2Tat}}\\
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat[TitFor2Tat vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-TitForTat}}\quad
+	\subfloat[TitFor2Tat vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitFor2Tat-TitForTat}}\\
+	\subfloat[TitForTat vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitFor2Tat-MainlyBad(k=72)}}\quad
+	\subfloat[TitForTat vs MainlyBad ($k=72$)]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitForTat-MainlyBad(k=72)}}\\
+	\subfloat[TitForTat vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitForTat-Nice}}\quad
+	\subfloat[TitForTat vs Nice]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitForTat-Nice}}\\
+	\subfloat[TitForTat vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-rewards-TitForTat-TitForTat}}\quad
+	\subfloat[TitForTat vs TitForTat]{\includegraphics[height=13em]{../img/ipd2p/ipd2p-boxplot-TitForTat-TitForTat}}\\
+\end{figure}
+
+\end{document}
