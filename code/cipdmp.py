@@ -62,7 +62,6 @@ def main():
         players, count_bad, count_good = MultiPlayer.change_strategy(players, FIXED, ALTERNATIVE)
         players = np.append(players, players_to_add)
 
-        # TODO should df['count'] go here or stay above?
         df['more_coop'] = count_good
         df['less_coop'] = count_bad
         strategies_df = strategies_df.append(df,sort=True) # sort fixes FutureWarning
@@ -93,6 +92,7 @@ def main():
             print(strategies_df.to_latex(index=False))
     else:
         print(strategies_df)
+    #strategies_df.T.to_excel("Alt{}.xlsx".format(ALTERNATIVE)) # DEBUG only
 
     fig = strategies_df.drop(columns=["count", "more_coop", "less_coop"]).plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)
