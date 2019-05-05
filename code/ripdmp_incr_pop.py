@@ -50,7 +50,6 @@ def main():
             score = score.sort_values(by=['points'], ascending=False)
             score['points'] = score.max().points-score['points']  # For this reason we go from 0
             score['percentage'] = score['points']/score.max().points
-            #print(score) # TODO delete after tests
         else:
             players = IPDRoundRobin(players, NUM_ITER)
         repeated_players.append(players)
