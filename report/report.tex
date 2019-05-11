@@ -126,20 +126,14 @@ r_1 = u_1^T M u_2
 r_2 = u_2^T M u_1
 $$
 
-For a single-shot game, namely a game which is played only once, the best strategy (choice of action) may seem for both players to cooperate. If both players cooperate, this leads to a good payoff which maximizes the global outcome, evaluated as the sum of the payoffs for each of them. This is indeed the \textit{Pareto dominating strategy}.
+For a single-shot game, namely a game which is played only once, the best strategy (choice of action) may seem for both players to cooperate. If both players cooperate, this leads to a good payoff which maximizes the global outcome, evaluated as the sum of the payoffs for each of them. This is indeed the \textit{Pareto dominating strategy}. Here lies the dilemma: when a player is facing the decision to cooperate or not, if he chooses to cooperate, he also realizes that the best choice of action would have been instead to betray the other player as this leads, \textit{irrespective of the opponent's move}, to a better payoff for himself.
 
-Here lies the dilemma: when a player is facing the decision to cooperate or not, if he chooses to cooperate, he also realizes that the best choice of action would have been instead to betray the other player as this leads, \textit{irrespective of the opponent's move}, to a better payoff for himself.
-
-Both players are rational, which also implies some degree of selfishness, and that they are fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms). In addition, they move simultaneously (so no one knows the opponent's move beforehand). Provided these statements and by doing the simple reasoning explained above, the two players will conclude that the best way of acting is to defect: this would lead to a slightly lower payoff if the opponent defects (minor punishment), but to a higher one if the other player chooses to cooperate, allowing them both to gain something in any case, instead of risking to loose everything.
-
-As a result, the only reasonable conclusion is that the only \textit{Nash equilibrium}, or the only way to always win this game in a single-shot scenario, is to defect.
-
-Thus, we have just observed that the \textit{Nash equilibrium} is not \textit{Pareto optimal}: playing cooperate is not feasible since the player is in danger against a defecting opponent. Hence, the only strategy in which nobody wants to deviate is to defect, as also noted by Fogel in~\cite{fogelEvolvingBehaviors}.
+Both players are rational, which also implies some degree of selfishness, and that they are fully aware of the rules of the game (they have \textit{common knowledge}, using Game Theory terms). In addition, they move simultaneously (so no one knows the opponent's move beforehand). Provided these statements and by doing the simple reasoning explained above, the two players will conclude that the best way of acting is to defect: this would lead to a slightly lower payoff if the opponent defects (minor punishment), but to a higher one if the other player chooses to cooperate, allowing them both to gain something in any case, instead of risking to loose everything. As a result, the only reasonable conclusion is that the only \textit{Nash equilibrium}, or the only way to always win this game in a single-shot scenario, is to defect. Thus, we have just observed that the \textit{Nash equilibrium} is not \textit{Pareto optimal}: playing cooperate is not feasible since the player is in danger against a defecting opponent. Hence, the only strategy in which nobody wants to deviate is to defect, as also noted by Fogel in~\cite{fogelEvolvingBehaviors}.
 
 If repeated games are taken into consideration, this reasoning could loose some meaning. In particular, this is the case of the multiplayer Iterated Prisoner Dilemma (IPD), since time and memory (history) must be considered and the combination of the players may have some unexpected outcomes.
-Colman supported this concept by indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups.~\cite{yao1994experimental}
+Colman\textbf{TODO WHO?} supported this concept by indicating that the 2-player IPD is different from the generalized N-player version, and that strategies that work well in the first scenario may fail in large groups~\cite{yao1994experimental}.
 In addition, Grim Triggers, Tit For (Two) Tat, random or even more articulated strategies can be introduced, changing the balance of the game and of the previously defined winning cases.
-Moreover, in this game, or more generally in iterated games, the notions of Nash equilibrium, Pareto optimal or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionary stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. As a matter of fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long run, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies since they inherently loose some meaning due to the intrinsic nature of iterated games.~\cite{mathieu2017}
+Moreover, in this game, or more generally in iterated games, the notions of Nash equilibrium, Pareto optimal or evolutionary stable strategies\footnote{A strategy is said to be \textit{evolutionary stable} if it cannot be overwhelmed by the joint effect of two or more competing strategies. As a matter of fact, Lorberbaum, Boyd, Farrell and Ware proved that no pure or mixed strategy is ev. stable in the long run, if future moves are discounted (see~\cite{lorb94}).} do not suggest new, efficient and interesting strategies since they inherently loose some meaning due to the intrinsic nature of iterated games~\cite{mathieu2017}.
 Winning a game in this setup simply means eventually achieving a better payoff with respect to the opponents and this could be carried out even without playing such strategies.
 
 \section{Strategies} \label{s:str}
@@ -165,23 +159,21 @@ The deterministic strategies are:
 The strategies are considered static in case they apply the same move at each iteration as in \textit{Nice guy} or \textit{Bad guy}, and dynamic elsewhere.
 These players' strategies are generally fixed in time, i.e. a player cannot change its strategy between rounds, unless specifically requested by the case study rules.
 Many more and much complicated strategies could be analyzed and our implementation is open and structured so that it is easy to add one strategy just by changing few lines in the code.
-
 \section{Two players IPD} \label{s:IPD2P}
 In this section, the IPD intercourse between two players is evaluated: each player has an assigned strategy, he is unaware of the opponent's way of acting and he plays accordingly to its strategy definition without the possibility to change it. Both players know only their respective history of choices. Each game is repeated for a fixed number of rounds, unknown to the two players. The main metric evaluated as output of this game is the winner, or in other words the one who achieves a higher payoff at the end of the round.
 
 The number of iterations is set to \texttt{NUM\_ITER = 50} and can be modified by means of a simple option when launching the program.
-This could also be seen as the number of moves during the match, and is a factor unknown to the players; if otherwise, a smart player could adopt a supposedly optimal strategy: for example, against a \textit{Nice} (or \textit{TfT}) strategy the best choice of action\footnote{As inferred from \textit{backward induction} reasoning.} would be to cooperate in all but the last round, gaining advantage from knowing the number of runs.
+This could also be seen as the number of moves during the match, and is a factor unknown to the players; if otherwise, a smart player could adopt a supposedly optimal strategy: for example, against a \textit{Nice} (or \textit{TfT}) strategy the best choice of action would be to cooperate in all but the last round, gaining advantage from knowing the number of runs, as inferred from a \textit{backward induction} reasoning.
 Results do not depend on this value if only deterministic strategies are employed; conversely, it will slightly influence the random ones.
 Note that in every simulation an optional \textit{seed} value can be fixed, so as to have reproducible results from the pseudo-random number generator.
 
 All the possible combinations between players, which represents each strategy presented in \autoref{s:str}, are evaluated, including the case in which the player plays against himself (or, similarly, against a player with the same strategy).
-This is a simple repetition of the single-shot game with the addition of memory and the possibility to add probabilistic and more elaborated strategies, as it has already been highlighted.
-
-Since the population is not a concern in this particular context (which is a single A vs B game), the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy, as expected.
+This is a simple repetition of the single-shot game with the addition of memory and the possibility to add probabilistic and more elaborated strategies, as it has already been highlighted. Since the population is not a concern in this particular context (which is a single A vs B game), the winning strategy in all cases is to \textit{not} cooperate, or, in other terms, the \textit{Always Bad guy} strategy, as expected.
 
 As a matter of fact, in all scenarios \textit{Bad guy} reaches at least the same reward of the opponent, but more often it gets a higher one as in Figures~[\ref{fig:badvstft},\ref{fig:badvsnice},\ref{fig:badvsmainlybad}]. 
 Furthermore, a game facing a \textit{Bad guy} against another \textit{Bad guy} as in \autoref{fig:badvsbad}, or similarly against a \textit{Mainly bad} (\autoref{fig:badvsmainlybad}), leads to the same cumulative reward for both players in the former case or almost the same in the latter. The obtained reward is not as good as if players were playing against (mainly) nice strategies.
 This is a first important insight that verifies and points out what has been seen from a theoretical point of view earlier: defecting is always a winning strategy, but it may be non-optimal; on the other hand, if both are cooperating, so playing the Pareto optimal combination, each of them gains more in terms of payoff and would get an advantage if they choose to defect against the other. In the latter case, memory is important as it allows revenge and reactive strategies to exist, keeping in mind that the total number of rounds is unknown. 
+
 
 \begin{figure}[!ht]
     \centering
@@ -241,7 +233,7 @@ Taking a closer look, the combination of \textit{Nice} and one between \textit{T
     \label{fig:tftvstft}
 \end{figure}
 
-The \textit{TfT} strategy is interesting, because \textit{TfT} leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if it is fast-forgiving when it plays against a mainly bad strategy. In other words, \textit{TfT} is robust because it never defects first and never takes advantage for more than one iteration at a time.~\cite{fogelEvolvingBehaviors}
+The \textit{TfT} strategy is interesting, because \textit{TfT} leads to almost the same cumulative reward as the opponent, and it is highly adaptive, even if it is fast-forgiving when it plays against a mainly bad strategy. In other words, \textit{TfT} is robust because it never defects first and never takes advantage for more than one iteration at a time~\cite{fogelEvolvingBehaviors}.
 
 In addition to these considerations, simulations were performed multiple times to get insights of the mean and variance of the rewards ruling these games. It is obvious that the static strategies (as the \textit{Nice-Nice}, \autoref{fig:boxnn}), or the non-triggering ones, or the ones without variations have constant mean and 0 standard deviation. On the other hand, it is interesting to notice that random strategies have a non-null variance, as shown in \textit{Mainly Bad-TfT}, \autoref{fig:boxmbvtft}. However, this does not imply that \textit{TfT} could ever win against such a strategy, it is only pointing out that there is a variation on subsequent runs based on the randomness of at least one of the two players: the \textit{TfT} strategy is a reactive strategy so it will be always ``late'', meaning that a player applying it will always have at most the same points of the opponent at the end of the game. There may be particular cases where a \textit{Mainly Nice} player may defect a \textit{Mainly Bad} opponent but these are just outliers in the overall simulation.
 
@@ -261,7 +253,7 @@ In addition to these considerations, simulations were performed multiple times t
 
 Moreover, it can be seen that the only strategies that reach 0 as a final payoff are the \textit{Nice} ones, while the \textit{TfT, Tf2T, GrT, Bad} have a higher minimum value.
 
-It is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy, it is necessary to defect at the first round, and, as already discussed, to play optimally against \textit{GrT} (or equivalently \textit{TfT}), it is necessary to cooperate until the last round where you should defect.~\cite{mathieu2017}
+It is impossible to make the optimal score against all strategies. The most intuitive reason is a consequence of the first move: to play optimally against a \textit{Bad} guy, it is necessary to defect at the first round, and, as already discussed, to play optimally against \textit{GrT} (or equivalently \textit{TfT}), it is necessary to cooperate until the last round where you should defect~\cite{mathieu2017}.
 But the number of rounds is unknown to the players and they should know in advance the type of opponent: this would enable them to adapt their strategy, but is not allowed by the rules of the game. 
 
 Finally, two additional metrics have been introduced: \textit{yield} and \textit{achieve}. 
@@ -311,7 +303,7 @@ Analyzing the 50-players game as in Figures~[\ref{fig:ipdmp50evo},\ref{fig:ipdmp
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.7\columnwidth]{../img/ipdmp/ipdmp50-plot-det}
+    \includegraphics[width=.9\columnwidth]{../img/ipdmp/ipdmp50-plot-det}
     \caption{50 players, evolution -- software results \cite{demosw}}
     \label{fig:ipdmp50evosw}
 \end{figure}
@@ -341,14 +333,14 @@ In a 10-players game, as presented in Figures~[\ref{fig:ipdmp10evo},\ref{fig:ipd
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.7\columnwidth]{../img/ipdmp/ipdmp10-plot-det}
+    \includegraphics[width=.9\columnwidth]{../img/ipdmp/ipdmp10-plot-det}
     \caption{10 players, evolution -- software results \cite{demosw}}
     \label{fig:ipdmp10evosw}
 \end{figure}
 
 Historically \textit{TfT} was considered the best strategy to win the tournament since it is simple, and one of the best strategies for maximizing the player's score.
 This fact was demonstrated in the extensive tests done by Axelrod, thoroughly described in \cite{axelrod1981evolution,axelrod1984evolution} and taken up as a starting point in \cite{mathieu2017}: \textit{TfT}, proposed by Anatol Rapoport, was the winner over all strategies.
-However, here it is proven that \textit{TfT} wins only in specific tournaments cases depending on the initial population. Moreover, spiteful strategies like \textit{GrT} seem to get the maximum in heterogeneous and more mixed populations. In any case, both have an extreme but effective behavior in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies.~\cite{mathieu2017}
+However, here it is proven that \textit{TfT} wins only in specific tournaments cases depending on the initial population. Moreover, spiteful strategies like \textit{GrT} seem to get the maximum in heterogeneous and more mixed populations. In any case, both have an extreme but effective behavior in our testbed. Possible advances can be introduced by taking into account more than the last one or two moves, allowing for more intricate and complex strategies~\cite{mathieu2017}.
 
 In each tournament, some variations of the results can be seen by repeating the simulation multiple times with the same initial population and generating boxplots; since random strategies have been introduced, the result of a one-shot complete game may differ with respect to the average results. These are rare cases that ought to be considered as outliers. Moreover, running simulations with different strategies or with a different initial population (i.e. 20 or 30 players, or by changing the seed value), obtained results can be different, especially since the balance between the number of \textit{(Mainly) Bad} and \textit{(Mainly) Nice} guys changes from the previously analyzed scenarios. The results of the tournaments are not predictable without knowing the initial population but this is an information available only to external observers and \textit{not} to the actual players. 
 
@@ -371,37 +363,37 @@ Details on the evolution of the population, grouped by strategy type, are presen
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-evolution-const-pop-50}
+    \includegraphics[width=.95\columnwidth]{../img/ripdmp-const/ripdmp-evolution-const-pop-50}
     \caption{Evolution of a constant population of 50 players}
     \label{fig:constR}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r0}
+    \includegraphics[width=.95\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r0}
     \caption{First iteration scores ($it=0$)}
     \label{fig:constFI}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r3}
+    \includegraphics[width=.9\columnwidth]{../img/ripdmp-const/ripdmp-scores-const-pop-50-r3}
     \caption{Last iteration scores ($it=4$)}
     \label{fig:constLI}
 \end{figure}
-
+\pagebreak
 It can be easily observed how the \textit{GrT} and \textit{TfT} strategies very quickly outpace the others: in just two iterations, they represent almost half of the population, with a predominance of \textit{TfT} players. At the fifth iteration, we can see that \textit{GrT} takes the lead but, as previously stated, results depend on the initial population: for example, by fixing the seed to $24$ as in \autoref{fig:constRseed24} and \autoref{tab:ripdmp-const-24}, it can be pointed out how \textit{TfT} players dominate, while using $1209$ as seed (\autoref{fig:constRseed1209} and \autoref{tab:ripdmp-const-1209}) leads to a final population formed by mostly \textit{Bad} players.
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/seed24/ripdmp-evolution-const-pop-50}
+    \includegraphics[width=.9\columnwidth]{../img/ripdmp-const/seed24/ripdmp-evolution-const-pop-50}
     \caption{Evolution of a 50-players pop., $seed = 24$}
     \label{fig:constRseed24}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-const/seed1209/ripdmp-evolution-const-pop-50}
+    \includegraphics[width=.9\columnwidth]{../img/ripdmp-const/seed1209/ripdmp-evolution-const-pop-50}
     \caption{Evolution of a 50-players pop., $seed = 1209$}
     \label{fig:constRseed1209}
 \end{figure}
@@ -429,7 +421,7 @@ Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrLI}] show the evolution o
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=1\columnwidth]{../img/ripdmp-incr/alt1/ripdmp-evolution-increasing-pop-50}
+    \includegraphics[width=.9\columnwidth]{../img/ripdmp-incr/alt1/ripdmp-evolution-increasing-pop-50}
     \caption{Evolution of an increasing pop. from 50 players}
     \label{fig:incrR}
 \end{figure}
@@ -455,7 +447,9 @@ Figures~[\ref{fig:incrR},\ref{fig:incrFI},\ref{fig:incrLI}] show the evolution o
     \label{fig:incrLI}
 \end{figure}
 
-The other alternatives give similar results that do not change our considerations. Full details on the evolution of the population for all alternatives can be found in the \hyperref[s:appendix]{Appendix} (Tables~[\ref{tab:ripdmp-incr},\ref{tab:ripdmp-incrA2},\ref{tab:ripdmp-incrA3}] and Figures~[\ref{fig:incrRa2},\ref{fig:incrRa3}]). The only partial exception to this trend is alternative 3 because the score obtained by each player is not equally distributed as in the other two cases. This benefits the strategies that have achieved the best overall score and disadvantages all the other strategies.
+The other alternatives give similar results that do not change our considerations. Full details on the evolution of the population for all alternatives can be found in the \hyperref[s:appendix]{Appendix} (Tables~[\ref{tab:ripdmp-incr},\ref{tab:ripdmp-incrA2},\ref{tab:ripdmp-incrA3}] and Figures~[\ref{fig:incrRa2},\ref{fig:incrRa3}]). 
+
+The only partial exception to this trend is alternative 3 because the score obtained by each player is not equally distributed as in the other two cases. This benefits the strategies that have achieved the best overall score and disadvantages all the other strategies.
 
 It is interesting to note how Wu and Axelrod \cite{IPDnoise} exploit the presented behavior of \textit{TfT} to react to noise in the game: by slightly altering the strategy in both directions, adding generosity (some percentage of opponent's defections go unpunished) or contrition (avoid responding to a defect move when a player's previous defection was unintended), the ``error'' can be quickly recovered and cooperation can be successfully restored. Note, however, that in this work these two variations of the \textit{TfT} strategy are not implemented.
 
@@ -517,17 +511,16 @@ The evolution of a population initially made of 50 players is presented in Figur
 
 The second alternative is shown on \autoref{tab:cripdmpA2} and \autoref{fig:incrC2}.
 
-In both cases it is easy to see that the same strategies of the previously investigated scenarios take the lead, namely \textit{GrT}, \textit{Tf(2)T} and \textit{Bad} players. In our simulations we have found that {\bf\color{red} (\textit{clarify this}) either with a random bias toward cooperation or with a deterministic one} the evolution of the population still converges toward the strategies we previously identified as winningly: while from \autoref{fig:incrC} we can note how \textit{TfT} and \textit{Tf2T} jointly leave behind all other strategies, using alternative 2 as in \autoref{fig:incrC2} results in \textit{Bad} players to be the majority of the population after a few rounds.
-Finally, we can note how the sets of ``good'' and ``bad'' players have more or less the same cardinality, that is, there is no substantial differences betweeen the two populations.
-\textbf{Todo maybe expand?}
+In both cases it is easy to see that the same strategies of the previously investigated scenarios take the lead, namely \textit{GrT}, \textit{Tf(2)T} and \textit{Bad} players. In our simulations we have found that either with a random generation of the cooperation factor or a deterministic one the evolution of the population still converges toward the strategies we previously identified as winningly: while from \autoref{fig:incrC} we can note how \textit{TfT} and \textit{Tf2T} jointly leave behind all other strategies, using alternative 2 as in \autoref{fig:incrC2} results in \textit{Bad} players to be the majority of the population after a few rounds.
+Finally, we can note how the sets of ``good'' and ``bad'' players have more or less the same cardinality, that is, there is no substantial differences betweeen the two populations. Given the results obtained in the previous simulations we can expect no substantial changes in the future of these simulations and different results with different initial populations. Much more articulated simulations may be done, for example by excluding some strategies or the generation of the population, but we wanted to keep a common framework within all the steps of this work.
 
 \section{Machine Learning approaches} \label{s:ml}
 Since the beginning of research on this subject, studies have been developed to find some pattern that can be exploited by learning algorithms.
 By the formulation of the IPD game, if such a pattern exists, it has to be learned using unsupervised techniques, since the final outcome of the players depends on their actions.
 
-Players should learn to cooperate --- equivalently, to enhance their altruism --- and here the aim is to do so by adaptively \textit{learning} a strategy. A hindrance is that, in the PD, the Nash equilibrium solution (as stated before, to defect) is not a desirable learning target.~\cite{coopSeqRL}
+Players should learn to cooperate --- equivalently, to enhance their altruism --- and here the aim is to do so by adaptively \textit{learning} a strategy. A hindrance is that, in the PD, the Nash equilibrium solution (as stated before, to defect) is not a desirable learning target~\cite{coopSeqRL}.
 
-Reinforcement learning (RL) is an unsupervised learning technique whereby the system must select an output (in case of PD, an action: cooperate or defect) for which it receives a scalar evaluation. RL requires to find the best output for any given input, and is based on the idea that the tendency to produce an action should be strengthened if the action led to favorable results, and weakened otherwise.~\cite{sandholmRL}
+Reinforcement learning (RL) is an unsupervised learning technique whereby the system must select an output (in case of PD, an action: cooperate or defect) for which it receives a scalar evaluation. RL requires to find the best output for any given input, and is based on the idea that the tendency to produce an action should be strengthened if the action led to favorable results, and weakened otherwise~\cite{sandholmRL}.
 
 Sandholm and Crites \cite{sandholmRL} employed recurrent neural networks (RNN) and the Q-learning algorithm, a particular RL procedure that works by estimating the value of state-action pairs, to train agents to play against the \textit{TfT} strategy and against an unknown opponent. While the first task was easily learned, the second one proved to be more difficult due to non-stationary behavior and lack of \textit{a priori} knowledge of a policy to encourage cooperation.
 More recently, Wang \cite{kedaoRL} extended this study with newly developed structures for the RNN part, to test both finite and infinite iterations setups. However, his tests led to pretty much the same results Sandholm had previously obtained.
