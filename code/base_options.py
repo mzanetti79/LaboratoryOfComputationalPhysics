@@ -20,7 +20,7 @@ class BaseOptions():
             parser.add_argument('--nrep', type=int, default=10, help='number of repetitions of the game')
         elif case > BaseOptions.IPDMP:
             # for ripdmp const, incr, cipdmp
-            parser.add_argument('--maxrep', type=int, default=(5 if case>=BaseOptions.RIPDMP_I else 10), help='max number of allowed repetitions')
+            parser.add_argument('--maxrep', type=int, default=5, help='max number of allowed repetitions')
             if case != BaseOptions.CIPDMP:
                 parser.add_argument('--percent', type=float, default=0.3, help='percentage of the population to be considered [if applicable]')
             if case == BaseOptions.RIPDMP_I or case == BaseOptions.CIPDMP:

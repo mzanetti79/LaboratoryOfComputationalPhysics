@@ -85,13 +85,14 @@ def main():
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0).astype(int)
 
+    tmp = strategies_df[['count','more_coop','less_coop']]
+    strategies_df = strategies_df.drop(columns=["count", "more_coop", "less_coop"])
+    strategies_df[['count','more_coop','less_coop']]=tmp[['count','more_coop','less_coop']]
+    
     if LATEX:
-        if NUM_PLAYERS > 8:
-            print(strategies_df.T.to_latex()) # too large, transpose
-        else:
-            print(strategies_df.to_latex(index=False))
+        print(strategies_df.T.to_latex()) # too large, transpose
     else:
-        print(strategies_df)
+        print(strategies_df.T)
     #strategies_df.T.to_excel("Alt{}.xlsx".format(ALTERNATIVE)) # DEBUG only
 
     fig = strategies_df.drop(columns=["count", "more_coop", "less_coop"]).plot(figsize=(12,5))

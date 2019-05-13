@@ -68,12 +68,9 @@ def main():
     strategies_df = strategies_df.fillna(0).astype(int)
 
     if LATEX:
-        if NUM_PLAYERS > 8:
-            print(strategies_df.T.to_latex()) # too large, transpose
-        else:
-            print(strategies_df.to_latex(index=False))
+        print(strategies_df.T.to_latex()) # too large, transpose
     else:
-        print(strategies_df)
+        print(strategies_df.T)
 
     fig = strategies_df.plot(figsize=(12,5))
     plt.legend(bbox_to_anchor=(0,-0.1), ncol=5, loc=2)

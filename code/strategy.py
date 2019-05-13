@@ -18,6 +18,7 @@ TF2T = -2
 GRT  = -3
 PRBL = -10 # just placeholders
 PRBH = -11
+pd.set_option('display.max_rows',None)
 
 class Strategy:
     """Abstract Strategy class to derive other."""
