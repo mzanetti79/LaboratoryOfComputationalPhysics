@@ -75,8 +75,6 @@ def IPDRoundRobin(players, num_iter, against_itself=False, return_ranking=False,
     return players, ranking_df
 
 def main():
-    pd.set_option('display.max_columns', None)
-
     root = os.path.dirname(os.path.abspath(__file__))[:-5]
 
     opt = BaseOptions().parse(BaseOptions.IPDMP)
@@ -107,8 +105,6 @@ def main():
         repeated_ranking_df = repeated_ranking_df.append(ranking_df) if i!=0 else ranking_df
 
     # print tables
-    pd.set_option('precision', 2)
-
     group = repeated_ranking_df[['points', 'coop_count', 'defect_count']].groupby(repeated_ranking_df.index)
     group_mean = group.mean()
     group_mean.columns = [str(col) + '_mean' for col in group_mean.columns]

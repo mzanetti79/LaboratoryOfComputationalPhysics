@@ -5,9 +5,6 @@ from ipdmp import IPDRoundRobin
 from player import MultiPlayer
 
 def main():
-    pd.set_option('display.max_columns', None)
-    pd.set_option('precision', 2)
-
     root = os.path.dirname(os.path.abspath(__file__))[:-5]
 
     opt = BaseOptions().parse(BaseOptions.CIPDMP)
@@ -85,12 +82,13 @@ def main():
     strategies_df.index = np.arange(strategies_df.index.size)
     strategies_df = strategies_df.fillna(0).astype(int)
 
+    # move count columns to the end
     tmp = strategies_df[['count','more_coop','less_coop']]
-    strategies_df = strategies_df.drop(columns=["count", "more_coop", "less_coop"])
-    strategies_df[['count','more_coop','less_coop']]=tmp[['count','more_coop','less_coop']]
+    strategies_df = strategies_df.drop(columns=['count','more_coop','less_coop'])
+    strategies_df[['count','more_coop','less_coop']] = tmp
     
     if LATEX:
-        print(strategies_df.T.to_latex()) # too large, transpose
+        print(strategies_df.T.to_latex())
     else:
         print(strategies_df.T)
     #strategies_df.T.to_excel("Alt{}.xlsx".format(ALTERNATIVE)) # DEBUG only

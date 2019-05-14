@@ -5,6 +5,11 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator
 #from mgen import generatePayoffMatrix
 
+# pandas options for dataframe visualization
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('precision', 2)
+
 # global variables for ground truth about strategies
 COOPERATE = 0
 DEFECT = 1
@@ -18,7 +23,6 @@ TF2T = -2
 GRT  = -3
 PRBL = -10 # just placeholders
 PRBH = -11
-pd.set_option('display.max_rows',None)
 
 class Strategy:
     """Abstract Strategy class to derive other."""

@@ -122,7 +122,6 @@ def main():
     avg_df['yield'] /= (NUM_PLAYERS+1)
     avg_df['achieve'] /= (NUM_PLAYERS+1)
     
-    pd.set_option('precision', 2)
     if LATEX:
         print(matches_df.to_latex(index=False))
         print(avg_df.to_latex(index=False))
