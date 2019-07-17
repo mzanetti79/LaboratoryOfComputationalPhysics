@@ -1,15 +1,16 @@
 import sys
 sys.path.insert(0, '/strategies.py')
+sys.path.insert(0, '/pdFunctions.py')
 
 from strategies import Nice_guy, Bad_guy
+from pdFunctions import IPD, MIPD, createPlayers
 
 p1 = Nice_guy()
 p2 = Bad_guy()
-p1_score = []
-p2_score = []
-for i in range(1,10):
-    p1_move = p1.play() # 1 or 0
-    p2_move = p2.play()
-    p1_score.append(p1.setScore(p1_move, p2_move)) # store in p1 memory and return p1 score of this play
-    p2_score.append(p2.setScore(p2_move, p1_move))
-print(p1_score)
+
+print(IPD(p1,p2,2))
+players = createPlayers(['nice guy', 'bad guy', 'nice guy'])
+print(IPD(players[0], players[1]))
+print(IPD(players[0], players[2]))
+print(players[1].getMemory())
+print(MIPD(players,10))
