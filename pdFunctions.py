@@ -38,7 +38,7 @@ def MIPD(players, turns=1):
             if i == j: # if player play vs himself
                 scores[i][j] = 0
                 break
-            _scores = IPD(players[i],players[j])
+            _scores = IPD(players[i],players[j], turns)
             scores[i][j] = sum(_scores[0])
             scores[j][i] = sum(_scores[1])
     return scores
