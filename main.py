@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '/strategies.py')
 
-from strategies import Nice_guy, Bad_guy, Main_nice, Main_bad, Grudger, GoByMajority
+from strategies import Nice_guy, Bad_guy, Main_nice, Main_bad, Grudger, GoByMajority, Tit_for_tat, TitFor2Tats, SuspiciousTitForTat
 
 p1 = Nice_guy()
 p2 = Bad_guy()
