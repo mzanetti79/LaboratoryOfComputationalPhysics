@@ -7,6 +7,7 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.score = 0
         self.memory = []
+        self.name = 'Player'
 
     def getMemory(self):
         return self.memory
@@ -29,17 +30,66 @@ class Player(object):
         # To be overrided in the next classes
         return None
 
-# for i in range(1,10):
-#     p1_move = obj1.play() # 1 or 0
-#     p2_move = obj2.play()
-#     p1_score[i] = obj1.setScore(p1_move, p2_move) # store in p1 memory and return p1 score of this play
-#     p2_score[i] = obj2.setScore(p2_move, p1_move)
-
 class Nice_guy(Player):
+    def __init__(self):
+        """Initiates an empty history and 0 score for a player."""
+        Player.__init__(self)
+        self.name = 'Nice guy'
+        
     def play(self):
         return 1
 
 
 class Bad_guy(Player):
+    def __init__(self):
+        """Initiates an empty history and 0 score for a player."""
+        Player.__init__(self)
+        self.name = 'Bad guy'
+    
     def play(self):
         return 0
+
+
+
+class Tit_for_tat(Player):
+    def __init__(self):
+        """Initiates an empty history and 0 score for a player."""
+        Player.__init__(self)
+        self.name = 'Tit for tat'
+    
+    def play(self):
+        if(len(self.memory) == 0):
+            return 1
+        else:
+            return self.memory[-1]
+
+
+class TitFor2Tats(Player):
+    """A player starts by cooperating and then defects only after two defects by opponent."""
+
+    def __init__(self):
+        """Initiates an empty history and 0 score for a player."""
+        Player.__init__(self)
+        self.name = 'Tit for 2 tats'
+    
+    def play(self):
+        if self.memory[-2:] == [0, 0]:
+            return 0
+        else:
+            return 1
+
+class SuspiciousTitForTat(Player):
+    """A player that behaves opposite to Tit For Tat.
+    Starts by defecting and then does the opposite of opponent's previous move.
+    This the opposite of TIT FOR TAT, also sometimes called BULLY.
+    """
+    def __init__(self):
+        """Initiates an empty history and 0 score for a player."""
+        Player.__init__(self)
+        self.name = 'Suspicious Tit For Tat'
+
+    def play(self):
+        if (len(self.memory) == 0):
+            return 1
+        else:
+            return 0
