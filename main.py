@@ -9,7 +9,7 @@ p1 = Nice_guy()
 p2 = Bad_guy()
 
 print(IPD(p1,p2,2))
-players = createPlayers(['nice guy', 'bad guy', 'nice guy'])
+players = createPlayers([['nice guy', 5], ['bad guy', 10]])
 print(IPD(players[0], players[1]))
 print(IPD(players[0], players[2]))
 print(players[1].getMemory())

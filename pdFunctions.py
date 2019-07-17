@@ -16,10 +16,11 @@ def IPD(p1, p2, turns=1):
     return scores
 
 # create an array of players
-# playersNames: array of strings; values of the array must be one of the startigies
-# nice guy, bad guy, tit-for-tat
+# playersNames: array of array; values of the array must be one of the startigies and the number of instances
+# [['nice guy', 10], ['bad guy', 5]]
+# suffle
 # return array of objects of type Player
-def createPlayers(playersNames):
+def createPlayers(playersNames, shuffle=True):
     players = []
     stat = {
         'nice guy': (lambda: Nice_guy()),
@@ -32,11 +33,16 @@ def createPlayers(playersNames):
         'tit for 2 tats': (lambda: TitFor2Tats()),
         'suspicious tit for tat': (lambda: SuspiciousTitForTat())
     }
-    for name in playersNames:
-        # check if stratigy name exists    
+    for name, num in playersNames:
+        # check if stratigy name exists
+        print(name, num)
         assert(name in stat)
 
-        players.append(stat[name]())
+        for i in range(0,num):
+            players.append(stat[name]())
+    
+    # shuffle
+    if(shuffle): random.shuffle(players)
     return players
 
 def MIPD(players, turns=1):
