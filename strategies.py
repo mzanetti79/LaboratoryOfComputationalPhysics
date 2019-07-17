@@ -22,8 +22,8 @@ class Player(object):
         S=0
         newScore = 0
         if (self_move == 1 and opp_move == 1): newScore = R
-        elif (self_move == 1 and opp_move == 0): newScore = T
-        elif (self_move == 0 and opp_move == 1): newScore = S
+        elif (self_move == 1 and opp_move == 0): newScore = S # loser
+        elif (self_move == 0 and opp_move == 1): newScore = T # winner
         else: newScore = P
         self.score += newScore
         return newScore
