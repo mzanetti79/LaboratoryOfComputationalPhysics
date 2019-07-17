@@ -35,7 +35,6 @@ def createPlayers(playersNames, shuffle=True):
     }
     for name, num in playersNames:
         # check if stratigy name exists
-        print(name, num)
         assert(name in stat)
 
         for i in range(0,num):
