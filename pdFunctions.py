@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 from strategies import Nice_guy, Bad_guy, Main_nice, Main_bad, Grudger, GoByMajority, Tit_for_tat, TitFor2Tats, SuspiciousTitForTat
 
 ## Iterative Prisoner's Dilemma
@@ -55,3 +56,28 @@ def MIPD(players, turns=1):
             scores[i][j] = sum(_scores[0])
             scores[j][i] = sum(_scores[1])
     return scores
+
+
+def plot_cunsum(players_score_matrix, players):
+    players_len= len(players_score_matrix)
+    turns=len(players_score_matrix[0])
+    x = range(1,turns+1)
+    fig, ax = plt.subplots(figsize=(8, 4))
+    for i in range(players_len):
+        r = lambda: random.randint(20,200)
+        g = lambda: random.randint(20,200)
+        b = lambda: random.randint(20,200)
+        color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
+        y = np.asarray(players_score_matrix[i])
+        y = y.cumsum()
+        label= players[i] + str(i)
+        ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
+    # tidy up the figure
+    ax.grid(True)
+    ax.legend(loc='right')
+    ax.set_title('Cumulative Player Score over turns')
+    ax.set_xlabel('Turns')
+    ax.set_ylabel('Comulative Score')
+    plt.show()
+
+
