@@ -39,7 +39,7 @@ class Nice_guy(Player):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         Player.__init__(self)
-        self.name = 'Nice guy'
+        self.name = 'nice guy'
         
     def play(self):
         return 1
@@ -49,7 +49,7 @@ class Bad_guy(Player):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         Player.__init__(self)
-        self.name = 'Bad guy'
+        self.name = 'bad guy'
     
     def play(self):
         return 0
@@ -60,7 +60,7 @@ class Tit_for_tat(Player):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         Player.__init__(self)
-        self.name = 'Tit for tat'
+        self.name = 'tit for tat'
     
     def play(self):
         if(len(self.memory) == 0):
@@ -75,7 +75,7 @@ class TitFor2Tats(Player):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         Player.__init__(self)
-        self.name = 'Tit for 2 tats'
+        self.name = 'tit for 2 tats'
     
     def play(self):
         if self.memory[-2:] == [0, 0]:
@@ -91,7 +91,7 @@ class SuspiciousTitForTat(Player):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         Player.__init__(self)
-        self.name = 'Suspicious Tit For Tat'
+        self.name = 'suspicious Tit For Tat'
 
     def play(self):
         if (len(self.memory) == 0):
@@ -104,7 +104,7 @@ class Main_bad(Player):
     """randomly defect k\% of the times and cooperate 100-k%, k>50"""
     def __init__(self,K):
         Player.__init__(self)
-        self.name = 'Main bad'
+        self.name = 'main bad'
         self.K = K/10
 
     def play(self):
@@ -118,7 +118,7 @@ class Main_nice(Player):
     """randomly defect k\% of the times and cooperate 100-k%, k<50"""
     def __init__(self,K):
         Player.__init__(self)
-        self.name = 'Main nice'
+        self.name = 'main nice'
         self.K = K/10
 
     def play(self):
@@ -133,7 +133,7 @@ class Grudger(Player):
     at any point the opponent has defected."""
     def __init__(self):
         Player.__init__(self)
-        self.name = 'Gradger'
+        self.name = 'gradger'
 
     def play(self):
         if len(self.memory)==0:
@@ -149,7 +149,7 @@ class GoByMajority(Player):
     if the opponent has more defections than cooperations then the player defects."""
     def __init__(self):
         Player.__init__(self)
-        self.name = 'Go By Majority'
+        self.name = 'go by majority'
     def play(self):
         if sum([s == 0 for s in self.memory]) > sum([s == 1 for s in self.memory]):
             return 0
