@@ -1,7 +1,8 @@
 import random
 import numpy as np
 from strategies import Nice_guy, Bad_guy, Main_nice, Main_bad, Grudger, GoByMajority, Tit_for_tat, TitFor2Tats, SuspiciousTitForTat
-
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt; plt.rcdefaults()
 ## Iterative Prisoner's Dilemma
 # p1,p2 of type Player
 # turns: int; number of turns
@@ -55,3 +56,23 @@ def MIPD(players, turns=1):
             scores[i][j] = sum(_scores[0])
             scores[j][i] = sum(_scores[1])
     return scores
+
+def barPlot(players):
+    bins = []
+    playersNames = []
+    counts = []
+    for i in players:
+        playersNames.append(i.name)
+    bins = list(dict.fromkeys(playersNames))
+
+    for x in bins:
+        counts.append(playersNames.count(x))
+
+    y_pos = np.arange(len(bins))
+    plt.bar(y_pos, counts, align='center', alpha=0.5)
+    plt.xticks(y_pos, bins)
+    plt.xlabel('Name')
+    plt.ylabel('Number')
+    plt.title('Players with their names')
+
+    plt.show()
