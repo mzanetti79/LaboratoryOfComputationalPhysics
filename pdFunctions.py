@@ -19,13 +19,9 @@ def IPD(p1, p2, turns=1):
         scores[1].append(p2.setScore(p2_move, p1_move))
     return scores
 
-# create an array of players
-# playersNames: array of array; values of the array must be one of the startigies and the number of instances
-# [['nice guy', 10], ['bad guy', 5]]
-# suffle
-# return array of objects of type Player
-def createPlayers(playersNames, shuffle=True):
-    players = []
+# generates player by startegy name
+# name: string; name of startegy
+def strategyGenerator(name):
     stat = {
         'nice guy': (lambda: Nice_guy()),
         'bad guy': (lambda: Bad_guy()),
@@ -37,12 +33,21 @@ def createPlayers(playersNames, shuffle=True):
         'tit for 2 tats': (lambda: TitFor2Tats()),
         'suspicious tit for tat': (lambda: SuspiciousTitForTat())
     }
+    # check if stratigy name exists
+    assert(name in stat)
+    return stat[name]()
+    
+# create an array of players
+# playersNames: array of array; values of the array must be one of the startigies and the number of instances
+# [['nice guy', 10], ['bad guy', 5]]
+# suffle
+# return array of objects of type Player
+def createPlayers(playersNames, shuffle=True):
+    players = []
     for name, num in playersNames:
-        # check if stratigy name exists
-        assert(name in stat)
-
+     
         for i in range(0,num):
-            players.append(stat[name]())
+            players.append(strategyGenerator(name))
     
     # shuffle
     if(shuffle): random.shuffle(players)
@@ -60,6 +65,72 @@ def MIPD(players, turns=1):
             scores[j][i] = sum(_scores[1])
     return scores
 
+# players: list of objects of type Player
+# turns: int; number of turns of each match between two players
+# iters: int; number of iterations
+# alfa: float; the probabilty for a player to mutate
+#   set alfa = 0 to remove its effect
+# returns iterPlayers, iterScores, totals
+#   iterPlayers: 2D array of Player objects; number of rows is the number of iterations
+#       number of columns is the number of players
+#   iterScores: 2D array of float;
+#       each row is a set of total scores of each player one iteration
+#   totals: array of float; number of elements = number of iterations
+#       each element is the total score of all players in one iteration
+def rMIPD(players, turns=1,iters=1, alfa=0.5):
+    iterPlayers = [] # each row is a set of players in one iteration
+    iterScores = [] # each row is a set of total scores of each player one iteration
+    totals = [] # total scores for all players in each iteration
+    # create id for each strategy
+    idStrat = {} # { id : name }
+    stratId = {} # { name : id }
+    for p in players:
+        stratId[p.getName()] = 0
+    for i, strat in enumerate(stratId.keys()):
+        stratId[strat] = i
+        idStrat[i] = strat
+    # start iterations
+    for itr in range(0,iters):
+        scores = MIPD(players, turns)
+        scores = np.sum(scores,axis=1) # final score for each player
+        iterScores.append(scores)
+        strats = {} # total score for each strategy
+        for i, player in enumerate(players):
+            name = player.getName()
+            if (name not in strats.keys()): strats[name] = [scores[i]]
+            else: strats[name].append(scores[i])
+        
+         # average score for each strategy
+        _totalAvg = 0
+        _total = 0
+        for strat in strats:
+            _total = np.sum(strats[strat])
+            avg = np.average(strats[strat])
+            strats[strat] = avg
+            _totalAvg += avg
+        totals.append(_total)
+        # normalize scores of strategies then multiply by 100 and round it
+        spinner = []
+        for strat in strats:
+            strats[strat] = strats[strat] / _totalAvg # normalize scores
+            strats[strat] = int(round(strats[strat] * 100)) # eg. strats = { strat1: 40, strat2: 60}
+            # create spinner weel to be used in random selection
+            spinner = np.append(spinner, [stratId[strat] for i in range(0,strats[strat])])
+            # eg. spinner = [start1_id, start1_id,... 40 times, start2_id,.. x60 times]
+        
+        # Create new players with same population but different startegy distribution
+        newPlayers = []
+        for i in range(0, len(players)):
+            if(random.uniform(0, 1) >= alfa):
+                # flip a coin for each player to select his new strategy based on the 'spinner'
+                _id = int(np.random.choice(spinner))
+                newPlayers.append(strategyGenerator(idStrat[_id]))
+            # or dont change strategy
+            else: newPlayers.append(strategyGenerator(players[i].getName()))
+        iterPlayers.append(newPlayers)
+    return iterPlayers, iterScores, totals
+
+        
 def barPlot(players, scores):
     bins = []
     playersNames = []
