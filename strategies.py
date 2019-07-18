@@ -13,6 +13,9 @@ class Player(object):
 
     def getMemory(self):
         return self.memory
+
+    def getName(self):
+        return self.name
     
     def setScore(self, self_move, opp_move):
         self.memory.append(opp_move)
