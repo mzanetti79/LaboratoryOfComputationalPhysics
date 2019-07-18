@@ -55,3 +55,9 @@ def MIPD(players, turns=1):
             scores[i][j] = sum(_scores[0])
             scores[j][i] = sum(_scores[1])
     return scores
+
+def rMIPD(players, turns=1,iter=1):
+    scores = MIPD(players, turns)
+    scores = np.sum(scores,axis=1) # final score for each player
+    nScores = scores/np.sum(scores) # normalized
+    print(nScores)
