@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from strategies import Nice_guy, Bad_guy, Main_nice, Main_bad, Grudger, GoByMajority, Tit_for_tat, TitFor2Tats, SuspiciousTitForTat
 import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt; plt.rcdefaults()
+import statistics
+
 ## Iterative Prisoner's Dilemma
 # p1,p2 of type Player
 # turns: int; number of turns
@@ -58,25 +60,46 @@ def MIPD(players, turns=1):
             scores[j][i] = sum(_scores[1])
     return scores
 
-def barPlot(players):
+def barPlot(players, scores):
     bins = []
     playersNames = []
     counts = []
-    for i in players:
-        playersNames.append(i.getName())
+    avg_scores = []
+    for i in range(len(players)):
+        avg_scores.append(statistics.mean(scores[i]))
+        playersNames.append(players[i].getName())
     bins = list(dict.fromkeys(playersNames))
 
-    for x in bins:
-        counts.append(playersNames.count(x))
-
+    for x in range(len(bins)):
+        counts.append(playersNames.count(bins[x]))
+    
+    startigies_avg = [0] * len(bins)
+    for i in range(len(playersNames)):
+        for x in range(len(bins)):
+            if(bins[x] == playersNames[i]):
+                startigies_avg[x]+=avg_scores[i]
+    
+    for x in range(len(startigies_avg)):
+        startigies_avg[x] = startigies_avg[x]/counts[x]
+    
+    plt.figure(1)      
     y_pos = np.arange(len(bins))
     plt.bar(y_pos, counts, align='center', alpha=0.5)
     plt.xticks(y_pos, bins)
     plt.xlabel('Name')
     plt.ylabel('Number')
-    plt.title('Players with their names')
-
+    plt.title('Players with strategies names')
     plt.show()
+
+    plt.figure(2)
+    y_pos = np.arange(len(startigies_avg))
+    plt.bar(y_pos, startigies_avg, align='center', alpha=0.5)
+    plt.xticks(y_pos, bins)
+    plt.xlabel('Name')
+    plt.ylabel('Average score')
+    plt.title('Players with average scores')
+    plt.show()
+
 
 def plot_cunsum(players_score_matrix, players):
     players_len= len(players_score_matrix)
