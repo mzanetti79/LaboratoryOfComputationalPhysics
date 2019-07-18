@@ -82,7 +82,7 @@ def barPlot(players, scores):
     for x in range(len(startigies_avg)):
         startigies_avg[x] = startigies_avg[x]/counts[x]
     
-    plt.figure(1)      
+    plt.figure(1)
     y_pos = np.arange(len(bins))
     plt.bar(y_pos, counts, align='center', alpha=0.5)
     plt.xticks(y_pos, bins)
