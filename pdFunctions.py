@@ -58,10 +58,33 @@ def MIPD(players, turns=1):
     return scores
 
 
+# def plot_cunsum(players_score_matrix, players):
+#     players_len= len(players_score_matrix)
+#     turns=len(players_score_matrix[0])
+#     x = range(1,turns+1)
+#     fig, ax = plt.subplots(figsize=(8, 4))
+#     for i in range(players_len):
+#         r = lambda: random.randint(20,200)
+#         g = lambda: random.randint(20,200)
+#         b = lambda: random.randint(20,200)
+#         color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
+#         y = np.asarray(players_score_matrix[i])
+#         y = y.cumsum()
+#         label= players[i] + str(i)
+#         ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
+#     # tidy up the figure
+#     ax.grid(True)
+#     ax.legend(loc='right')
+#     ax.set_title('Cumulative Player Score over turns')
+#     ax.set_xlabel('Turns')
+#     ax.set_ylabel('Comulative Score')
+#     plt.show()
+
 def plot_cunsum(players_score_matrix, players):
     players_len= len(players_score_matrix)
     turns=len(players_score_matrix[0])
     x = range(1,turns+1)
+    total=sum(sum(np.asarray(players_score_matrix)))
     fig, ax = plt.subplots(figsize=(8, 4))
     for i in range(players_len):
         r = lambda: random.randint(20,200)
@@ -70,14 +93,14 @@ def plot_cunsum(players_score_matrix, players):
         color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
         y = np.asarray(players_score_matrix[i])
         y = y.cumsum()
+        y=y/total
         label= players[i] + str(i)
         ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
     # tidy up the figure
     ax.grid(True)
     ax.legend(loc='right')
-    ax.set_title('Cumulative Player Score over turns')
+    ax.set_title('Player Score over turns')
     ax.set_xlabel('Turns')
-    ax.set_ylabel('Comulative Score')
+    ax.set_ylabel('Score Fraction')
     plt.show()
-
 
