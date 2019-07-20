@@ -218,3 +218,18 @@ def plot_cunsum(players_score_matrix, players):
     ax.set_ylabel('Score Fraction')
     plt.show()
 
+
+def plot_box(player1, player2, NUM_REPETITIONS):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    results=IPD(player1, player2, NUM_REPETITIONS)
+    ax.boxplot(results,showmeans=True)
+    plt.xticks([1, 2], [player1.getName(), player2.getName()])
+    plt.ylabel('Reward')
+    plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
+    plt.show()
+    playone_mean=np.mean(np.asarray(results[0]))
+    playone_std=np.std(np.asarray(results[0]))
+    print(playone_mean)
+    print(playone_std)
+    # Save the figure
+    fig.savefig('fig2.png', bbox_inches='tight')
