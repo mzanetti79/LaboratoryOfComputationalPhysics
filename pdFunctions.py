@@ -213,7 +213,7 @@ def plot_cunsum(players_score_matrix, players):
         y = np.asarray(players_score_matrix[i])
         y = y.cumsum()
         y=y/total
-        label= players[i] + str(i)
+        label= players[i].getName()+str(i)
         ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
     # tidy up the figure
     ax.grid(True)
@@ -224,35 +224,15 @@ def plot_cunsum(players_score_matrix, players):
     plt.show()
 
 
-def plot_box(player1, player2, NUM_REPETITIONS):
-    fig, ax = plt.subplots(figsize=(8, 4))
-    results=IPD(player1, player2, NUM_REPETITIONS)
-    ax.boxplot(results,showmeans=True)
-    plt.xticks([1, 2], [player1.getName(), player2.getName()])
-    plt.ylabel('Reward')
-    plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
-    plt.show()
-    playone_mean=np.mean(np.asarray(results[0]))
-    playone_std=np.std(np.asarray(results[0]))
-    print(playone_mean)
-    print(playone_std)
-    # Save the figure
-    fig.savefig('fig2.png', bbox_inches='tight')
-
-
 def plot_box_multiple(players, NUM_REPETITIONS):
     fig, ax = plt.subplots(figsize=(8, 4))
-    scores=[]
     playersNames=[]
+    scores = MIPD(players,NUM_REPETITIONS,mode=0)
+    finalScore=[]
     for i in range(0,len(players)):
         playersNames.append(players[i].getName())
-        score=np.zeros(NUM_REPETITIONS)
-        for j in range(0,len(players)):
-            if i != j:
-                _scores = IPD(players[i],players[j], NUM_REPETITIONS)
-                score=np.asarray(_scores[0])+score
-        scores.append(score)
-    ax.boxplot(scores,showmeans=True)
+        finalScore.append(scores[i])
+    ax.boxplot(finalScore,showmeans=True)
     plt.xticks(range(1,len(players)+1), playersNames)
     plt.ylabel('Reward')
     plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
