@@ -53,17 +53,21 @@ def createPlayers(playersNames, shuffle=True):
     if(shuffle): random.shuffle(players)
     return players
 
-def MIPD(players, turns=1):
-    scores = np.zeros([len(players),len(players)])
+# mode = 0 => len(output) = (#players,turns)
+# mode = 1 => len(output) = (#players,#players)
+def MIPD(players, turns=1, mode=1):
+    if(mode == 1): scores = np.zeros([len(players),len(players)])
+    else: scores = np.zeros([len(players),turns])
     for i in range(0,len(players)):
         for j in range(i+1,len(players)):
-            if i == j: # if player play vs himself
-                scores[i][j] = 0
-                break
             _scores = IPD(players[i],players[j], turns)
-            scores[i][j] = sum(_scores[0])
-            scores[j][i] = sum(_scores[1])
-    return scores
+            if(mode == 1):
+                scores[i][j] = sum(_scores[0])
+                scores[j][i] = sum(_scores[1])
+            else:
+                scores[i] = np.add(scores[i],_scores[0])
+                scores[j] = np.add(scores[j],_scores[1])
+    return scores 
 
 # players: list of objects of type Player
 # turns: int; number of turns of each match between two players
@@ -128,6 +132,7 @@ def rMIPD(players, turns=1,iters=1, alfa=0.5):
             # or dont change strategy
             else: newPlayers.append(strategyGenerator(players[i].getName()))
         iterPlayers.append(newPlayers)
+        players = newPlayers
     return iterPlayers, iterScores, totals
 
         
