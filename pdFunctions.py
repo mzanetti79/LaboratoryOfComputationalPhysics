@@ -233,3 +233,23 @@ def plot_box(player1, player2, NUM_REPETITIONS):
     print(playone_std)
     # Save the figure
     fig.savefig('fig2.png', bbox_inches='tight')
+
+
+def plot_box_multiple(players, NUM_REPETITIONS):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    scores=[]
+    playersNames=[]
+    for i in range(0,len(players)):
+        playersNames.append(players[i].getName())
+        score=np.zeros(NUM_REPETITIONS)
+        for j in range(0,len(players)):
+            if i != j:
+                _scores = IPD(players[i],players[j], NUM_REPETITIONS)
+                score=np.asarray(_scores[0])+score
+        scores.append(score)
+    ax.boxplot(scores,showmeans=True)
+    plt.xticks(range(1,len(players)+1), playersNames)
+    plt.ylabel('Reward')
+    plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
+    plt.show()
+    # fig.savefig('fig2.png', bbox_inches='tight')
