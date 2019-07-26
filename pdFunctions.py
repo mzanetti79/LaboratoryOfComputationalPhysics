@@ -53,6 +53,25 @@ def createPlayers(playersNames, shuffle=True):
     if(shuffle): random.shuffle(players)
     return players
 
+# calculate alfa for each strategy according to its score
+# the higher the score, the lower alfa it gets
+# args:
+#   strategies: object {strategy_name: average_score}
+# returns:
+#   {strategy_name: strategy_alfa}
+def calcAlfa(strategies):
+    stratsArr = [] # stratigies names
+    avScores = []
+    aflaDic = {}
+    for s in strategies:
+        stratsArr.append(s)
+        avScores.append(strategies[s])
+    maxScore = max(avScores)
+    avScores = 1-(np.array(avScores)*0.9/maxScore)
+    for i in range(0,len(stratsArr)):
+        aflaDic[stratsArr[i]]= avScores[i]
+    return aflaDic
+
 # mode = 0 => len(output) = (#players,turns)
 # mode = 1 => len(output) = (#players,#players)
 def MIPD(players, turns=1, mode=1):
@@ -73,7 +92,8 @@ def MIPD(players, turns=1, mode=1):
 # turns: int; number of turns of each match between two players
 # iters: int; number of iterations
 # alfa: float; the probabilty for a player to mutate
-#   set alfa = 0 to remove its effect
+#   set alfa = 1 to remove its effect; all players will change their startigies in each iteration
+#   set alfa = -1 to let alfa be calculated for each strategy according to it's scores
 # returns iterPlayers, iterScores, totals
 #   iterPlayers: 2D array of Player objects; number of rows is the number of iterations
 #       number of columns is the number of players
@@ -110,7 +130,7 @@ def rMIPD(players, turns=1,iters=1, alfa=0.5):
         for strat in strats:
             _total = np.sum(strats[strat])
             avg = np.average(strats[strat])
-            strats[strat] = avg
+            strats[strat] = avg # average score for each strategy
             _totalAvg += avg
         totals.append(_total)
         # normalize scores of strategies then multiply by 100 and round it
@@ -121,11 +141,15 @@ def rMIPD(players, turns=1,iters=1, alfa=0.5):
             # create spinner weel to be used in random selection
             spinner = np.append(spinner, [stratId[strat] for i in range(0,strats[strat])])
             # eg. spinner = [start1_id, start1_id,... 40 times, start2_id,.. x60 times]
-        
+        # Calculate alfa for each strategy if needed
+        if(alfa == -1):
+            alfas = calcAlfa(strats) 
         # Create new players with same population but different startegy distribution
         newPlayers = []
         for i in range(0, len(players)):
-            if(random.uniform(0, 1) >= alfa):
+            if(alfa == -1): prob = 1 - alfas[players[i].getName()]
+            else: prob = (1 - alfa)
+            if(random.uniform(0, 1) >= prob):
                 # flip a coin for each player to select his new strategy based on the 'spinner'
                 _id = int(np.random.choice(spinner))
                 newPlayers.append(strategyGenerator(idStrat[_id]))

@@ -4,7 +4,7 @@ sys.path.insert(0, '/pdFunctions.py')
 import numpy as np
 import matplotlib.pyplot as plt
 from strategies import Nice_guy, Bad_guy
-from pdFunctions import IPD, MIPD, rMIPD, createPlayers, plot_cunsum, barPlot, plot_box, plot_box_multiple
+from pdFunctions import IPD, MIPD, rMIPD, createPlayers, plot_cunsum, barPlot, plot_box_multiple
 
 p1 = Nice_guy()
 p2 = Bad_guy()
@@ -23,8 +23,8 @@ iterPlayers, iterScores, totals = rMIPD(players2,10,5)
 
 # barPlot(players,scores)
 # plot_cunsum(IPD(players[0], players[1],100),[players[0].getName(), players[1].getName()])
-rMIPD(players,100,10)
-# print(rMIPD(players,100,10))
+players3 = createPlayers([['nice guy', 5], ['bad guy', 5], ['main bad', 5]])
+rMIPD(players3,100,10,-1)
 
 NUM_REPETITIONS=100
 scores = MIPD(players,NUM_REPETITIONS,mode=0)
