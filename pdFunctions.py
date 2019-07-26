@@ -224,11 +224,11 @@ def plot_cunsum(players_score_matrix, players):
     plt.show()
 
 
-def plot_box_multiple(players, NUM_REPETITIONS):
+def plot_box_multiple(scores,players, NUM_REPETITIONS):
     fig, ax = plt.subplots(figsize=(8, 4))
     playersNames=[]
-    scores = MIPD(players,NUM_REPETITIONS,mode=0)
     finalScore=[]
+    print('players',players)
     for i in range(0,len(players)):
         playersNames.append(players[i].getName())
         finalScore.append(scores[i])
@@ -238,3 +238,18 @@ def plot_box_multiple(players, NUM_REPETITIONS):
     plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
     plt.show()
     # fig.savefig('fig2.png', bbox_inches='tight')
+
+
+def plot_box(results,player1, player2, NUM_REPETITIONS):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.boxplot(results,showmeans=True)
+    plt.xticks([1, 2], [player1.getName(), player2.getName()])
+    plt.ylabel('Reward')
+    plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
+    plt.show()
+    playone_mean=np.mean(np.asarray(results[0]))
+    playone_std=np.std(np.asarray(results[0]))
+    print(playone_mean)
+    print(playone_std)
+    # Save the figure
+    fig.savefig('fig2.png', bbox_inches='tight')
