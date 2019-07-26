@@ -26,6 +26,8 @@ iterPlayers, iterScores, totals = rMIPD(players2,10,5)
 # plot_cunsum(IPD(players[0], players[1],100),[players[0].getName(), players[1].getName()])
 rMIPD(players,100,10)
 # print('hhhh',rMIPD(players,100,10))
+players3 = createPlayers([['nice guy', 5], ['bad guy', 5], ['main bad', 5]])
+rMIPD(players3,100,10,-1)
 
 NUM_REPETITIONS=10
 results = MIPD(players,NUM_REPETITIONS,mode=0)
