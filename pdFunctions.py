@@ -247,7 +247,6 @@ def plot_cunsum(players_score_matrix, players):
     ax.set_ylabel('Score Fraction')
     plt.show()
 
-
 def plot_box_multiple(scores,players, NUM_REPETITIONS):
     fig, ax = plt.subplots(figsize=(8, 4))
     playersNames=[]
