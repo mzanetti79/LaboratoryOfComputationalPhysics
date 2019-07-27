@@ -83,3 +83,13 @@ returns:
 iterPlayers: 2D array of Player objects for the number of iterations and the number of players
 iterScores: 2D array for the total scores of each player in one iteration
 totals: array of the total score of all players in one iteration.
+# results
+...
+...
+## Repeated multiple players iterated prisoners dilemma (rMIPD)
+Basically this method iterates MIPD for several iterations, each iteration represents new generation which has new strategy distribution depending on their scores in previous generation(iteration).
+The population used to analyze this function is as follows:
+10 nice-guy, 10 bad-guy and 10 main-bad players.
+```
+players = createPlayers([['nice guy', 10], ['bad guy', 10], ['main bad', 10]])
+```
