@@ -53,23 +53,47 @@ def createPlayers(playersNames, shuffle=True):
     if(shuffle): random.shuffle(players)
     return players
 
-def MIPD(players, turns=1):
-    scores = np.zeros([len(players),len(players)])
+# calculate alfa for each strategy according to its score
+# the higher the score, the lower alfa it gets
+# args:
+#   strategies: object {strategy_name: average_score}
+# returns:
+#   {strategy_name: strategy_alfa}
+def calcAlfa(strategies):
+    stratsArr = [] # stratigies names
+    avScores = []
+    aflaDic = {}
+    for s in strategies:
+        stratsArr.append(s)
+        avScores.append(strategies[s])
+    maxScore = max(avScores)
+    avScores = 1-(np.array(avScores)*0.9/maxScore)
+    for i in range(0,len(stratsArr)):
+        aflaDic[stratsArr[i]]= avScores[i]
+    return aflaDic
+
+# mode = 0 => len(output) = (#players,turns)
+# mode = 1 => len(output) = (#players,#players)
+def MIPD(players, turns=1, mode=1):
+    if(mode == 1): scores = np.zeros([len(players),len(players)])
+    else: scores = np.zeros([len(players),turns])
     for i in range(0,len(players)):
         for j in range(i+1,len(players)):
-            if i == j: # if player play vs himself
-                scores[i][j] = 0
-                break
             _scores = IPD(players[i],players[j], turns)
-            scores[i][j] = sum(_scores[0])
-            scores[j][i] = sum(_scores[1])
-    return scores
+            if(mode == 1):
+                scores[i][j] = sum(_scores[0])
+                scores[j][i] = sum(_scores[1])
+            else:
+                scores[i] = np.add(scores[i],_scores[0])
+                scores[j] = np.add(scores[j],_scores[1])
+    return scores 
 
 # players: list of objects of type Player
 # turns: int; number of turns of each match between two players
 # iters: int; number of iterations
 # alfa: float; the probabilty for a player to mutate
-#   set alfa = 0 to remove its effect
+#   set alfa = 1 to remove its effect; all players will change their startigies in each iteration
+#   set alfa = -1 to let alfa be calculated for each strategy according to it's scores
 # returns iterPlayers, iterScores, totals
 #   iterPlayers: 2D array of Player objects; number of rows is the number of iterations
 #       number of columns is the number of players
@@ -106,7 +130,7 @@ def rMIPD(players, turns=1,iters=1, alfa=0.5):
         for strat in strats:
             _total = np.sum(strats[strat])
             avg = np.average(strats[strat])
-            strats[strat] = avg
+            strats[strat] = avg # average score for each strategy
             _totalAvg += avg
         totals.append(_total)
         # normalize scores of strategies then multiply by 100 and round it
@@ -117,17 +141,22 @@ def rMIPD(players, turns=1,iters=1, alfa=0.5):
             # create spinner weel to be used in random selection
             spinner = np.append(spinner, [stratId[strat] for i in range(0,strats[strat])])
             # eg. spinner = [start1_id, start1_id,... 40 times, start2_id,.. x60 times]
-        
+        # Calculate alfa for each strategy if needed
+        if(alfa == -1):
+            alfas = calcAlfa(strats) 
         # Create new players with same population but different startegy distribution
         newPlayers = []
         for i in range(0, len(players)):
-            if(random.uniform(0, 1) >= alfa):
+            if(alfa == -1): prob = 1 - alfas[players[i].getName()]
+            else: prob = (1 - alfa)
+            if(random.uniform(0, 1) >= prob):
                 # flip a coin for each player to select his new strategy based on the 'spinner'
                 _id = int(np.random.choice(spinner))
                 newPlayers.append(strategyGenerator(idStrat[_id]))
             # or dont change strategy
             else: newPlayers.append(strategyGenerator(players[i].getName()))
         iterPlayers.append(newPlayers)
+        players = newPlayers
     return iterPlayers, iterScores, totals
 
         
@@ -172,10 +201,33 @@ def barPlot(players, scores):
     plt.show()
 
 
+# def plot_cunsum(players_score_matrix, players):
+#     players_len= len(players_score_matrix)
+#     turns=len(players_score_matrix[0])
+#     x = range(1,turns+1)
+#     fig, ax = plt.subplots(figsize=(8, 4))
+#     for i in range(players_len):
+#         r = lambda: random.randint(20,200)
+#         g = lambda: random.randint(20,200)
+#         b = lambda: random.randint(20,200)
+#         color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
+#         y = np.asarray(players_score_matrix[i])
+#         y = y.cumsum()
+#         label= players[i] + str(i)
+#         ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
+#     # tidy up the figure
+#     ax.grid(True)
+#     ax.legend(loc='right')
+#     ax.set_title('Cumulative Player Score over turns')
+#     ax.set_xlabel('Turns')
+#     ax.set_ylabel('Comulative Score')
+#     plt.show()
+
 def plot_cunsum(players_score_matrix, players):
     players_len= len(players_score_matrix)
     turns=len(players_score_matrix[0])
     x = range(1,turns+1)
+    total=sum(sum(np.asarray(players_score_matrix)))
     fig, ax = plt.subplots(figsize=(8, 4))
     for i in range(players_len):
         r = lambda: random.randint(20,200)
@@ -184,14 +236,43 @@ def plot_cunsum(players_score_matrix, players):
         color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
         y = np.asarray(players_score_matrix[i])
         y = y.cumsum()
-        label= players[i] + str(i)
+        y=y/total
+        label= players[i].getName()+str(i)
         ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
     # tidy up the figure
     ax.grid(True)
     ax.legend(loc='right')
-    ax.set_title('Cumulative Player Score over turns')
+    ax.set_title('Player Score over turns')
     ax.set_xlabel('Turns')
-    ax.set_ylabel('Comulative Score')
+    ax.set_ylabel('Score Fraction')
     plt.show()
 
+def plot_box_multiple(scores,players, NUM_REPETITIONS):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    playersNames=[]
+    finalScore=[]
+    print('players',players)
+    for i in range(0,len(players)):
+        playersNames.append(players[i].getName())
+        finalScore.append(scores[i])
+    ax.boxplot(finalScore,showmeans=True)
+    plt.xticks(range(1,len(players)+1), playersNames)
+    plt.ylabel('Reward')
+    plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
+    plt.show()
+    # fig.savefig('fig2.png', bbox_inches='tight')
 
+
+def plot_box(results,player1, player2, NUM_REPETITIONS):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.boxplot(results,showmeans=True)
+    plt.xticks([1, 2], [player1.getName(), player2.getName()])
+    plt.ylabel('Reward')
+    plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
+    plt.show()
+    playone_mean=np.mean(np.asarray(results[0]))
+    playone_std=np.std(np.asarray(results[0]))
+    print(playone_mean)
+    print(playone_std)
+    # Save the figure
+    fig.savefig('fig2.png', bbox_inches='tight')
