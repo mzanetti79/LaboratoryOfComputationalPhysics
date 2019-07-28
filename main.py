@@ -29,7 +29,7 @@ results=IPD(players[0], players[1],10)
 # plt.tight_layout() 
 # plt.show()
 players_bar = createPlayers([['nice guy',5],['bad guy',5], ['main bad',5],['main nice',5],['tit for tat',5], ['go by majority',5], ['tit for 2 tats',5], ['grudger',5]], False)
-scores= MIPD(players2,10,mode = 0)
+scores= MIPD(players_bar ,10,mode = 0)
 
 barPlot(players_bar,scores)
 # plot_cunsum(IPD(players[0], players[1],100),[players[0].getName(), players[1].getName()])

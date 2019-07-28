@@ -190,10 +190,9 @@ def barPlot(players, scores):
     # plt.ylabel('Number')
     # plt.title('Players with strategies names')
     # plt.show()
-
     plt.figure(1)
     y_pos = np.arange(len(startigies_avg))
-    plt.bar(y_pos, startigies_avg, align='center', alpha=0.5)
+    plt.bar(y_pos, startigies_avg, align='center', alpha=0.5, width=0.5)
     plt.xticks(y_pos, bins)
     plt.xlabel('Name')
     plt.ylabel('Average score')
