@@ -223,43 +223,42 @@ def barPlot(players, scores):
 #     ax.set_ylabel('Comulative Score')
 #     plt.show()
 
-def plot_cunsum(players_score_matrix, players):
+def plot_cunsum(players_score_matrix, players,ax1):
     players_len= len(players_score_matrix)
     turns=len(players_score_matrix[0])
     x = range(1,turns+1)
     total=sum(sum(np.asarray(players_score_matrix)))
-    fig, ax = plt.subplots(figsize=(8, 4))
     for i in range(players_len):
         r = lambda: random.randint(20,200)
         g = lambda: random.randint(20,200)
         b = lambda: random.randint(20,200)
         color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
+        linestyles = ['-', '--', '-.', ':']
+        marker = ['.', 'o', '>', 'D', '+']
         y = np.asarray(players_score_matrix[i])
         y = y.cumsum()
         y=y/total
-        label= players[i].getName()+str(i)
-        ax.plot(x, y, 'k--', linewidth=1.5, label=label, color=color)
+        label= players[i].getName()
+        ax1.plot(x, y, marker=random.choice(marker), linestyle=random.choice(linestyles), linewidth=1.5, label=label, color=color)
     # tidy up the figure
-    ax.grid(True)
-    ax.legend(loc='right')
-    ax.set_title('Player Score over turns')
-    ax.set_xlabel('Turns')
-    ax.set_ylabel('Score Fraction')
-    plt.show()
+    ax1.grid(True)
+    ax1.legend(loc='right')
+    ax1.set_title('Player Score over turns')
+    ax1.set_xlabel('Turns')
+    ax1.set_ylabel('Score Fraction')
+    # plt.show()
 
-def plot_box_multiple(scores,players, NUM_REPETITIONS):
-    fig, ax = plt.subplots(figsize=(8, 4))
+def plot_box_multiple(scores,players, NUM_REPETITIONS,ax2):
+    # fig, ax = plt.subplots(figsize=(8, 4))
     playersNames=[]
     finalScore=[]
-    print('players',players)
     for i in range(0,len(players)):
         playersNames.append(players[i].getName())
         finalScore.append(scores[i])
-    ax.boxplot(finalScore,showmeans=True)
+    ax2.boxplot(finalScore,showmeans=True)
     plt.xticks(range(1,len(players)+1), playersNames)
     plt.ylabel('Reward')
     plt.title("Means Scores for {} iterations".format(NUM_REPETITIONS))
-    plt.show()
     # fig.savefig('fig2.png', bbox_inches='tight')
 
 
@@ -272,7 +271,14 @@ def plot_box(results,player1, player2, NUM_REPETITIONS):
     plt.show()
     playone_mean=np.mean(np.asarray(results[0]))
     playone_std=np.std(np.asarray(results[0]))
-    print(playone_mean)
-    print(playone_std)
+    # print(playone_mean)
+    # print(playone_std)
     # Save the figure
     fig.savefig('fig2.png', bbox_inches='tight')
+
+def plot_two_functions(scores,players, NUM_REPETITIONS):
+    fig, (ax1,ax2) = plt.subplots(1,2,figsize=(10, 4))
+    plot_cunsum(scores,players,ax1)
+    plot_box_multiple(scores,players,10,ax2)
+    plt.tight_layout() 
+    plt.show()
