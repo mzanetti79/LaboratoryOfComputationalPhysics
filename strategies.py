@@ -133,7 +133,7 @@ class Grudger(Player):
     at any point the opponent has defected."""
     def __init__(self):
         Player.__init__(self)
-        self.name = 'gradger'
+        self.name = 'grudger'
 
     def play(self):
         if len(self.memory)==0:

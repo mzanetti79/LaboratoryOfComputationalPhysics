@@ -34,7 +34,7 @@ def strategyGenerator(name):
         'suspicious tit for tat': (lambda: SuspiciousTitForTat())
     }
     # check if stratigy name exists
-    assert(name in stat)
+    assert(name in stat), "Strategy does not exsit: %s" % name
     return stat[name]()
     
 # create an array of players
