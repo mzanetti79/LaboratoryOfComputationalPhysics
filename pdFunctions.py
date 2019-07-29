@@ -281,3 +281,46 @@ def plot_two_functions(scores,players, NUM_REPETITIONS):
     plot_box_multiple(scores,players,10,ax2)
     plt.tight_layout() 
     plt.show()
+
+# iterPlayers is a matrix of Player objects
+# iterPlayers.shape = (number_of_iterations, number_of_players)
+def plot_iterPlayers(iterPlayers, ax):
+    iterPlayers = np.array(iterPlayers)
+    strats = {}
+    iterations = iterPlayers.shape[0]
+    # count the number of players for each strategy in each iteration
+    # result => strats = {startegyName:[num_of_players_in_iteration_1, ...iteration_2, _3,...,.._15]}
+    for i,iP in enumerate(iterPlayers):
+        for player in iP:
+            strategyName = player.getName()
+            if(strategyName not in strats):
+                strats[strategyName] = np.zeros(iterations)
+            strats[strategyName][i] += 1
+    for strat in strats:
+        r = lambda: random.randint(20,200)
+        g = lambda: random.randint(20,200)
+        b = lambda: random.randint(20,200)
+        color = '#{:02x}{:02x}{:02x}'.format(r(), g(), b())
+        y = np.asarray(strats[strat])
+        x = range(1,iterations+1)
+        ax.plot(x, y, 'k--', linewidth=1.5, label=strat, color=color)
+    # tidy up the figure
+    ax.grid(True)
+    ax.legend(loc='right')
+    ax.set_title('Number of players for each strategy over generations')
+    ax.set_xlabel('iterations')
+    ax.set_ylabel('number of players')
+
+# Plot totals
+def plot_totals(totals, ax):
+    ax.plot(totals)
+    ax.set_title('Total score for all players in each generation')
+    ax.set_xlabel('Iterations')
+    ax.set_ylabel('Total score')
+
+def plot_totals_iterPlayers(totals,iterPlayers):
+    fig, (ax1,ax2) = plt.subplots(1,2,figsize=(14, 4))
+    plot_totals(totals, ax2)
+    plot_iterPlayers(iterPlayers, ax1)
+    plt.tight_layout() 
+    plt.show()
