@@ -93,3 +93,4 @@ this will update your local version, not the one on github. To update the latter
  `git push origin master`
 
  `git commit -d DEV_BRANCH_NAME`
+
